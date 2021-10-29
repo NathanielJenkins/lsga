@@ -1,7 +1,7 @@
-import { FontAwesome } from '@expo/vector-icons';
-import * as Font from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import * as React from 'react';
+import { FontAwesome } from "@expo/vector-icons";
+import * as Font from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import * as React from "react";
 
 export default function useCachedResources() {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
@@ -15,7 +15,11 @@ export default function useCachedResources() {
         // Load fonts
         await Font.loadAsync({
           ...FontAwesome.font,
-          'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
+          "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
+          "sofia-regular": require("../assets/fonts/Sofia-Pro-Regular.otf"),
+          "sofia-semibold": require("../assets/fonts/Sofia-Pro-Semi-Bold.otf"),
+          "sofia-bold": require("../assets/fonts/Sofia-Pro-Bold.otf"),
+          "sofia-medium": require("../assets/fonts/Sofia-Pro-Medium.otf")
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
