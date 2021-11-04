@@ -9,7 +9,7 @@ import {
   NavigationContainer,
   DefaultTheme,
   DarkTheme,
-  useNavigation
+  useNavigation,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
@@ -19,12 +19,12 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import TabOneScreen from "../screens/TabOneScreen";
+import HomeScreen from "../screens/HomeScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import {
   RootStackParamList,
   RootTabParamList,
-  RootTabScreenProps
+  RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
@@ -35,7 +35,7 @@ import ResetPasswordScreen from "../screens/auth/ResetPasswordScreen";
 import { auth } from "../firebase/firebaseTooling";
 
 export default function Navigation({
-  colorScheme
+  colorScheme,
 }: {
   colorScheme: ColorSchemeName;
 }) {
@@ -105,30 +105,17 @@ function BottomTabNavigator() {
   };
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="HomeScreen"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint
+        tabBarActiveTintColor: Colors[colorScheme].tint,
       }}>
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<"TabOne">) => ({
-          title: "Tab One",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={handleSignOut}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1
-              })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          )
+        name="HomeScreen"
+        component={HomeScreen}
+        options={({ navigation }: RootTabScreenProps<"HomeScreen">) => ({
+          title: "Home",
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          headerShown: false,
         })}
       />
       <BottomTab.Screen
@@ -136,7 +123,8 @@ function BottomTabNavigator() {
         component={TabTwoScreen}
         options={{
           title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          headerShown: false,
         }}
       />
     </BottomTab.Navigator>

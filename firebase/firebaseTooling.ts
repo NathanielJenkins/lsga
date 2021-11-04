@@ -1,13 +1,12 @@
 import * as fb from "firebase";
 const firebaseConfig = {
-  apiKey: "AIzaSyAoUYB4BjsPOFwVs7pG8oHnZfeYU48itDk",
-  authDomain: "lifespace-6a560.firebaseapp.com",
-  databaseURL: "https://lifespace-6a560.firebaseio.com",
-  projectId: "lifespace-6a560",
-  storageBucket: "lifespace-6a560.appspot.com",
-  messagingSenderId: "sender-id",
-  appId: "1:446627723287:web:65c3ef295ac44498d64452",
-  measurementId: "G-measurement-id"
+  apiKey: "AIzaSyDkzA1RFBkMSbxuYSldNdQ4NdSNjL_BnDQ",
+  authDomain: "lifespace-app.firebaseapp.com",
+  projectId: "lifespace-app",
+  storageBucket: "lifespace-app.appspot.com",
+  messagingSenderId: "911589203008",
+  appId: "1:911589203008:web:5f7b10d94c14754ffbd3a5",
+  measurementId: "G-3W4YV9TV70",
 };
 if (!fb.default.apps.length) {
   fb.default.initializeApp(firebaseConfig);
@@ -16,5 +15,5 @@ if (!fb.default.apps.length) {
 }
 
 const auth = fb.default.auth();
-export { auth };
-
+const firestore = fb.default.firestore();
+export { auth, firestore };

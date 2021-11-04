@@ -8,7 +8,12 @@ export const useUser = () => {
 
   const us = useEffect(() => {
     auth.onAuthStateChanged(user => {
-      if (user) navigation.navigate("Root");
+      if (user) {
+        // perform a request to grab and set all the user information on the state
+        
+
+        navigation.navigate("Root")
+      };
     });
 
     return us;

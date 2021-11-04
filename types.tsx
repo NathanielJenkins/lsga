@@ -6,7 +6,7 @@
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeScreenProps,
-  NavigatorScreenParams
+  NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
@@ -24,6 +24,13 @@ export type RootStackParamList = {
   CreateAccount: undefined;
   ResetPassword: undefined;
   HomePage: undefined;
+  SelectLocation: undefined;
+  ConfirmLocation: undefined;
+  GardenInformationStart: undefined;
+  SelectPlanter: undefined;
+  SunExposure: undefined;
+  TypeOfSpace: undefined;
+  NameGarden: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -32,6 +39,9 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 export type RootTabParamList = {
   TabOne: undefined;
   TabTwo: undefined;
+  HomeScreen: undefined;
+  GardenScreen: undefined;
+  ScheduleScreen: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
@@ -41,5 +51,5 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
   >;
 
 export const ActionTypes = {
-  SET_USER: "SET_USER"
+  SET_USER: "SET_USER",
 };
