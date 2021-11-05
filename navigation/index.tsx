@@ -2,14 +2,16 @@
  * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
  * https://reactnavigation.org/docs/getting-started
  *
+ * @format
  */
+
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   NavigationContainer,
   DefaultTheme,
   DarkTheme,
-  useNavigation,
+  useNavigation
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
@@ -24,7 +26,7 @@ import TabTwoScreen from "../screens/TabTwoScreen";
 import {
   RootStackParamList,
   RootTabParamList,
-  RootTabScreenProps,
+  RootTabScreenProps
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
@@ -33,9 +35,9 @@ import CreateAccountScreen from "../screens/auth/CreateAccountScreen";
 import LoginScreen from "../screens/auth/LoginScreen";
 import ResetPasswordScreen from "../screens/auth/ResetPasswordScreen";
 import { auth } from "../firebase/firebaseTooling";
-
+import { brandColor } from "../components/Themed";
 export default function Navigation({
-  colorScheme,
+  colorScheme
 }: {
   colorScheme: ColorSchemeName;
 }) {
@@ -95,7 +97,6 @@ function RootNavigator() {
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
-
 function BottomTabNavigator() {
   const navigation = useNavigation<any>();
 
@@ -107,7 +108,7 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="HomeScreen"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarActiveTintColor: Colors[colorScheme].tint
       }}>
       <BottomTab.Screen
         name="HomeScreen"
@@ -116,6 +117,7 @@ function BottomTabNavigator() {
           title: "Home",
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerShown: false,
+          tabBarActiveTintColor: brandColor
         })}
       />
       <BottomTab.Screen
@@ -125,6 +127,7 @@ function BottomTabNavigator() {
           title: "Tab Two",
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerShown: false,
+          tabBarActiveTintColor: brandColor
         }}
       />
     </BottomTab.Navigator>

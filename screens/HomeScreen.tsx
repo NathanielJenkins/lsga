@@ -1,6 +1,8 @@
+/** @format */
+
 import * as React from "react";
-import { StyleSheet } from "react-native";
-import { PrimaryButton } from "../components/common/Button";
+import { StyleSheet, Image } from "react-native";
+import { PrimaryButton, SecondaryButton } from "../components/common/Button";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
@@ -8,8 +10,13 @@ import { getGardenByName } from "../models/Garden";
 import { RootState } from "../store/reducers";
 import { useSelector, useDispatch } from "react-redux";
 import { updateGardens } from "../store/actions/garden.actions";
+import no_gardens from "../assets/images/no_gardens.png";
+import { tw } from "../components/Themed";
+import { SofiaRegularText } from "../components/StyledText";
+import MainPageSlot from "./slots/MainPageSlot";
+PrimaryButton;
 export default function HomeScreen({
-  navigation,
+  navigation
 }: RootTabScreenProps<"HomeScreen">) {
   const handleButtonPress = async () => {
     console.log(await getGardenByName("garden1"));
@@ -33,9 +40,20 @@ export default function HomeScreen({
       <EditScreenInfo path="/screens/TabOneScreen.tsx" />
     </View>
   ) : (
-    <View>
-      <Text style={styles.title}>No Gardens Yet :(</Text>
-    </View>
+    <MainPageSlot>
+      <View style={tw.style("bg-transparent", styles.container)}>
+        <View style={tw``}>
+          <Image
+            source={no_gardens}
+            style={tw.style(`w-64 h-64`, { resizeMode: "contain" })}
+          />
+        </View>
+        <SofiaRegularText style={tw.style(`text-xl mb-2`)}>
+          No Gardens... yet
+        </SofiaRegularText>
+        <SecondaryButton title="Add a New Garden" onPress={handleButtonPress} />
+      </View>
+    </MainPageSlot>
   );
 }
 
@@ -43,15 +61,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   separator: {
     marginVertical: 30,
     height: 1,
-    width: "80%",
-  },
+    width: "80%"
+  }
 });

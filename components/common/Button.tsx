@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import {
   StyleSheet,
@@ -11,7 +13,8 @@ import {
 import { SofiaRegularText } from "../StyledText";
 import Ripple from "react-native-material-ripple";
 
-import { tw } from "../Themed";
+import { Text, tw } from "../Themed";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 interface ButtonProps {
   onPress: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
@@ -25,6 +28,15 @@ interface ImageProps {
   style?: StyleProp<any>;
 }
 
+interface IconProps {
+  name: React.ComponentProps<typeof FontAwesome5>["name"];
+  color: string;
+  text: string;
+  size: number;
+  onPress: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
+  style?: StyleProp<any>;
+}
+
 export function PrimaryButton(props: ButtonProps) {
   const { onPress, style } = props;
 
@@ -33,6 +45,22 @@ export function PrimaryButton(props: ButtonProps) {
       <View style={tw.style(style)}>
         <View style={[styles.base, styles.primary]}>
           <SofiaRegularText style={tw`text-white`}>
+            {props.title}
+          </SofiaRegularText>
+        </View>
+      </View>
+    </Ripple>
+  );
+}
+
+export function SecondaryButton(props: ButtonProps) {
+  const { onPress, style } = props;
+
+  return (
+    <Ripple onPress={onPress}>
+      <View style={tw.style(style)}>
+        <View style={[styles.base, styles.secondary]}>
+          <SofiaRegularText style={tw.style(`text-brand`)}>
             {props.title}
           </SofiaRegularText>
         </View>
@@ -69,9 +97,29 @@ export function ImageButton(props: ImageProps) {
   );
 }
 
+export function IconText(props: IconProps) {
+  const { name, color, text, size, onPress, style } = props;
+
+  return (
+    <View style={tw.style("flex", style)}>
+      <Ripple onPress={onPress}>
+        <View
+          style={tw.style(
+            "flex flex-col justify-center items-center  p-1 rounded"
+          )}>
+          <FontAwesome5 size={size} style={{}} name={name} color={color} />
+
+          <SofiaRegularText style={tw.style("text-gray-500")}>
+            {text}
+          </SofiaRegularText>
+        </View>
+      </Ripple>
+    </View>
+  );
+}
 const styles = StyleSheet.create({
   base: tw`rounded p-4 flex rounded text-center items-center `,
   primary: tw.style(`bg-brand `),
-  secondary: tw`bg-gray-200`,
+  secondary: tw.style(`border-brand border-2 `),
   image: tw`rounded items-center flex shadow p-2 bg-white `
 });

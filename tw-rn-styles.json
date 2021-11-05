@@ -5779,6 +5779,14 @@
     "backgroundColor": "rgb(103,146,54)"
   },
 
+  "border-brand": {
+    "borderColor": "rgb(103,146,54)"
+  },
+
+  "text-brand": {
+    "color": "rgb(103,146,54)"
+  },
+
   "bg-transparent": {
     "backgroundColor": "transparent"
   },
