@@ -1,11 +1,11 @@
+/** @format */
+
 import { combineReducers } from "redux";
-import { feedReducer } from "./feed.reducer";
-import { storiesReducer } from "./stories.reducer";
 import { gardenReducer } from "./garden.reducer";
+import { veggieReducer } from "./veggie.reducer";
 export const rootReducer = combineReducers({
-  feed: feedReducer,
-  stories: storiesReducer,
   gardens: gardenReducer,
+  veggies: veggieReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

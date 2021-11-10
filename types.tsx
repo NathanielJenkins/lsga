@@ -1,14 +1,19 @@
 /**
  * Learn more about using TypeScript with React Navigation:
  * https://reactnavigation.org/docs/typescript/
+ *
+ * @format
  */
 
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeScreenProps,
-  NavigatorScreenParams,
+  NavigatorScreenParams
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Camera } from "expo-camera";
+import { NativeSyntheticEvent, NativeTouchEvent } from "react-native";
+import UserGarden from "./models/UserGardens";
 
 declare global {
   namespace ReactNavigation {
@@ -25,12 +30,25 @@ export type RootStackParamList = {
   ResetPassword: undefined;
   HomePage: undefined;
   SelectLocation: undefined;
-  ConfirmLocation: undefined;
+  SetupGarden: undefined;
+  ConfirmLocation: {
+    newGardenState: [
+      UserGarden,
+      React.Dispatch<React.SetStateAction<UserGarden>>
+    ];
+  };
   GardenInformationStart: undefined;
   SelectPlanter: undefined;
   SunExposure: undefined;
   TypeOfSpace: undefined;
   NameGarden: undefined;
+  CameraPreview: {
+    newGardenState: [
+      UserGarden,
+      React.Dispatch<React.SetStateAction<UserGarden>>
+    ];
+  };
+  Admin: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -51,5 +69,5 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
   >;
 
 export const ActionTypes = {
-  SET_USER: "SET_USER",
+  SET_USER: "SET_USER"
 };

@@ -1,21 +1,39 @@
+/** @format */
+
 import Garden from "./Garden";
-import { auth, firestore } from "../firebase/firebaseTooling";
+import { auth, firestore, storage } from "../firebase/firebaseTooling";
 import Documents from "./Documents";
 
 const ref = firestore.collection(Documents.UserGardens);
 
 export default interface UserGarden {
-  [properties.userId]: string;
-  [properties.garden]: Garden;
+  [properties.userId]?: string;
+  [properties.url]?: string;
+  [properties._name]?: string;
+  [properties.description]?: string;
+  [properties.garden]?: Garden;
 }
 
 class properties {
   public static readonly userId = "userId";
   public static readonly garden = "garden";
+  public static readonly url = "url";
+  public static readonly _name = "name";
+  public static readonly description = "description";
 }
 
-export const setUserGarden = async (userGarden: UserGarden) => {
-  const res = await ref.doc().set(userGarden);
+export const addUserGarden = async (userGarden: UserGarden) => {
+  const blob = await (await fetch(userGarden.url)).blob();
+  const newUrl = `${auth.currentUser.uid}/${encodeURIComponent(
+    userGarden.name
+  )}`;
+
+  await storage.ref().child(newUrl).put(blob);
+
+  userGarden.userId = auth.currentUser?.uid;
+  userGarden.url = newUrl;
+  await ref.doc().set(userGarden);
+  return userGarden;
 };
 
 export const getUserGardens = async () => {

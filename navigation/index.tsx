@@ -22,7 +22,7 @@ import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import HomeScreen from "../screens/HomeScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
+import GardenScreen from "../screens/GardenScreen";
 import {
   RootStackParamList,
   RootTabParamList,
@@ -36,6 +36,10 @@ import LoginScreen from "../screens/auth/LoginScreen";
 import ResetPasswordScreen from "../screens/auth/ResetPasswordScreen";
 import { auth } from "../firebase/firebaseTooling";
 import { brandColor } from "../components/Themed";
+import SetupGarden from "../screens/garden_setup/SetupGarden";
+import ConfirmLocation from "../screens/garden_setup/ConfirmLocation";
+import CameraPreview from "../screens/util/CameraPreview";
+import Admin from "../screens/admin/Admin";
 export default function Navigation({
   colorScheme
 }: {
@@ -85,6 +89,27 @@ function RootNavigator() {
         component={NotFoundScreen}
         options={{ title: "Oops!" }}
       />
+      <Stack.Screen
+        name="SetupGarden"
+        component={SetupGarden}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ConfirmLocation"
+        component={ConfirmLocation}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CameraPreview"
+        component={CameraPreview}
+        options={{ headerShown: false, animation: "none" }}
+      />
+      <Stack.Screen
+        name="Admin"
+        component={Admin}
+        options={{ headerShown: false, animation: "none" }}
+      />
+
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
@@ -121,11 +146,11 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        name="GardenScreen"
+        component={GardenScreen}
         options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Garden",
+          tabBarIcon: ({ color }) => <TabBarIcon name="leaf" color={color} />,
           headerShown: false,
           tabBarActiveTintColor: brandColor
         }}

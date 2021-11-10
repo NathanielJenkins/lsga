@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState } from "react";
 import {
   StyleSheet,
@@ -15,6 +17,7 @@ interface InputProps {
   placeholder: string;
   secureTextEntry?: boolean;
   style?: StyleProp<any>;
+  numberOfLines?: number;
 }
 
 export function Input(props: InputProps) {

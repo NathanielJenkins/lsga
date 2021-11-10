@@ -1,3 +1,5 @@
+/** @format */
+
 import { firestore } from "../firebase/firebaseTooling";
 import Documents from "./Documents";
 
@@ -7,12 +9,14 @@ class properties {
   public static readonly _name = "name";
   public static readonly _height = "height";
   public static readonly _width = "width";
+  public static readonly _img = "img";
 }
 
 export default interface Garden {
   [properties._name]: string;
   [properties._height]: number;
   [properties._width]: number;
+  [properties._img]: string;
 }
 
 export const getGardenByName = async (name: string) => {

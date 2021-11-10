@@ -1,6 +1,6 @@
 /** @format */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -10,12 +10,12 @@ import {
   StyleProp,
   Image
 } from "react-native";
-import { SofiaRegularText } from "../StyledText";
+import { SofiaBoldText, SofiaRegularText } from "../StyledText";
 import Ripple from "react-native-material-ripple";
 
 import { Text, tw } from "../Themed";
 import { FontAwesome5 } from "@expo/vector-icons";
-
+import { storage } from "../../firebase/firebaseTooling";
 interface ButtonProps {
   onPress: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
   title: string;
@@ -35,6 +35,13 @@ interface IconProps {
   size: number;
   onPress: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
   style?: StyleProp<any>;
+}
+
+interface CircleIconProps {
+  name: React.ComponentProps<typeof FontAwesome5>["name"];
+  style?: StyleProp<any>;
+  onPress: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
+  size?: "sm" | "md";
 }
 
 export function PrimaryButton(props: ButtonProps) {
@@ -117,9 +124,87 @@ export function IconText(props: IconProps) {
     </View>
   );
 }
+
+export function CircleIconButton(props: CircleIconProps) {
+  const { name, onPress, style, size } = props;
+
+  return (
+    <View
+      style={tw.style(
+        "flex rounded-full  border-white",
+        size === "sm" ? "border" : "border-4",
+        style
+      )}>
+      <Ripple
+        onPress={onPress}
+        rippleContainerBorderRadius={9999}
+        rippleColor={"white"}>
+        <View
+          style={tw.style(
+            "flex flex-col justify-center items-center",
+            size === "sm" ? "w-8 h-8" : "w-24 h-24"
+          )}>
+          <FontAwesome5
+            style={tw.style("opacity-100")}
+            name={name}
+            color={"white"}
+            size={size === "sm" ? 20 : 30}
+          />
+        </View>
+      </Ripple>
+    </View>
+  );
+}
+
+interface ThumbnailCardProps {
+  title: string;
+  style?: StyleProp<any>;
+  onPress: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
+  active: boolean;
+  img: string;
+}
+
+export function ThumbnailCard(props: ThumbnailCardProps) {
+  const { onPress, style, active, img } = props;
+  const [imageUrl, setImageUrl] = useState(undefined);
+  useEffect(() => {
+    storage
+      .ref(`/images/${props.img}`) //name in storage in firebase console
+      .getDownloadURL()
+      .then(url => {
+        setImageUrl(url);
+      })
+      .catch(() => {});
+  }, []);
+  return (
+    <View
+      style={tw.style(
+        "shadow-brand",
+        active ? "border border-brand" : "border border-transparent",
+        style
+      )}>
+      <Ripple onPress={onPress} rippleContainerBorderRadius={10}>
+        <View style={tw.style("flex flex-row items-center p-2")}>
+          <Image
+            source={{ uri: imageUrl }}
+            style={tw`h-16 w-16 resize-contain mr-2`}
+          />
+          <SofiaBoldText
+            style={tw.style(
+              "text-xl",
+              active ? "text-brand" : "text-gray-500"
+            )}>
+            {props.title}
+          </SofiaBoldText>
+        </View>
+      </Ripple>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   base: tw`rounded p-4 flex rounded text-center items-center `,
-  primary: tw.style(`bg-brand `),
-  secondary: tw.style(`border-brand border-2 `),
+  primary: tw.style(` bg-brand `),
+  secondary: tw.style(`border-brand border-2 bg-white`),
   image: tw`rounded items-center flex shadow p-2 bg-white `
 });

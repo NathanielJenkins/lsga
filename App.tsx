@@ -1,3 +1,5 @@
+/** @format */
+
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -6,6 +8,7 @@ import { store } from "./store/index";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
+import { NativeBaseProvider } from "native-base";
 // import { initializedFirebaseApp } from "./firebaseTooling";
 
 export default function App() {
