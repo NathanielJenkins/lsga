@@ -3,6 +3,7 @@
 import Garden from "./Garden";
 import { auth, firestore, storage } from "../firebase/firebaseTooling";
 import Documents from "./Documents";
+import Veggie from "./Veggie";
 
 const ref = firestore.collection(Documents.UserGardens);
 
@@ -12,6 +13,7 @@ export default interface UserGarden {
   [properties._name]?: string;
   [properties.description]?: string;
   [properties.garden]?: Garden;
+  [properties.grid]?: Array<Veggie | null>;
 }
 
 class properties {
@@ -20,6 +22,7 @@ class properties {
   public static readonly url = "url";
   public static readonly _name = "name";
   public static readonly description = "description";
+  public static readonly grid = "grid";
 }
 
 export const addUserGarden = async (userGarden: UserGarden) => {
@@ -32,6 +35,10 @@ export const addUserGarden = async (userGarden: UserGarden) => {
 
   userGarden.userId = auth.currentUser?.uid;
   userGarden.url = newUrl;
+
+  userGarden.grid = [
+    ...Array(userGarden.garden.height * userGarden.garden.width).keys()
+  ].map(() => null);
   await ref.doc().set(userGarden);
   return userGarden;
 };

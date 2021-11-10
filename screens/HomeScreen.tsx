@@ -23,6 +23,12 @@ import {
 import MainPageSlot from "./slots/MainPageSlot";
 import { Picker } from "@react-native-picker/picker";
 import { storage } from "../firebase/firebaseTooling";
+import { updateVeggies } from "../store";
+import {
+  GardenSelector,
+  NoGardensPrompt
+} from "../components/garden/GardenItems";
+
 PrimaryButton;
 export default function HomeScreen({
   navigation
@@ -34,7 +40,6 @@ export default function HomeScreen({
 
   React.useEffect(() => {
     if (!activeGarden?.url) return;
-    console.log(activeGarden);
     storage
       .ref(activeGarden.url) //name in storage in firebase console
       .getDownloadURL()
@@ -47,6 +52,7 @@ export default function HomeScreen({
 
   React.useEffect(() => {
     dispatch(updateGardens());
+    dispatch(updateVeggies());
   }, []);
 
   const handleUpdateActiveGarden = (gardenName: string) => {
@@ -56,25 +62,7 @@ export default function HomeScreen({
 
   return gardens?.length && activeGarden ? (
     <MainPageSlot>
-      {gardens.length === 1 ? (
-        <View>
-          <SofiaSemiBoldText style={tw.style("text-2xl text-gray-500")}>
-            {activeGarden?.name}
-          </SofiaSemiBoldText>
-        </View>
-      ) : (
-        <View style={tw.style("flex flex-1 flex-col")}>
-          <View style={tw.style("flex mb-4")}>
-            <Picker
-              selectedValue={activeGarden.name}
-              onValueChange={handleUpdateActiveGarden}>
-              {gardens.map((g, i) => (
-                <Picker.Item key={i} label={g.name} value={g.name} />
-              ))}
-            </Picker>
-          </View>
-        </View>
-      )}
+      <GardenSelector />
       <View
         style={tw`w-full h-64 flex justify-center items-center shadow-brand`}>
         <Image
@@ -83,23 +71,7 @@ export default function HomeScreen({
       </View>
     </MainPageSlot>
   ) : (
-    <MainPageSlot>
-      <View style={tw.style("bg-transparent", styles.container)}>
-        <View style={tw`flex justify-center items-center`}>
-          <Image
-            source={no_gardens}
-            style={tw.style(`w-64 h-64`, { resizeMode: "contain" })}
-          />
-        </View>
-        <SofiaRegularText style={tw.style(`text-xl mb-2`)}>
-          No Gardens... yet
-        </SofiaRegularText>
-        <SecondaryButton
-          title="Add a New Garden"
-          onPress={() => navigation.navigate("SetupGarden")}
-        />
-      </View>
-    </MainPageSlot>
+    <NoGardensPrompt />
   );
 }
 

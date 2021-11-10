@@ -30,7 +30,7 @@ export function updateGardens() {
       response => {
         dispatch(updateStoredGardensSuccess(response));
         const { activeGarden } = getState().gardens;
-        console.log("a", activeGarden, response.length);
+
         if (!activeGarden && response.length)
           dispatch(updateActiveGardenSuccess(response[0]));
       },
@@ -74,6 +74,7 @@ export function addNewGarden(garden: UserGarden) {
           dispatch(updateActiveGardenSuccess(response));
       },
       error => {
+        console.error(error);
         dispatch(failure("Server error."));
       }
     );
