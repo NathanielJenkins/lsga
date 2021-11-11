@@ -22,7 +22,7 @@ import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import HomeScreen from "../screens/HomeScreen";
-import GardenScreen from "../screens/GardenScreen";
+import GardenScreen from "../screens/gardens/GardenScreen";
 import {
   RootStackParamList,
   RootTabParamList,

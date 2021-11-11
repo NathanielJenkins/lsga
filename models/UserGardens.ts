@@ -13,7 +13,7 @@ export default interface UserGarden {
   [properties._name]?: string;
   [properties.description]?: string;
   [properties.garden]?: Garden;
-  [properties.grid]?: Array<Veggie | null>;
+  [properties.grid]?: Array<string>;
 }
 
 class properties {

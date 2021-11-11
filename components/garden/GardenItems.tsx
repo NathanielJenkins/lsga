@@ -64,7 +64,7 @@ export function GardenGrid(props: GardenGridProps) {
   const [squareSize, setSquareSize] = useState<number>(0);
 
   const widthGrid: Array<JSX.Element> = [];
-
+  const maxSize = 250;
   for (let i = 0; i < width * height; i++) {
     widthGrid.push(
       <DraxView
@@ -86,10 +86,18 @@ export function GardenGrid(props: GardenGridProps) {
           style={tw.style("flex justify-center items-center mt-1")}
           onLayout={event => {
             if (squareSize) return;
+
+            let w = event.nativeEvent.layout.width;
+            w = w > maxSize ? maxSize : w;
             setSquareSize(event.nativeEvent.layout.width);
           }}>
           {workingGrid[i] && (
-            <VeggieItem draggable={false} veggie={workingGrid[i]} noShadow />
+            <VeggieItem
+              draggable={false}
+              veggie={workingGrid[i]}
+              noShadow
+              size={squareSize}
+            />
           )}
         </View>
       </DraxView>
@@ -107,7 +115,20 @@ export function GardenGrid(props: GardenGridProps) {
     </View>
   ));
 
-  return <View style={tw.style("shadow-brand", props.style)}>{grid}</View>;
+  return (
+    <View style={tw.style(" flex items-center justify-center")}>
+      <View
+        style={tw.style(
+          "shadow-brand flex items-center justify-center",
+          props.style,
+          {
+            maxWidth: maxSize
+          }
+        )}>
+        {grid}
+      </View>
+    </View>
+  );
 }
 
 interface VeggieItemProps {
@@ -115,11 +136,12 @@ interface VeggieItemProps {
   draggable?: boolean;
   noShadow?: boolean;
   style?: StyleProp<any>;
+  size?: number;
 }
 export function VeggieItem(props: VeggieItemProps) {
   const [imageUrl, setImageUrl] = React.useState(undefined);
   const veggieRef = useRef();
-
+  let size = props.size || 90;
   React.useEffect(() => {
     if (!props.veggie?.url) return;
     storage
@@ -134,12 +156,21 @@ export function VeggieItem(props: VeggieItemProps) {
   const VeggieBase = (
     <View
       style={tw.style(
-        "flex justify-center items-center p-2 h-24 w-24",
+        "flex justify-between py-2 items-center ",
         props.style,
-        { "shadow-brand": !props.noShadow }
+        { "shadow-brand": !props.noShadow },
+        { height: size, width: size }
       )}>
-      <Image source={{ uri: imageUrl }} style={tw`h-14 w-14 resize-contain`} />
-      <SofiaSemiMediumText>{props.veggie.displayName}</SofiaSemiMediumText>
+      <Image
+        source={{ uri: imageUrl }}
+        style={tw.style(`resize-contain`, {
+          height: size - 45,
+          width: size - 45
+        })}
+      />
+      <SofiaSemiMediumText style={tw.style("text-center")}>
+        {props.veggie.displayName}
+      </SofiaSemiMediumText>
     </View>
   );
 
