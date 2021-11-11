@@ -3,11 +3,11 @@
 import Veggie from "../../models/Veggie";
 import { UPDATE_VEGGIES, VeggieActionTypes } from "../types";
 interface VeggieState {
-  veggies: Veggie[];
+  veggies: { [name: string]: Veggie };
 }
 
 const initialState: VeggieState = {
-  veggies: []
+  veggies: {}
 };
 
 export function veggieReducer(

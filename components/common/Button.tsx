@@ -42,6 +42,7 @@ interface CircleIconProps {
   style?: StyleProp<any>;
   onPress: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
   size?: "sm" | "md";
+  color?: string;
 }
 
 export function PrimaryButton(props: ButtonProps) {
@@ -127,18 +128,18 @@ export function IconText(props: IconProps) {
 
 export function CircleIconButton(props: CircleIconProps) {
   const { name, onPress, style, size } = props;
-
+  const color = props.color || "white";
   return (
     <View
       style={tw.style(
-        "flex rounded-full  border-white",
+        `flex rounded-full  border-${color}`,
         size === "sm" ? "border" : "border-4",
         style
       )}>
       <Ripple
         onPress={onPress}
         rippleContainerBorderRadius={9999}
-        rippleColor={"white"}>
+        rippleColor={color}>
         <View
           style={tw.style(
             "flex flex-col justify-center items-center",
@@ -147,7 +148,7 @@ export function CircleIconButton(props: CircleIconProps) {
           <FontAwesome5
             style={tw.style("opacity-100")}
             name={name}
-            color={"white"}
+            color={color}
             size={size === "sm" ? 20 : 30}
           />
         </View>

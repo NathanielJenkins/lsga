@@ -40,6 +40,7 @@ import SetupGarden from "../screens/garden_setup/SetupGarden";
 import ConfirmLocation from "../screens/garden_setup/ConfirmLocation";
 import CameraPreview from "../screens/util/CameraPreview";
 import Admin from "../screens/admin/Admin";
+import Veggie from "../screens/gardens/VeggieScreen";
 export default function Navigation({
   colorScheme
 }: {
@@ -103,6 +104,11 @@ function RootNavigator() {
         name="CameraPreview"
         component={CameraPreview}
         options={{ headerShown: false, animation: "none" }}
+      />
+      <Stack.Screen
+        name="Veggie"
+        component={Veggie}
+        options={{ headerShown: false, animation: "fade" }}
       />
       <Stack.Screen
         name="Admin"

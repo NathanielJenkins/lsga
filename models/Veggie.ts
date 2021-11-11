@@ -1,6 +1,6 @@
 /** @format */
 
-import { firestore } from "../firebase/firebaseTooling";
+import { firestore, storage } from "../firebase/firebaseTooling";
 import Documents from "./Documents";
 
 export class Season {
@@ -29,6 +29,7 @@ export default interface Veggie {
   name: string;
   displayName: string;
   url: string;
+  downloadUrl?: string;
   seasons: Array<Season>;
   directSeed: Array<Month>;
   startIndoors: Month;
@@ -51,7 +52,16 @@ const ref = firestore.collection(Documents.Veggies);
 export const getAllVeggies = async () => {
   const snapshot = await ref.get();
 
-  const veggies: Array<Veggie> = new Array();
-  snapshot.forEach(doc => veggies.push(doc.data() as Veggie));
+  const veggies: { [name: string]: Veggie } = {};
+  snapshot.forEach(async doc => {
+    const veggie = { ...(doc.data() as Veggie) };
+
+    const url = await storage
+      .ref(veggie.url) //name in storage in firebase console
+      .getDownloadURL();
+
+    veggie.downloadUrl = url;
+    veggies[veggie.name] = veggie;
+  });
   return veggies;
 };

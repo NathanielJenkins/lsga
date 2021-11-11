@@ -14,6 +14,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Camera } from "expo-camera";
 import { NativeSyntheticEvent, NativeTouchEvent } from "react-native";
 import UserGarden from "./models/UserGardens";
+import Veggie from "./models/Veggie";
 
 declare global {
   namespace ReactNavigation {
@@ -47,6 +48,9 @@ export type RootStackParamList = {
       UserGarden,
       React.Dispatch<React.SetStateAction<UserGarden>>
     ];
+  };
+  Veggie: {
+    veggie: Veggie;
   };
   Admin: undefined;
 };

@@ -6,7 +6,7 @@ export const UPDATE_VEGGIES = "UPDATE_VEGGIES";
 
 interface UpdateVeggiesAction {
   type: typeof UPDATE_VEGGIES;
-  payload: Veggie[];
+  payload: { [name: string]: Veggie };
 }
 
 export type VeggieActionTypes = UpdateVeggiesAction;

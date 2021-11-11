@@ -16,14 +16,25 @@ import { RootState } from "../../store";
 import { tw } from "../Themed";
 import { Picker } from "@react-native-picker/picker";
 import { updateActiveGarden } from "../../store/actions/garden.actions";
-import { SofiaSemiBoldText, SofiaSemiMediumText } from "../StyledText";
-import { DraxProvider, DraxView } from "react-native-drax";
+import {
+  SofiaBoldText,
+  SofiaSemiBoldText,
+  SofiaSemiMediumText
+} from "../StyledText";
+import {
+  DraxDragEndEventData,
+  DraxDragEventData,
+  DraxProtocolDragEndResponse,
+  DraxProvider,
+  DraxView
+} from "react-native-drax";
 import MainPageSlot from "../../screens/slots/MainPageSlot";
 import { SofiaRegularText } from "../../components/StyledText";
 import no_gardens from "../../assets/images/no_gardens.png";
-import { SecondaryButton } from "../common/Button";
+import { PrimaryButton, SecondaryButton } from "../common/Button";
 import { useNavigation } from "@react-navigation/native";
 import { chunk } from "lodash";
+import { FontAwesome } from "@expo/vector-icons";
 
 export function NoGardensPrompt() {
   const navigation = useNavigation();
@@ -48,59 +59,94 @@ export function NoGardensPrompt() {
   );
 }
 
+interface GardenVeggieInfoReceiverProps {}
+
+interface GardenVeggieReceiverProps {
+  width: number;
+  i: number;
+  workingGridState: [
+    Array<Veggie>,
+    React.Dispatch<React.SetStateAction<Array<Veggie>>>
+  ];
+  onDragStart?: (data: DraxDragEventData) => void;
+  onDragEnd?: (data: DraxDragEndEventData) => DraxProtocolDragEndResponse;
+}
+export function GardenVeggieReceiver(props: GardenVeggieReceiverProps) {
+  const { width, i } = props;
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const [squareSize, setSquareSize] = useState<number>(0);
+  const [workingGrid, setWorkingGrid] = props.workingGridState;
+  const maxSize = 250;
+
+  return (
+    <DraxView
+      style={tw.style("flex-1 border-gray-300 bg-transparent border-r", {
+        height: squareSize,
+        "border-r-0 ": (i + 1) % width === 0,
+        "bg-gray-100": isDraggingOver
+      })}
+      key={i}
+      onReceiveDragEnter={() => setIsDraggingOver(true)}
+      onReceiveDragExit={e => setIsDraggingOver(false)}
+      onReceiveDragDrop={({
+        dragged: {
+          payload: { veggie }
+        }
+      }) => {
+        const workingGridCopy = [...workingGrid];
+        workingGridCopy[i] = veggie;
+        setWorkingGrid(workingGridCopy);
+        setIsDraggingOver(false);
+      }}>
+      <View
+        style={tw.style("flex justify-center items-center mt-1")}
+        onLayout={event => {
+          if (squareSize) return;
+
+          let w = event.nativeEvent.layout.width;
+          w = w > maxSize ? maxSize : w;
+          setSquareSize(event.nativeEvent.layout.width);
+        }}>
+        {workingGrid[i] && (
+          <VeggieItem
+            draggable={true}
+            veggie={workingGrid[i]}
+            noShadow
+            size={squareSize}
+            onDragStart={props.onDragStart}
+            onDragEnd={props.onDragEnd}
+          />
+        )}
+      </View>
+    </DraxView>
+  );
+}
+
 interface GardenGridProps {
   style: StyleProp<any>;
   workingGridState: [
     Array<Veggie>,
     React.Dispatch<React.SetStateAction<Array<Veggie>>>
   ];
+  onDragStart?: (data: DraxDragEventData) => void;
+  onDragEnd?: (data: DraxDragEndEventData) => DraxProtocolDragEndResponse;
 }
 export function GardenGrid(props: GardenGridProps) {
   const { activeGarden } = useSelector((state: RootState) => state.gardens);
-  const [workingGrid, setWorkingGrid] = props.workingGridState;
 
   const height = activeGarden?.garden.height || 0;
   const width = activeGarden?.garden.width || 0;
-  const [squareSize, setSquareSize] = useState<number>(0);
 
   const widthGrid: Array<JSX.Element> = [];
-  const maxSize = 250;
   for (let i = 0; i < width * height; i++) {
     widthGrid.push(
-      <DraxView
-        style={tw.style("flex-1 border-gray-300 border-r", {
-          height: squareSize,
-          "border-r-0 ": (i + 1) % width === 0
-        })}
-        key={i}
-        onReceiveDragDrop={({
-          dragged: {
-            payload: { veggie }
-          }
-        }) => {
-          const workingGridCopy = [...workingGrid];
-          workingGridCopy[i] = veggie;
-          setWorkingGrid(workingGridCopy);
-        }}>
-        <View
-          style={tw.style("flex justify-center items-center mt-1")}
-          onLayout={event => {
-            if (squareSize) return;
-
-            let w = event.nativeEvent.layout.width;
-            w = w > maxSize ? maxSize : w;
-            setSquareSize(event.nativeEvent.layout.width);
-          }}>
-          {workingGrid[i] && (
-            <VeggieItem
-              draggable={false}
-              veggie={workingGrid[i]}
-              noShadow
-              size={squareSize}
-            />
-          )}
-        </View>
-      </DraxView>
+      <GardenVeggieReceiver
+        width={width}
+        i={i}
+        workingGridState={props.workingGridState}
+        onDragStart={props.onDragStart}
+        onDragEnd={props.onDragEnd}
+      />
     );
   }
 
@@ -122,7 +168,7 @@ export function GardenGrid(props: GardenGridProps) {
           "shadow-brand flex items-center justify-center",
           props.style,
           {
-            maxWidth: maxSize
+            maxWidth: 250
           }
         )}>
         {grid}
@@ -137,32 +183,25 @@ interface VeggieItemProps {
   noShadow?: boolean;
   style?: StyleProp<any>;
   size?: number;
+  onDragStart?: (data: DraxDragEventData) => void;
+  onDragEnd?: (data: DraxDragEndEventData) => DraxProtocolDragEndResponse;
 }
 export function VeggieItem(props: VeggieItemProps) {
-  const [imageUrl, setImageUrl] = React.useState(undefined);
-  const veggieRef = useRef();
+  if (!props.veggie) return <View />;
+
+  const [isDragging, setIsDragging] = React.useState(false);
   let size = props.size || 90;
-  React.useEffect(() => {
-    if (!props.veggie?.url) return;
-    storage
-      .ref(props.veggie.url) //name in storage in firebase console
-      .getDownloadURL()
-      .then((url: string) => {
-        setImageUrl(url);
-      })
-      .catch((e: Error) => console.log("Errors while downloading => ", e));
-  }, []);
 
   const VeggieBase = (
     <View
       style={tw.style(
-        "flex justify-between py-2 items-center ",
+        "flex justify-between py-2 items-center rounded",
         props.style,
         { "shadow-brand": !props.noShadow },
-        { height: size, width: size }
+        { height: size - 5, width: size - 5 }
       )}>
       <Image
-        source={{ uri: imageUrl }}
+        source={{ uri: props.veggie.downloadUrl }}
         style={tw.style(`resize-contain`, {
           height: size - 45,
           width: size - 45
@@ -173,13 +212,21 @@ export function VeggieItem(props: VeggieItemProps) {
       </SofiaSemiMediumText>
     </View>
   );
-
   return (
     <React.Fragment>
       {props.draggable ? (
         <DraxView
           animateSnapback={false}
           snapbackDelay={0}
+          onDragStart={e => {
+            props.onDragStart && props.onDragStart(e);
+            setIsDragging(true);
+          }}
+          onDragEnd={e => {
+            props.onDragEnd && props.onDragEnd(e);
+            setIsDragging(false);
+          }}
+          onDragDrop={e => props.onDragEnd && props.onDragEnd(undefined)}
           payload={{
             veggie: props.veggie
           }}>
@@ -226,6 +273,71 @@ export function GardenSelector(props: GardenSelectorProps) {
         </View>
       )}
     </React.Fragment>
+  );
+}
+
+interface DropSectionProps {
+  isDraggingPallet: boolean;
+  isDraggingGrid: boolean;
+  onVeggieInfoSelection: (veggie: Veggie) => void;
+  onVeggieDeleteSelection: (veggie: Veggie) => void;
+}
+export function DropSection(props: DropSectionProps) {
+  const { isDraggingGrid, isDraggingPallet } = props;
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const navigation = useNavigation();
+  return (
+    <View style={tw.style("mt-2 flex  flex justify-center ")}>
+      {isDraggingGrid ? (
+        <DraxView
+          onReceiveDragDrop={({
+            dragged: {
+              payload: { veggie }
+            }
+          }) => {
+            props.onVeggieDeleteSelection(veggie);
+            setIsDraggingOver(false);
+          }}
+          onReceiveDragEnter={() => setIsDraggingOver(true)}
+          onReceiveDragExit={() => setIsDraggingOver(false)}
+          style={tw.style("bg-red-100 border-red-200 border p-2 rounded-md", {
+            "bg-red-500 text-white": isDraggingOver
+          })}>
+          <SofiaBoldText
+            style={tw.style("text-center text-red-400", {
+              "text-white": isDraggingOver
+            })}>
+            <FontAwesome name="trash" size={20} /> Delete
+          </SofiaBoldText>
+        </DraxView>
+      ) : isDraggingPallet ? (
+        <DraxView
+          onReceiveDragDrop={({
+            dragged: {
+              payload: { veggie }
+            }
+          }) => {
+            props.onVeggieInfoSelection(veggie);
+            setIsDraggingOver(false);
+          }}
+          onReceiveDragEnter={() => setIsDraggingOver(true)}
+          onReceiveDragExit={() => setIsDraggingOver(false)}
+          style={tw.style("bg-blue-100 border-blue-200 border p-2 rounded-md", {
+            "bg-blue-500 text-white": isDraggingOver
+          })}>
+          <SofiaBoldText
+            style={tw.style("text-center text-blue-400", {
+              "text-white": isDraggingOver
+            })}>
+            <FontAwesome name="leaf" size={20} /> Veggie Info
+          </SofiaBoldText>
+        </DraxView>
+      ) : (
+        <View style={tw.style("border border-transparent p-2")}>
+          <SofiaRegularText>Select Veggies</SofiaRegularText>
+        </View>
+      )}
+    </View>
   );
 }
 
