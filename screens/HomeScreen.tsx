@@ -25,9 +25,11 @@ import { Picker } from "@react-native-picker/picker";
 import { storage } from "../firebase/firebaseTooling";
 import { updateVeggies } from "../store";
 import {
+  GardenGrid,
   GardenSelector,
   NoGardensPrompt
 } from "../components/garden/GardenItems";
+import { ScrollView } from "react-native-gesture-handler";
 
 PrimaryButton;
 export default function HomeScreen({
@@ -37,6 +39,8 @@ export default function HomeScreen({
   const { gardens, activeGarden } = useSelector(
     (state: RootState) => state.gardens
   );
+  const { veggies } = useSelector((state: RootState) => state.veggies);
+  const [veggieGrid, setVeggieGrid] = React.useState([]);
 
   React.useEffect(() => {
     if (!activeGarden?.url) return;
@@ -55,6 +59,15 @@ export default function HomeScreen({
     dispatch(updateVeggies());
   }, []);
 
+  React.useEffect(() => {
+    console.log(
+      { ...veggies },
+      activeGarden?.grid.map(g => veggies[g]),
+      activeGarden?.grid
+    );
+    setVeggieGrid(activeGarden?.grid.map(g => veggies[g]) || []);
+  }, [activeGarden, veggies]);
+
   const handleUpdateActiveGarden = (gardenName: string) => {
     const garden = gardens.find(g => g.name === gardenName);
     dispatch(updateActiveGarden(garden));
@@ -62,13 +75,18 @@ export default function HomeScreen({
 
   return gardens?.length && activeGarden ? (
     <MainPageSlot>
-      <GardenSelector />
-      <View
-        style={tw`w-full h-64 flex justify-center items-center shadow-brand`}>
-        <Image
-          style={tw.style("h-64 w-full rounded-md")}
-          source={{ uri: imageUrl }}></Image>
-      </View>
+      <ScrollView>
+        <GardenSelector />
+        <View
+          style={tw`w-full flex overflow-visible justify-center items-center shadow-brand relative`}>
+          <Image
+            style={tw.style("h-64 w-full rounded-md")}
+            source={{ uri: imageUrl }}></Image>
+          <View style={tw.style(" bg-transparent flex w-full -top-16")}>
+            <GardenGrid draggable={false} veggieGrid={veggieGrid} />
+          </View>
+        </View>
+      </ScrollView>
     </MainPageSlot>
   ) : (
     <NoGardensPrompt />

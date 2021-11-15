@@ -114,8 +114,10 @@ export default function GardenScreen({
       <DraxProvider>
         <View style={tw.style("flex px-4")}>
           <GardenGrid
+            draggable={true}
             style={tw.style("mt-2")}
-            workingGridState={[workingGrid, setWorkingGrid]}
+            veggieGrid={workingGrid}
+            setVeggieGrid={setWorkingGrid}
             stateGrid={stateGrid}
             onDragStart={() => setIsDraggingGrid(true)}
             onDragEnd={() => setIsDraggingGrid(false)}

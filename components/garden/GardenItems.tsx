@@ -127,33 +127,48 @@ export function GardenVeggieReceiver(props: GardenVeggieReceiverProps) {
 }
 
 interface GardenGridProps {
-  style: StyleProp<any>;
-  workingGridState: [
-    Array<Veggie>,
-    React.Dispatch<React.SetStateAction<Array<Veggie>>>
-  ];
+  style?: StyleProp<any>;
+  veggieGrid: Array<Veggie>;
+  setVeggieGrid?: React.Dispatch<React.SetStateAction<Array<Veggie>>>;
   onDragStart?: (data: DraxDragEventData) => void;
   onDragEnd?: (data: DraxDragEndEventData) => DraxProtocolDragEndResponse;
-  stateGrid: Array<VeggieState>;
+  stateGrid?: Array<VeggieState>;
+  draggable?: boolean;
 }
 export function GardenGrid(props: GardenGridProps) {
   const { activeGarden } = useSelector((state: RootState) => state.gardens);
-
+  const { veggies } = useSelector((state: RootState) => state.veggies);
   const height = activeGarden?.garden.height || 0;
   const width = activeGarden?.garden.width || 0;
-
+  const draggable = props.draggable !== undefined ? props.draggable : false;
   const widthGrid: Array<JSX.Element> = [];
   for (let i = 0; i < width * height; i++) {
     widthGrid.push(
-      <GardenVeggieReceiver
-        width={width}
-        i={i}
-        key={i}
-        workingGridState={props.workingGridState}
-        veggieState={props.stateGrid[i]}
-        onDragStart={props.onDragStart}
-        onDragEnd={props.onDragEnd}
-      />
+      draggable ? (
+        <GardenVeggieReceiver
+          width={width}
+          i={i}
+          key={i}
+          workingGridState={[props.veggieGrid, props.setVeggieGrid]}
+          veggieState={props.stateGrid[i]}
+          onDragStart={props.onDragStart}
+          onDragEnd={props.onDragEnd}
+        />
+      ) : (
+        <View
+          key={i}
+          style={tw.style("border-r border-gray-300", {
+            "border-r-0 ": (i + 1) % width === 0
+          })}>
+          <VeggieItem
+            index={i}
+            draggable={false}
+            veggie={props.veggieGrid[i]}
+            noShadow={true}
+            size={75}
+          />
+        </View>
+      )
     );
   }
 
@@ -169,7 +184,7 @@ export function GardenGrid(props: GardenGridProps) {
   ));
 
   return (
-    <View style={tw.style(" flex items-center justify-center")}>
+    <View style={tw.style("flex items-center justify-center")}>
       <View
         style={tw.style(
           "shadow-brand flex items-center justify-center",
@@ -190,13 +205,11 @@ interface VeggieItemProps {
   noShadow?: boolean;
   style?: StyleProp<any>;
   size?: number;
-  index: number;
+  index?: number;
   onDragStart?: (data: DraxDragEventData) => void;
   onDragEnd?: (data: DraxDragEndEventData) => DraxProtocolDragEndResponse;
 }
 export function VeggieItem(props: VeggieItemProps) {
-  if (!props.veggie) return <View />;
-
   const [isDragging, setIsDragging] = React.useState(false);
   let size = props.size || 90;
 
@@ -205,19 +218,23 @@ export function VeggieItem(props: VeggieItemProps) {
       style={tw.style(
         "flex justify-between py-2 items-center rounded",
         props.style,
-        { "shadow-brand": !props.noShadow },
+        { "shadow-brand": !props?.noShadow },
         { height: size - 5, width: size - 5 }
       )}>
-      <Image
-        source={{ uri: props.veggie.downloadUrl }}
-        style={tw.style(`resize-contain`, {
-          height: size - 45,
-          width: size - 45
-        })}
-      />
-      <SofiaSemiMediumText style={tw.style("text-center")}>
-        {props.veggie.displayName}
-      </SofiaSemiMediumText>
+      {props.veggie && (
+        <View style={tw.style("flex justify-between items-center")}>
+          <Image
+            source={{ uri: props.veggie?.downloadUrl }}
+            style={tw.style(`resize-contain`, {
+              height: size - 45,
+              width: size - 45
+            })}
+          />
+          <SofiaSemiMediumText style={tw.style("text-center")}>
+            {props.veggie?.displayName}
+          </SofiaSemiMediumText>
+        </View>
+      )}
     </View>
   );
   return (

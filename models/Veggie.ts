@@ -53,7 +53,7 @@ export const getAllVeggies = async () => {
   const snapshot = await ref.get();
 
   const veggies: { [name: string]: Veggie } = {};
-  snapshot.forEach(async doc => {
+  for (let doc of snapshot.docs) {
     const veggie = { ...(doc.data() as Veggie) };
 
     const url = await storage
@@ -62,8 +62,7 @@ export const getAllVeggies = async () => {
 
     veggie.downloadUrl = url;
     veggies[veggie.name] = veggie;
-  });
-
+  }
   return veggies;
 };
 
