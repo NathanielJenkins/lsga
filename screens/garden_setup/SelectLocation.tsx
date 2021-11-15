@@ -1,7 +1,13 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Image, View, Text } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  View,
+  Text,
+  DeviceEventEmitter
+} from "react-native";
 import CardSlot from "../../screens/slots/CardSlot";
 import { RootStackParamList, RootStackScreenProps } from "../../types";
 import { tw, brandColor } from "../../components/Themed";
@@ -29,6 +35,7 @@ export default function SelectLocation(
   const [subtitle, setSubtitle] = useState<string>(
     "Use a picture to showcase the location of your next garden"
   );
+  DeviceEventEmitter;
   const navigation = useNavigation();
   React.useEffect(() => {
     if (newGarden?.url) {

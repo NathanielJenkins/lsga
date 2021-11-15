@@ -41,6 +41,8 @@ import ConfirmLocation from "../screens/garden_setup/ConfirmLocation";
 import CameraPreview from "../screens/util/CameraPreview";
 import Admin from "../screens/admin/Admin";
 import Veggie from "../screens/gardens/VeggieScreen";
+import { useDispatch } from "react-redux";
+import { updateGardens, updateVeggies } from "../store";
 export default function Navigation({
   colorScheme
 }: {

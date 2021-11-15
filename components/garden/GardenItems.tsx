@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { storage } from "../../firebase/firebaseTooling";
-import Veggie from "../../models/Veggie";
+import Veggie, { VeggieState } from "../../models/Veggie";
 import { RootState } from "../../store";
 import { tw } from "../Themed";
 import { Picker } from "@react-native-picker/picker";
@@ -70,9 +70,10 @@ interface GardenVeggieReceiverProps {
   ];
   onDragStart?: (data: DraxDragEventData) => void;
   onDragEnd?: (data: DraxDragEndEventData) => DraxProtocolDragEndResponse;
+  veggieState: VeggieState;
 }
 export function GardenVeggieReceiver(props: GardenVeggieReceiverProps) {
-  const { width, i } = props;
+  const { width, i, veggieState } = props;
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [squareSize, setSquareSize] = useState<number>(0);
   const [workingGrid, setWorkingGrid] = props.workingGridState;
@@ -83,7 +84,9 @@ export function GardenVeggieReceiver(props: GardenVeggieReceiverProps) {
       style={tw.style("flex-1 border-gray-300 bg-transparent border-r", {
         height: squareSize,
         "border-r-0 ": (i + 1) % width === 0,
-        "bg-gray-100": isDraggingOver
+        "bg-gray-100": isDraggingOver,
+        "bg-green-100": veggieState === VeggieState.Compatible,
+        "bg-red-100": veggieState === VeggieState.Incompatible
       })}
       key={i}
       onReceiveDragEnter={() => setIsDraggingOver(true)}
@@ -130,6 +133,7 @@ interface GardenGridProps {
   ];
   onDragStart?: (data: DraxDragEventData) => void;
   onDragEnd?: (data: DraxDragEndEventData) => DraxProtocolDragEndResponse;
+  stateGrid: Array<VeggieState>;
 }
 export function GardenGrid(props: GardenGridProps) {
   const { activeGarden } = useSelector((state: RootState) => state.gardens);
@@ -143,7 +147,9 @@ export function GardenGrid(props: GardenGridProps) {
       <GardenVeggieReceiver
         width={width}
         i={i}
+        key={i}
         workingGridState={props.workingGridState}
+        veggieState={props.stateGrid[i]}
         onDragStart={props.onDragStart}
         onDragEnd={props.onDragEnd}
       />
@@ -333,7 +339,7 @@ export function DropSection(props: DropSectionProps) {
           </SofiaBoldText>
         </DraxView>
       ) : (
-        <View style={tw.style("border border-transparent p-2")}>
+        <View style={tw.style("border border-transparent py-2")}>
           <SofiaRegularText>Select Veggies</SofiaRegularText>
         </View>
       )}

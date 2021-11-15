@@ -79,19 +79,49 @@ export default function VeggieScreen({
         <SofiaRegularText style={tw.style("text-brand text-lg my-2")}>
           Companions
         </SofiaRegularText>
-        <FlatList
-          style={tw.style("pb-2")}
-          nestedScrollEnabled
-          horizontal={true}
-          data={veggie.companions}
-          keyExtractor={item => item.name}
-          renderItem={({ item }) => (
-            <VeggieItem
-              style={tw.style("m-1")}
-              veggie={veggies[item]}
-              draggable={false}
-            />
-          )}></FlatList>
+        {veggie.companions?.length ? (
+          <FlatList
+            style={tw.style("pb-2")}
+            nestedScrollEnabled
+            horizontal={true}
+            data={veggie.companions}
+            renderItem={({ item, index }) => (
+              <VeggieItem
+                style={tw.style("m-1")}
+                veggie={veggies[item]}
+                key={index}
+                draggable={false}
+              />
+            )}
+          />
+        ) : (
+          <SofiaRegularText style={tw.style("text-gray-500 text-sm my-2")}>
+            No Companions
+          </SofiaRegularText>
+        )}
+        <SofiaRegularText style={tw.style("text-brand text-lg my-2")}>
+          Exclusions
+        </SofiaRegularText>
+        {veggie?.exclusions.length ? (
+          <FlatList
+            style={tw.style("pb-2")}
+            nestedScrollEnabled
+            horizontal={true}
+            data={veggie.exclusions}
+            renderItem={({ item, index }) => (
+              <VeggieItem
+                style={tw.style("m-1")}
+                veggie={veggies[item]}
+                key={index}
+                draggable={false}
+              />
+            )}
+          />
+        ) : (
+          <SofiaRegularText style={tw.style("text-gray-500 text-sm ")}>
+            No Exclusions
+          </SofiaRegularText>
+        )}
         <Info title={"How to Harvest"} text={veggie.howToHarvest} />
       </ScrollView>
     </GeneralSlot>

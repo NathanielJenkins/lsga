@@ -63,5 +63,12 @@ export const getAllVeggies = async () => {
     veggie.downloadUrl = url;
     veggies[veggie.name] = veggie;
   });
+
   return veggies;
 };
+
+export class VeggieState {
+  public static readonly Compatible = "Compatible";
+  public static readonly Incompatible = "Incompatible";
+  public static readonly None = "None";
+}

@@ -8,7 +8,6 @@ import { store } from "./store/index";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
-import { NativeBaseProvider } from "native-base";
 // import { initializedFirebaseApp } from "./firebaseTooling";
 
 export default function App() {
