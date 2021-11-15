@@ -10,7 +10,8 @@ import {
 } from "../types";
 import UserGarden, {
   getUserGardens,
-  addUserGarden
+  addUserGarden,
+  updateUserGarden
 } from "../../models/UserGardens";
 import { useSelector } from "react-redux";
 import { RootState } from "..";
@@ -72,6 +73,23 @@ export function addNewGarden(garden: UserGarden) {
         const { activeGarden } = getState().gardens;
         if (!activeGarden && response)
           dispatch(updateActiveGardenSuccess(response));
+      },
+      error => {
+        console.error(error);
+        dispatch(failure("Server error."));
+      }
+    );
+  };
+}
+
+export function updateActiveUserGarden(garden: UserGarden) {
+  return (dispatch: Dispatch, getState: () => RootState) => {
+    // async action: uses Redux-Thunk middleware to return a function instead of an action creator
+    dispatch(request());
+
+    return updateUserGarden(garden).then(
+      response => {
+        dispatch(updateActiveGardenSuccess(response));
       },
       error => {
         console.error(error);

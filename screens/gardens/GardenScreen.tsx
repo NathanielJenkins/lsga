@@ -13,16 +13,19 @@ import {
   DropSection
 } from "../../components/garden/GardenItems";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { SofiaBoldText } from "../../components/StyledText";
+import { SofiaBoldText, SofiaRegularText } from "../../components/StyledText";
 import { RootTabScreenProps } from "../../types";
 import Veggie, { VeggieState } from "../../models/Veggie";
-
+import { IconText } from "../../components/common/Button";
+import { updateActiveUserGarden } from "../../store/actions/garden.actions";
 export default function GardenScreen({
   navigation,
   route
 }: RootTabScreenProps<"GardenScreen">) {
+  const dispatch = useDispatch();
+
   const { veggies } = useSelector((state: RootState) => state.veggies);
 
   const { activeGarden } = useSelector((state: RootState) => state.gardens);
@@ -34,6 +37,12 @@ export default function GardenScreen({
   const [stateGrid, setStateGrid] = React.useState(
     veggieGrid.map(() => VeggieState.None)
   );
+
+  React.useEffect(() => {
+    setWorkingGrid(veggieGrid);
+    setStateGrid(veggieGrid.map(() => VeggieState.None));
+  }, [activeGarden]);
+
   const [isDraggingPallet, setIsDraggingPallet] = React.useState(false);
   const [isDraggingGrid, setIsDraggingGrid] = React.useState(false);
   const [veggieDragging, setVeggieDragging] = React.useState<Veggie>();
@@ -46,54 +55,62 @@ export default function GardenScreen({
     }
     const { width, height } = activeGarden.garden;
 
-    const checkSquare = (index: number): VeggieState => {
-      if (index < 0 || index >= workingGrid.length) return VeggieState.None;
-
-      // check the veggie at the spot for exclusions
-      if (workingGrid[index]?.exclusions.includes(veggieDragging.name))
-        return VeggieState.Incompatible;
-      if (workingGrid[index]?.companions.includes(veggieDragging.name))
-        return VeggieState.Compatible;
-      else return VeggieState.None;
+    const checkSquare = (
+      index: number,
+      veggie: Veggie,
+      stateGrid: Array<VeggieState>
+    ) => {
+      if (index < 0 || index >= workingGrid.length)
+        stateGrid[index] = VeggieState.None;
+      else if (workingGrid[index]) stateGrid[index] = VeggieState.None;
+      else if (veggie.exclusions.includes(veggieDragging.name))
+        stateGrid[index] = VeggieState.Incompatible;
+      else if (veggie.companions.includes(veggieDragging.name))
+        stateGrid[index] = VeggieState.Compatible;
+      else stateGrid[index] = VeggieState.None;
     };
 
     for (let i = 0; i < workingGrid.length; i++) {
-      if (workingGrid[i]) stateGridCopy[i] = VeggieState.None;
-      else {
-        const left = i - 1;
-        const right = i + 1;
-        const top = i - width;
-        const bottom = i + width;
-        const topLeft = i - (width + 1);
-        const topRight = i - (width - 1);
-        const bottomLeft = i + (width + 1);
-        const bottomRight = i + (width - 1);
+      const veggie = workingGrid[i];
+      if (!veggie) continue;
+      const left =
+        Math.floor((i - 1) / width) !== Math.floor(i / width) ? -1 : i - 1;
+      const right =
+        Math.floor((i + 1) / width) !== Math.floor(i / width) ? -1 : i + 1;
+      const top = i - width;
+      const bottom = i + width;
 
-        const checks = [
-          left,
-          right,
-          top,
-          bottom,
-          topLeft,
-          topRight,
-          bottomLeft,
-          bottomRight
-        ];
-        const stateArray = checks.map(i => checkSquare(i));
-        if (stateArray.includes(VeggieState.Incompatible))
-          stateGridCopy[i] = VeggieState.Incompatible;
-        else if (stateArray.includes(VeggieState.Compatible))
-          stateGridCopy[i] = VeggieState.Compatible;
-        else stateGridCopy[i] = VeggieState.None;
-      }
+      const checks = [left, right, top, bottom];
+      checks.map(i => checkSquare(i, veggie, stateGridCopy));
 
       setStateGrid(stateGridCopy);
     }
   }, [veggieDragging]);
 
+  const handleSaveGarden = () => {
+    const userGarden = { ...activeGarden };
+    userGarden.grid = workingGrid.map(w => w?.name || null);
+    dispatch(updateActiveUserGarden(userGarden));
+  };
+
   if (!activeGarden) return <NoGardensPrompt />;
   return (
     <View style={tw.style("bg-white  flex flex-1  pt-8")}>
+      <View style={tw.style("flex flex-row justify-between items-center px-2")}>
+        <SofiaBoldText style={tw.style("text-gray-500 text-2xl")}>
+          {activeGarden.name}
+        </SofiaBoldText>
+
+        <IconText
+          size={25}
+          name="save"
+          text="Save"
+          color="grey"
+          style={tw`mr-2`}
+          onPress={handleSaveGarden}
+        />
+      </View>
+
       <DraxProvider>
         <View style={tw.style("flex px-4")}>
           <GardenGrid
@@ -106,7 +123,11 @@ export default function GardenScreen({
           <DropSection
             isDraggingPallet={isDraggingPallet}
             isDraggingGrid={isDraggingGrid}
-            onVeggieDeleteSelection={veggie => console.log(veggie)}
+            onVeggieDeleteSelection={index => {
+              const workingGridCopy = [...workingGrid];
+              workingGridCopy[index] = null;
+              setWorkingGrid(workingGridCopy);
+            }}
             onVeggieInfoSelection={veggie =>
               navigation.push("Veggie", { veggie })
             }
@@ -120,8 +141,10 @@ export default function GardenScreen({
                 data={Object.values(veggies)}
                 style={tw.style("flex mb-auto")}
                 numColumns={Math.floor(Object.values(veggies).length / 2) + 1}
-                renderItem={({ item }) => (
+                keyExtractor={d => `--${d.name}`}
+                renderItem={({ item, index }) => (
                   <VeggieItem
+                    index={index}
                     key={item.name}
                     draggable={true}
                     veggie={item}

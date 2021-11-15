@@ -4,6 +4,7 @@ import Garden from "./Garden";
 import { auth, firestore, storage } from "../firebase/firebaseTooling";
 import Documents from "./Documents";
 import Veggie from "./Veggie";
+import { useDispatch } from "react-redux";
 
 const ref = firestore.collection(Documents.UserGardens);
 
@@ -40,6 +41,19 @@ export const addUserGarden = async (userGarden: UserGarden) => {
     ...Array(userGarden.garden.height * userGarden.garden.width).keys()
   ].map(() => null);
   await ref.doc().set(userGarden);
+  return userGarden;
+};
+
+export const updateUserGarden = async (userGarden: UserGarden) => {
+  const sc = await ref
+    .where(properties._name, "==", userGarden.name)
+    .limit(1)
+    .get();
+  const gardenId = sc.docs?.at(0).id;
+
+  if (!gardenId) return;
+  await ref.doc(gardenId).set(userGarden);
+
   return userGarden;
 };
 

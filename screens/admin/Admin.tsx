@@ -4,6 +4,8 @@ import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { PrimaryButton } from "../../components/common/Button";
 import Veggies from "../../assets/data/Veggies.json";
+import Gardens from "../../assets/data/Gardens.json";
+
 import { firestore } from "../../firebase/firebaseTooling";
 import Veggie from "../../models/Veggie";
 import Documents from "../../models/Documents";
@@ -13,7 +15,10 @@ export default function Admin() {
     Veggies.forEach(v => veggieRef.doc(v.name).set(v));
   };
 
-  const handleImportGardens = () => {};
+  const handleImportGardens = () => {
+    const gardenRef = firestore.collection(Documents.Gardens);
+    Gardens.forEach(v => gardenRef.doc(v.name).set(v));
+  };
 
   return (
     <View style={styles.container}>

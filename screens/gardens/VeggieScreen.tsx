@@ -87,6 +87,7 @@ export default function VeggieScreen({
             data={veggie.companions}
             renderItem={({ item, index }) => (
               <VeggieItem
+                index={index}
                 style={tw.style("m-1")}
                 veggie={veggies[item]}
                 key={index}

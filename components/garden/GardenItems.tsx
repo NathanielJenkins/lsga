@@ -112,6 +112,7 @@ export function GardenVeggieReceiver(props: GardenVeggieReceiverProps) {
         }}>
         {workingGrid[i] && (
           <VeggieItem
+            index={i}
             draggable={true}
             veggie={workingGrid[i]}
             noShadow
@@ -189,6 +190,7 @@ interface VeggieItemProps {
   noShadow?: boolean;
   style?: StyleProp<any>;
   size?: number;
+  index: number;
   onDragStart?: (data: DraxDragEventData) => void;
   onDragEnd?: (data: DraxDragEndEventData) => DraxProtocolDragEndResponse;
 }
@@ -234,7 +236,8 @@ export function VeggieItem(props: VeggieItemProps) {
           }}
           onDragDrop={e => props.onDragEnd && props.onDragEnd(undefined)}
           payload={{
-            veggie: props.veggie
+            veggie: props.veggie,
+            index: props.index
           }}>
           {VeggieBase}
         </DraxView>
@@ -286,7 +289,7 @@ interface DropSectionProps {
   isDraggingPallet: boolean;
   isDraggingGrid: boolean;
   onVeggieInfoSelection: (veggie: Veggie) => void;
-  onVeggieDeleteSelection: (veggie: Veggie) => void;
+  onVeggieDeleteSelection: (index: number) => void;
 }
 export function DropSection(props: DropSectionProps) {
   const { isDraggingGrid, isDraggingPallet } = props;
@@ -298,10 +301,10 @@ export function DropSection(props: DropSectionProps) {
         <DraxView
           onReceiveDragDrop={({
             dragged: {
-              payload: { veggie }
+              payload: { veggie, index }
             }
           }) => {
-            props.onVeggieDeleteSelection(veggie);
+            props.onVeggieDeleteSelection(index);
             setIsDraggingOver(false);
           }}
           onReceiveDragEnter={() => setIsDraggingOver(true)}
