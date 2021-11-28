@@ -8,17 +8,19 @@ import { useSelector } from "react-redux";
 import { RootState } from "..";
 import {
   FrostDateParsed,
-  setFrostDate,
-  setUserProperties
+  setFrostDateFromDate,
+  setFrostDateFromLngLat,
+  setUserProperties,
+  updateFirebaseFrostDates
 } from "../../models/UserProperties";
 
-export function updateFrostDates(lat: number, lon: number) {
+export function updateFrostDatesByLngLat(lat: number, lon: number) {
   // check if an of the fields of the user garden are null
   return (dispatch: Dispatch) => {
     // async action: uses Redux-Thunk middleware to return a function instead of an action creator
     dispatch(request());
 
-    return setFrostDate(lat, lon).then(
+    return setFrostDateFromLngLat(lat, lon).then(
       response => {
         dispatch({
           type: UPDATE_FROST_DATE,
@@ -29,6 +31,29 @@ export function updateFrostDates(lat: number, lon: number) {
         dispatch(failure("Server error"));
       }
     );
+  };
+}
+
+export function updateFrostDatesFromDate(date: Date, type: "spring" | "fall") {
+  return (dispatch: Dispatch, getState: () => RootState) => {
+    let springFrostDate: FrostDateParsed, fallFrostDate: FrostDateParsed;
+    if (type === "spring") {
+      springFrostDate = new FrostDateParsed(date);
+      fallFrostDate = getState().user.fallFrostDate;
+    } else {
+      springFrostDate = getState().user.springFrostDate;
+      fallFrostDate = new FrostDateParsed(date);
+    }
+
+    // async action: uses Redux-Thunk middleware to return a function instead of an action creator
+    dispatch(request());
+
+    updateFirebaseFrostDates(springFrostDate, fallFrostDate);
+
+    return dispatch({
+      type: UPDATE_FROST_DATE,
+      payload: { springFrostDate, fallFrostDate }
+    });
   };
 }
 

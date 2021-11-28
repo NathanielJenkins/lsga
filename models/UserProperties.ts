@@ -4,13 +4,25 @@ import { parseInt } from "lodash";
 import { Month } from "./Veggie";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { updateFrostDates } from "../store/actions/user.actions";
 import { auth, firestore } from "../firebase/firebaseTooling";
 import { store } from "../store";
 import Documents from "./Documents";
 
 const ref = firestore.collection("user_properties");
-
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
 export default interface UserProperties {
   [properties.springFrostDate]: FrostDateParsed;
   [properties.fallFrostDate]: FrostDateParsed;
@@ -51,29 +63,12 @@ export const Fall = "2";
 export class FrostDateParsed {
   public day: number;
   public month: Month;
+  public date: Date;
 
-  constructor(frostDateRaw: FrostDateRaw) {
-    //take the 90th percentile
-    const f = frostDateRaw.prob_90;
-    const monthNumber = parseInt(f.slice(0, 2));
-    const dayNumber = parseInt(f.slice(2, 4));
-    const orderOfMonths = [
-      Month.January,
-      Month.February,
-      Month.March,
-      Month.April,
-      Month.May,
-      Month.June,
-      Month.July,
-      Month.August,
-      Month.September,
-      Month.October,
-      Month.November,
-      Month.December
-    ];
-
-    this.day = dayNumber;
-    this.month = orderOfMonths[monthNumber];
+  constructor(date: Date) {
+    this.day = date.getDate();
+    this.month = monthNames[date.getMonth()];
+    this.date = date;
   }
 }
 
@@ -88,7 +83,7 @@ export const setUserProperties = async () => {
 const frostAx = axios.create({
   baseURL: "https://api.farmsense.net/v1/frostdates"
 });
-export const setFrostDate = async (lat: number, lon: number) => {
+export const setFrostDateFromLngLat = async (lat: number, lon: number) => {
   const locationParams = new URLSearchParams({
     lat: lat.toString(),
     lon: lon.toString()
@@ -118,9 +113,34 @@ export const setFrostDate = async (lat: number, lon: number) => {
   if (springFrostResponse.status !== 200 || fallFrostResponse.status !== 200)
     return;
 
-  const springFrostDate = new FrostDateParsed(springFrostResponse.data[0]);
-  const fallFrostDate = new FrostDateParsed(fallFrostResponse.data[0]);
+  const date1 = getDateFromString(springFrostResponse.data[0].prob_90);
+  const date2 = getDateFromString(fallFrostResponse.data[0].prob_90);
 
+  const springFrostDate = new FrostDateParsed(date1);
+  const fallFrostDate = new FrostDateParsed(date2);
+
+  updateFirebaseFrostDates(springFrostDate, fallFrostDate);
+
+  return {
+    springFrostDate,
+    fallFrostDate
+  };
+};
+
+export const setFrostDateFromDate = async (
+  springDate: Date,
+  fallDate: Date
+) => {
+  const springFrostDate = new FrostDateParsed(springDate);
+  const fallFrostDate = new FrostDateParsed(fallDate);
+
+  updateFirebaseFrostDates(springFrostDate, fallFrostDate);
+};
+
+export const updateFirebaseFrostDates = (
+  springFrostDate: FrostDateParsed,
+  fallFrostDate: FrostDateParsed
+) => {
   // update the user properties object
   const userId = auth.currentUser.uid;
   const userProperties = { ...store.getState().user };
@@ -129,8 +149,12 @@ export const setFrostDate = async (lat: number, lon: number) => {
   userProperties.springFrostDate = { ...springFrostDate };
   ref.doc(userId).set(userProperties);
 
-  return {
-    springFrostDate,
-    fallFrostDate
-  };
+  return { springFrostDate, fallFrostDate };
+};
+
+const getDateFromString = (f: string) => {
+  const monthNumber = parseInt(f.slice(0, 2));
+  const dayNumber = parseInt(f.slice(2, 4));
+
+  return new Date(new Date().getFullYear(), monthNumber, dayNumber);
 };

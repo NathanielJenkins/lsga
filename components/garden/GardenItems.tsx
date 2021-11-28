@@ -14,7 +14,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { storage } from "../../firebase/firebaseTooling";
 import Veggie, { VeggieState } from "../../models/Veggie";
-import { RootState, updateFrostDates } from "../../store";
+import {
+  RootState,
+  updateFrostDatesByLngLat,
+  updateFrostDatesFromDate
+} from "../../store";
 import { tw } from "../Themed";
 import { Picker } from "@react-native-picker/picker";
 import { updateActiveGarden } from "../../store/actions/garden.actions";
@@ -39,8 +43,9 @@ import { chunk } from "lodash";
 import { FontAwesome } from "@expo/vector-icons";
 import Ripple from "react-native-material-ripple";
 import { Info } from "../common/Display";
-import Location from "expo-location";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import * as Location from "expo-location";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { setFrostDateFromLngLat } from "../../models/UserProperties";
 
 export function NoGardensPrompt() {
   const navigation = useNavigation();
@@ -429,32 +434,31 @@ export default function AddFrostDateComponent() {
 
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-
-  const createAlert = () => {
-    Alert.alert("Alert Title", "My Alert Msg", [
-      {
-        text: "Set Manually",
-        onPress: () => setOpen(true)
-      },
-      {
-        text: "Set with Location",
-        onPress: () => setOpen(true)
-      }
-    ]);
-  };
+  const [settingDateType, setSettingDateType] = useState<"spring" | "fall">();
 
   const handleAskForLocation = async () => {
     setIsLoading(true);
-    let { status } = await Location.requestForegroundPermissionsAsync();
 
-    if (status === "granted") {
-      const { coords } = await Location.getCurrentPositionAsync({});
-      dispatch(updateFrostDates(coords.longitude, coords.latitude));
-    } else {
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status === "granted") {
+        const { coords } = await Location.getCurrentPositionAsync({});
+        dispatch(updateFrostDatesByLngLat(coords.longitude, coords.latitude));
+      } else {
+        setIsLoading(false);
+      }
+    } catch (error) {
       setIsLoading(false);
     }
+  };
+
+  const handleSetDate = (event: Event, date: Date) => {
+    setOpen(false);
+
+    if (event.type === "dismissed") return;
+    dispatch(updateFrostDatesFromDate(date, settingDateType));
   };
 
   return (
@@ -466,18 +470,41 @@ export default function AddFrostDateComponent() {
           </View>
         ) : springFrostDate && fallFrostDate ? (
           <View>
-            <SofiaRegularText>
-              <SofiaBoldText>Fall Frost Date: </SofiaBoldText>
-              <SofiaRegularText>
-                {fallFrostDate.month} {fallFrostDate.day}
-              </SofiaRegularText>
-            </SofiaRegularText>
-            <SofiaRegularText>
-              <SofiaBoldText>Spring Frost Date: </SofiaBoldText>
-              <SofiaRegularText>
-                {springFrostDate.month} {springFrostDate.day}
-              </SofiaRegularText>
-            </SofiaRegularText>
+            <View
+              style={tw.style("flex flex-row justify-between items-center")}>
+              <View style={tw.style("flex flex-row")}>
+                <SofiaBoldText>Fall Frost Date: </SofiaBoldText>
+                <SofiaRegularText>
+                  {fallFrostDate.month} {fallFrostDate.day}
+                </SofiaRegularText>
+              </View>
+              <SofiaBoldText
+                onPress={() => {
+                  setSettingDateType("fall");
+                  setOpen(true);
+                }}
+                style={tw.style("text-brand underline")}>
+                Edit
+              </SofiaBoldText>
+            </View>
+
+            <View
+              style={tw.style("flex flex-row justify-between items-center")}>
+              <View style={tw.style("flex flex-row")}>
+                <SofiaBoldText>Spring Frost Date: </SofiaBoldText>
+                <SofiaRegularText>
+                  {springFrostDate.month} {springFrostDate.day}
+                </SofiaRegularText>
+              </View>
+              <SofiaBoldText
+                onPress={() => {
+                  setSettingDateType("spring");
+                  setOpen(true);
+                }}
+                style={tw.style("text-brand underline")}>
+                Edit
+              </SofiaBoldText>
+            </View>
           </View>
         ) : (
           <View>
@@ -489,22 +516,19 @@ export default function AddFrostDateComponent() {
         <View style={tw.style("mt-2")}>
           <SecondaryButton
             title="Set Frost Date"
-            onPress={() => createAlert()}
+            onPress={() => handleAskForLocation()}
           />
         </View>
 
-        <DatePicker
-          modal
-          open={open}
-          date={date}
-          onConfirm={date => {
-            setOpen(false);
-            setDate(date);
-          }}
-          onCancel={() => {
-            setOpen(false);
-          }}
-        />
+        {open && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={new Date()}
+            is24Hour={true}
+            display="default"
+            onChange={handleSetDate as any}
+          />
+        )}
       </Info>
     </React.Fragment>
   );

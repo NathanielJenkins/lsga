@@ -18,11 +18,10 @@ import GeneralSlot from "../slots/GeneralSlot";
 import Ripple from "react-native-material-ripple";
 import { IconText, SecondaryButton } from "../../components/common/Button";
 import { Info } from "../../components/common/Display";
-import { RootState, updateActiveGarden, updateFrostDates } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
-import { setFrostDate } from "../../models/UserProperties";
+import { setFrostDateFromLngLat } from "../../models/UserProperties";
 import AddFrostDate from "../../components/garden/GardenItems";
 import AddFrostDateComponent from "../../components/garden/GardenItems";
 
