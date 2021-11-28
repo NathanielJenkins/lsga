@@ -15,6 +15,7 @@ import GardenInformationStart from "./GardenInformationStart";
 import brand_logo from "../../assets/images/brand_logo.png";
 import SelectPlanter from "./SelectPlanter";
 import NameGarden from "./NameGarden";
+import AddFrostDate from "./AddFrostDate";
 
 SelectPlanter;
 export default function SetupGarden({
@@ -43,6 +44,8 @@ export default function SetupGarden({
           newGardenState={[newGarden, setNewGarden]}
           swiper={swiper}
         />
+        <AddFrostDate swiper={swiper} />
+
         <NameGarden
           newGardenState={[newGarden, setNewGarden]}
           swiper={swiper}

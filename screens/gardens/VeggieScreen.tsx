@@ -10,45 +10,44 @@ import {
   FlatList
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { CircleIconButton } from "../../components/common/Button";
-import Hr from "../../components/common/Hr";
-import { VeggieItem } from "../../components/garden/GardenItems";
-import {
-  SofiaBoldText,
-  SofiaRegularText,
-  SofiaSemiBoldText
-} from "../../components/StyledText";
+import { TextPill, VeggieItem } from "../../components/garden/GardenItems";
+import { SofiaBoldText, SofiaRegularText } from "../../components/StyledText";
 import { tw } from "../../components/Themed";
 import { RootState } from "../../store";
 import { RootStackScreenProps } from "../../types";
 import GeneralSlot from "../slots/GeneralSlot";
+import { IconText } from "../../components/common/Button";
+import Ripple from "react-native-material-ripple";
+import { Info } from "../../components/common/Display";
+
 export default function VeggieScreen({
   navigation,
   route
 }: RootStackScreenProps<"Veggie">) {
   const { veggie } = route.params;
-  const { veggies } = useSelector((state: RootState) => state.veggies);
-
-  const Info = (props: {
-    title: string;
-    text?: string;
-    style?: StyleProp<any>;
-    children?: React.ReactNode;
-  }) => {
+  if (!veggie)
     return (
-      <View style={tw.style(props.style, "flex mt-4")}>
-        <SofiaRegularText style={tw.style("text-brand text-lg")}>
-          {props.title}
-        </SofiaRegularText>
-        <SofiaRegularText style={tw.style("text-gray-500")}>
-          {props.text}
-        </SofiaRegularText>
-        {props.children && props.children}
-      </View>
+      <GeneralSlot>
+        <View
+          style={tw.style(
+            "flex flex-row w-full items-center justify-end pb-2 border-b border-gray-300"
+          )}>
+          <CircleIconButton
+            name={"times"}
+            size={"sm"}
+            color={"black"}
+            onPress={() => navigation.pop()}
+          />
+        </View>
+        <View style={tw.style("flex flex-1 justify-center items-center")}>
+          <SofiaRegularText>Veggie Not Added Yet</SofiaRegularText>
+        </View>
+      </GeneralSlot>
     );
-  };
+
+  const { veggies } = useSelector((state: RootState) => state.veggies);
 
   return (
     <GeneralSlot>
@@ -74,7 +73,65 @@ export default function VeggieScreen({
           </SofiaBoldText>
           <View style={tw.style("border-b border-gray-300 flex w-64 my-2 ")} />
         </View>
+
         <Info title={"Seeding Notes"} text={veggie.seedingNotes} />
+
+        {veggie.directSeed.length !== 0 && (
+          <Info title={"Direct Seed"}>
+            <FlatList
+              style={tw.style("")}
+              data={veggie.directSeed}
+              keyExtractor={d => `directseed-${d}`}
+              nestedScrollEnabled
+              horizontal={true}
+              renderItem={({ item, index }) => (
+                <TextPill
+                  style={tw.style("mr-2 mb-2")}
+                  text={item as string}
+                  key={index}
+                />
+              )}
+            />
+          </Info>
+        )}
+
+        {veggie.startIndoors.length !== 0 && (
+          <Info title={"Start Indoors"}>
+            <FlatList
+              style={tw.style("")}
+              data={veggie.startIndoors}
+              keyExtractor={d => `startindoors-${d}`}
+              nestedScrollEnabled
+              horizontal={true}
+              renderItem={({ item, index }) => (
+                <TextPill
+                  style={tw.style("mr-2 mb-2")}
+                  text={item as string}
+                  key={index}
+                />
+              )}
+            />
+          </Info>
+        )}
+
+        {veggie.transplantOutdoors.length !== 0 && (
+          <Info title={"Transplant Outdoors"}>
+            <FlatList
+              style={tw.style("")}
+              data={veggie.transplantOutdoors}
+              keyExtractor={d => `transplant-${d}`}
+              nestedScrollEnabled
+              horizontal={true}
+              renderItem={({ item, index }) => (
+                <TextPill
+                  style={tw.style("mr-2 mb-2")}
+                  text={item as string}
+                  key={index}
+                />
+              )}
+            />
+          </Info>
+        )}
 
         <SofiaRegularText style={tw.style("text-brand text-lg my-2")}>
           Companions
@@ -85,14 +142,19 @@ export default function VeggieScreen({
             nestedScrollEnabled
             horizontal={true}
             data={veggie.companions}
+            keyExtractor={v => `companion-${v}`}
             renderItem={({ item, index }) => (
-              <VeggieItem
-                index={index}
-                style={tw.style("m-1")}
-                veggie={veggies[item]}
-                key={index}
-                draggable={false}
-              />
+              <Ripple
+                onPress={() =>
+                  navigation.push("Veggie", { veggie: veggies[item] })
+                }>
+                <VeggieItem
+                  index={index}
+                  style={tw.style("m-1")}
+                  veggie={veggies[item]}
+                  draggable={false}
+                />
+              </Ripple>
             )}
           />
         ) : (
@@ -106,16 +168,21 @@ export default function VeggieScreen({
         {veggie?.exclusions.length ? (
           <FlatList
             style={tw.style("pb-2")}
+            keyExtractor={v => `exclusion-${v}`}
             nestedScrollEnabled
             horizontal={true}
             data={veggie.exclusions}
             renderItem={({ item, index }) => (
-              <VeggieItem
-                style={tw.style("m-1")}
-                veggie={veggies[item]}
-                key={index}
-                draggable={false}
-              />
+              <Ripple
+                onPress={() =>
+                  navigation.push("Veggie", { veggie: veggies[item] })
+                }>
+                <VeggieItem
+                  style={tw.style("m-1")}
+                  veggie={veggies[item]}
+                  draggable={false}
+                />
+              </Ripple>
             )}
           />
         ) : (
@@ -124,6 +191,46 @@ export default function VeggieScreen({
           </SofiaRegularText>
         )}
         <Info title={"How to Harvest"} text={veggie.howToHarvest} />
+
+        <Info title={"Veggie Attributes"}>
+          <View style={tw.style("flex flex-row justify-between my-2")}>
+            <IconText
+              size={25}
+              name="sun"
+              text={`${veggie.sunlight[0]} - ${veggie.sunlight[1]} hrs`}
+              color="grey"
+              style={tw`flex text-center flex-1`}
+              onPress={() => {}}
+            />
+            <IconText
+              size={25}
+              name="expand-arrows-alt"
+              text={`${veggie.spacingPerSquareFoot} inches`}
+              color="grey"
+              style={tw`flex text-center flex-1`}
+              onPress={() => {}}
+            />
+
+            <IconText
+              size={25}
+              name="snowflake"
+              text={`${veggie.earliestPlaningFromFirstFrostDate} | ${veggie.earliestPlantingFromLastFrostDate} days`}
+              color="grey"
+              style={tw`p-1 flex text-center flex-1`}
+              onPress={() => {}}
+            />
+          </View>
+          <View style={tw.style("flex flex-row justify-center")}>
+            <IconText
+              size={25}
+              name="leaf"
+              text={`${veggie.daysToMaturity[0]} | ${veggie.daysToMaturity[1]} days`}
+              color="grey"
+              style={tw`p-1 flex text-center `}
+              onPress={() => {}}
+            />
+          </View>
+        </Info>
       </ScrollView>
     </GeneralSlot>
   );

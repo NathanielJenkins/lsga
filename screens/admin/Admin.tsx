@@ -6,13 +6,22 @@ import { PrimaryButton } from "../../components/common/Button";
 import Veggies from "../../assets/data/Veggies.json";
 import Gardens from "../../assets/data/Gardens.json";
 
-import { firestore } from "../../firebase/firebaseTooling";
+import { firestore, storage } from "../../firebase/firebaseTooling";
 import Veggie from "../../models/Veggie";
 import Documents from "../../models/Documents";
 export default function Admin() {
   const veggieRef = firestore.collection(Documents.Veggies);
   const handleImportVeggies = () => {
-    Veggies.forEach(v => veggieRef.doc(v.name).set(v));
+    Veggies.forEach(async v => {
+      const url = await storage
+        .ref(v.url) //name in storage in firebase console
+        .getDownloadURL();
+
+      const veg = { ...v } as unknown as Veggie;
+      veg.downloadUrl = url;
+
+      veggieRef.doc(veg.name).set(veg);
+    });
   };
 
   const handleImportGardens = () => {

@@ -3,9 +3,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/reducers";
-import Garden, { getAllGardens } from "../../models/Garden";
-import UserGarden, { setUserGarden } from "../../models/UserGardens";
+import UserGarden from "../../models/UserGardens";
 import CardSlot from "../slots/CardSlot";
 import { addNewGarden } from "../../store/actions/garden.actions";
 import { tw } from "../../components/Themed";

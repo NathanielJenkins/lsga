@@ -8,9 +8,14 @@ import {
   NativeSyntheticEvent,
   NativeTouchEvent,
   StyleProp,
-  Image
+  Image,
+  Button
 } from "react-native";
-import { SofiaBoldText, SofiaRegularText } from "../StyledText";
+import {
+  SofiaBoldText,
+  SofiaRegularText,
+  SofiaSemiBoldText
+} from "../StyledText";
 import Ripple from "react-native-material-ripple";
 
 import { Text, tw } from "../Themed";
@@ -33,6 +38,7 @@ interface IconProps {
   color: string;
   text: string;
   size: number;
+  subText?: string;
   onPress: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
   style?: StyleProp<any>;
 }
@@ -106,7 +112,7 @@ export function ImageButton(props: ImageProps) {
 }
 
 export function IconText(props: IconProps) {
-  const { name, color, text, size, onPress, style } = props;
+  const { name, color, text, size, onPress, style, subText } = props;
 
   return (
     <View style={tw.style("flex", style)}>
@@ -203,9 +209,25 @@ export function ThumbnailCard(props: ThumbnailCardProps) {
   );
 }
 
+export function RoundedOutlineButton(props: ButtonProps) {
+  const { onPress, style } = props;
+
+  return (
+    <Ripple onPress={onPress} rippleContainerBorderRadius={9999}>
+      <View style={tw.style(style)}>
+        <View style={tw.style("flex rounded-full border border-gray-500 p-3")}>
+          <SofiaSemiBoldText style={tw.style(`text-gray-500`)}>
+            {props.title}
+          </SofiaSemiBoldText>
+        </View>
+      </View>
+    </Ripple>
+  );
+}
+
 const styles = StyleSheet.create({
   base: tw`rounded p-4 flex rounded text-center items-center `,
   primary: tw.style(` bg-brand `),
-  secondary: tw.style(`border-brand border-2 bg-white`),
+  secondary: tw.style(`border-brand border-2 bg-white text-brand`),
   image: tw`rounded items-center flex shadow p-2 bg-white `
 });

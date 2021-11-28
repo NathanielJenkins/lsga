@@ -16,14 +16,18 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { SofiaBoldText, SofiaRegularText } from "../../components/StyledText";
-import { RootTabScreenProps } from "../../types";
+import {
+  RootStackParamList,
+  RootStackScreenProps,
+  RootTabScreenProps
+} from "../../types";
 import Veggie, { VeggieState } from "../../models/Veggie";
-import { IconText } from "../../components/common/Button";
+import { CircleIconButton, IconText } from "../../components/common/Button";
 import { updateActiveUserGarden } from "../../store/actions/garden.actions";
 export default function GardenScreen({
   navigation,
   route
-}: RootTabScreenProps<"GardenScreen">) {
+}: RootStackScreenProps<"GardenScreen">) {
   const dispatch = useDispatch();
 
   const { veggies } = useSelector((state: RootState) => state.veggies);
@@ -88,6 +92,7 @@ export default function GardenScreen({
   }, [veggieDragging]);
 
   const handleSaveGarden = () => {
+    navigation.pop();
     const userGarden = { ...activeGarden };
     userGarden.grid = workingGrid.map(w => w?.name || null);
     dispatch(updateActiveUserGarden(userGarden));
@@ -101,14 +106,24 @@ export default function GardenScreen({
           {activeGarden.name}
         </SofiaBoldText>
 
-        <IconText
-          size={25}
-          name="save"
-          text="Save"
-          color="grey"
-          style={tw`mr-2`}
-          onPress={handleSaveGarden}
-        />
+        <View style={tw.style("flex flex-row")}>
+          <IconText
+            size={25}
+            name="save"
+            text="Save"
+            color="grey"
+            style={tw`mr-2`}
+            onPress={handleSaveGarden}
+          />
+          <IconText
+            size={25}
+            name="times-circle"
+            text="Close"
+            color="grey"
+            style={tw`mr-2`}
+            onPress={() => navigation.pop()}
+          />
+        </View>
       </View>
 
       <DraxProvider>
@@ -136,7 +151,9 @@ export default function GardenScreen({
           />
         </View>
         <SafeAreaView
-          style={tw.style("flex-1 pt-2 mt-1 border border-gray-200")}>
+          style={tw.style(
+            "flex-1 pt-2 mt-1 border border-gray-200 bg-gray-50"
+          )}>
           <DraxScrollView horizontal={true} style={tw.style("h-full ")}>
             {Object.values(veggies).length !== 0 && (
               <FlatList
@@ -166,6 +183,14 @@ export default function GardenScreen({
           </DraxScrollView>
         </SafeAreaView>
       </DraxProvider>
+      <View style={tw.style(" p-4")}>
+        <SofiaRegularText style={tw.style("text-lg text-center")}>
+          Drag and Drop Veggies
+        </SofiaRegularText>
+        <SofiaRegularText style={tw.style(" text-center")}>
+          Make changes by dragging and dropping veggies into the grid.
+        </SofiaRegularText>
+      </View>
     </View>
   );
 }

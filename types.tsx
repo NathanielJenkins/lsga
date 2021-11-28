@@ -43,6 +43,8 @@ export type RootStackParamList = {
   SunExposure: undefined;
   TypeOfSpace: undefined;
   NameGarden: undefined;
+  GardenScreen: undefined;
+
   CameraPreview: {
     newGardenState: [
       UserGarden,
@@ -52,6 +54,8 @@ export type RootStackParamList = {
   Veggie: {
     veggie: Veggie;
   };
+  GardenInfoScreen: {};
+
   Admin: undefined;
 };
 
@@ -62,7 +66,7 @@ export type RootTabParamList = {
   TabOne: undefined;
   TabTwo: undefined;
   HomeScreen: undefined;
-  GardenScreen: undefined;
+  AllVeggiesScreen: undefined;
   ScheduleScreen: undefined;
 };
 

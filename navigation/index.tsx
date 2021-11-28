@@ -43,6 +43,8 @@ import Admin from "../screens/admin/Admin";
 import Veggie from "../screens/gardens/VeggieScreen";
 import { useDispatch } from "react-redux";
 import { updateGardens, updateVeggies } from "../store";
+import AllVeggiesScreen from "../screens/gardens/AllVeggiesScreen";
+import GardenInfoScreen from "../screens/gardens/GardenInfoScreen";
 export default function Navigation({
   colorScheme
 }: {
@@ -113,6 +115,16 @@ function RootNavigator() {
         options={{ headerShown: false, animation: "fade" }}
       />
       <Stack.Screen
+        name="GardenScreen"
+        component={GardenScreen}
+        options={{ headerShown: false, animation: "none" }}
+      />
+      <Stack.Screen
+        name="GardenInfoScreen"
+        component={GardenInfoScreen}
+        options={{ headerShown: false, animation: "none" }}
+      />
+      <Stack.Screen
         name="Admin"
         component={Admin}
         options={{ headerShown: false, animation: "none" }}
@@ -154,10 +166,10 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="GardenScreen"
-        component={GardenScreen}
+        name="AllVeggiesScreen"
+        component={AllVeggiesScreen}
         options={{
-          title: "Garden",
+          title: "Veggies",
           tabBarIcon: ({ color }) => <TabBarIcon name="leaf" color={color} />,
           headerShown: false,
           tabBarActiveTintColor: brandColor

@@ -40,19 +40,12 @@ export const addUserGarden = async (userGarden: UserGarden) => {
   userGarden.grid = [
     ...Array(userGarden.garden.height * userGarden.garden.width).keys()
   ].map(() => null);
-  await ref.doc().set(userGarden);
+  await ref.doc(userGarden.name).set(userGarden);
   return userGarden;
 };
 
 export const updateUserGarden = async (userGarden: UserGarden) => {
-  const sc = await ref
-    .where(properties._name, "==", userGarden.name)
-    .limit(1)
-    .get();
-  const gardenId = sc.docs?.at(0).id;
-
-  if (!gardenId) return;
-  await ref.doc(gardenId).set(userGarden);
+  await ref.doc(userGarden.name).set(userGarden);
 
   return userGarden;
 };

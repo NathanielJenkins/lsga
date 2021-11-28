@@ -16,7 +16,6 @@ export function veggieReducer(
 ): VeggieState {
   switch (action.type) {
     case UPDATE_VEGGIES: {
-      console.log("a", { ...action.payload });
       return {
         ...state,
         veggies: { ...state.veggies, ...action.payload }

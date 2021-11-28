@@ -32,8 +32,8 @@ export default interface Veggie {
   downloadUrl?: string;
   seasons: Array<Season>;
   directSeed: Array<Month>;
-  startIndoors: Month;
-  transplantOutdoors: Month;
+  startIndoors: Array<Month>;
+  transplantOutdoors: Array<Month>;
   seedingNotes: string;
   earliestPlantingFromLastFrostDate: number;
   earliestPlaningFromFirstFrostDate: number;
@@ -56,11 +56,13 @@ export const getAllVeggies = async () => {
   for (let doc of snapshot.docs) {
     const veggie = { ...(doc.data() as Veggie) };
 
-    const url = await storage
-      .ref(veggie.url) //name in storage in firebase console
-      .getDownloadURL();
+    if (!veggie.downloadUrl) {
+      const url = await storage
+        .ref(veggie.url) //name in storage in firebase console
+        .getDownloadURL();
 
-    veggie.downloadUrl = url;
+      veggie.downloadUrl = url;
+    }
     veggies[veggie.name] = veggie;
   }
   return veggies;

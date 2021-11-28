@@ -1,18 +1,20 @@
 /** @format */
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   PanResponder,
   StyleProp,
   StyleSheet,
   Text,
-  View
+  View,
+  Alert
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { storage } from "../../firebase/firebaseTooling";
 import Veggie, { VeggieState } from "../../models/Veggie";
-import { RootState } from "../../store";
+import { RootState, updateFrostDates } from "../../store";
 import { tw } from "../Themed";
 import { Picker } from "@react-native-picker/picker";
 import { updateActiveGarden } from "../../store/actions/garden.actions";
@@ -31,10 +33,14 @@ import {
 import MainPageSlot from "../../screens/slots/MainPageSlot";
 import { SofiaRegularText } from "../../components/StyledText";
 import no_gardens from "../../assets/images/no_gardens.png";
-import { PrimaryButton, SecondaryButton } from "../common/Button";
+import { IconText, PrimaryButton, SecondaryButton } from "../common/Button";
 import { useNavigation } from "@react-navigation/native";
 import { chunk } from "lodash";
 import { FontAwesome } from "@expo/vector-icons";
+import Ripple from "react-native-material-ripple";
+import { Info } from "../common/Display";
+import Location from "expo-location";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 export function NoGardensPrompt() {
   const navigation = useNavigation();
@@ -265,7 +271,9 @@ export function VeggieItem(props: VeggieItemProps) {
   );
 }
 
-interface GardenSelectorProps {}
+interface GardenSelectorProps {
+  style?: StyleProp<any>;
+}
 export function GardenSelector(props: GardenSelectorProps) {
   const { gardens, activeGarden } = useSelector(
     (state: RootState) => state.gardens
@@ -278,7 +286,7 @@ export function GardenSelector(props: GardenSelectorProps) {
   };
 
   return (
-    <React.Fragment>
+    <View style={tw.style(props.style)}>
       {gardens.length === 1 ? (
         <View>
           <SofiaSemiBoldText style={tw.style("text-2xl text-gray-500")}>
@@ -298,7 +306,7 @@ export function GardenSelector(props: GardenSelectorProps) {
           </View>
         </View>
       )}
-    </React.Fragment>
+    </View>
   );
 }
 
@@ -364,6 +372,141 @@ export function DropSection(props: DropSectionProps) {
         </View>
       )}
     </View>
+  );
+}
+
+interface VeggieSearchItemProps {
+  veggie: Veggie;
+  style?: StyleProp<any>;
+}
+export function VeggieSearchItem(props: VeggieSearchItemProps) {
+  const navigation = useNavigation();
+
+  return (
+    <Ripple
+      onPress={() => navigation.navigate("Veggie", { veggie: props.veggie })}
+      style={tw.style(
+        "flex flex-row items-center shadow-brand p-2",
+        props.style
+      )}>
+      <Image
+        source={{ uri: props.veggie?.downloadUrl }}
+        style={tw.style(`resize-contain h-14 w-14 mr-4`)}
+      />
+      <SofiaBoldText style={tw.style("text-2xl text-gray-500 text-center")}>
+        {props.veggie?.displayName}
+      </SofiaBoldText>
+    </Ripple>
+  );
+}
+
+interface TextPillProps {
+  text: string;
+  style?: StyleProp<any>;
+}
+export function TextPill(props: TextPillProps) {
+  return (
+    <View
+      style={tw.style(
+        props.style,
+        "border border-gray-500 p-2 rounded-md flex items-center justify-center"
+      )}>
+      <SofiaRegularText style={tw.style("text-gray-500")}>
+        {props.text}
+      </SofiaRegularText>
+    </View>
+  );
+}
+
+export default function AddFrostDateComponent() {
+  const { springFrostDate, fallFrostDate } = useSelector(
+    (state: RootState) => state.user
+  );
+
+  useEffect(() => {
+    if (springFrostDate && fallFrostDate) setIsLoading(false);
+  }, [springFrostDate, fallFrostDate]);
+
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+
+  const createAlert = () => {
+    Alert.alert("Alert Title", "My Alert Msg", [
+      {
+        text: "Set Manually",
+        onPress: () => setOpen(true)
+      },
+      {
+        text: "Set with Location",
+        onPress: () => setOpen(true)
+      }
+    ]);
+  };
+
+  const handleAskForLocation = async () => {
+    setIsLoading(true);
+    let { status } = await Location.requestForegroundPermissionsAsync();
+
+    if (status === "granted") {
+      const { coords } = await Location.getCurrentPositionAsync({});
+      dispatch(updateFrostDates(coords.longitude, coords.latitude));
+    } else {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <React.Fragment>
+      <Info title={"Frost Date"}>
+        {isLoading ? (
+          <View style={tw.style("flex flex-1 justify-center mb-2 ")}>
+            <ActivityIndicator color="#0000ff" />
+          </View>
+        ) : springFrostDate && fallFrostDate ? (
+          <View>
+            <SofiaRegularText>
+              <SofiaBoldText>Fall Frost Date: </SofiaBoldText>
+              <SofiaRegularText>
+                {fallFrostDate.month} {fallFrostDate.day}
+              </SofiaRegularText>
+            </SofiaRegularText>
+            <SofiaRegularText>
+              <SofiaBoldText>Spring Frost Date: </SofiaBoldText>
+              <SofiaRegularText>
+                {springFrostDate.month} {springFrostDate.day}
+              </SofiaRegularText>
+            </SofiaRegularText>
+          </View>
+        ) : (
+          <View>
+            <SofiaRegularText style={tw.style("text-gray-500 mb-2")}>
+              No Frost Date Set
+            </SofiaRegularText>
+          </View>
+        )}
+        <View style={tw.style("mt-2")}>
+          <SecondaryButton
+            title="Set Frost Date"
+            onPress={() => createAlert()}
+          />
+        </View>
+
+        <DatePicker
+          modal
+          open={open}
+          date={date}
+          onConfirm={date => {
+            setOpen(false);
+            setDate(date);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
+      </Info>
+    </React.Fragment>
   );
 }
 

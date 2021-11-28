@@ -2,7 +2,11 @@
 
 import * as React from "react";
 import { StyleSheet, Image } from "react-native";
-import { PrimaryButton, SecondaryButton } from "../components/common/Button";
+import {
+  IconText,
+  PrimaryButton,
+  SecondaryButton
+} from "../components/common/Button";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
@@ -23,7 +27,7 @@ import {
 import MainPageSlot from "./slots/MainPageSlot";
 import { Picker } from "@react-native-picker/picker";
 import { storage } from "../firebase/firebaseTooling";
-import { updateVeggies } from "../store";
+import { updateUserProperties, updateVeggies } from "../store";
 import {
   GardenGrid,
   GardenSelector,
@@ -57,14 +61,10 @@ export default function HomeScreen({
   React.useEffect(() => {
     dispatch(updateGardens());
     dispatch(updateVeggies());
+    dispatch(updateUserProperties());
   }, []);
 
   React.useEffect(() => {
-    console.log(
-      { ...veggies },
-      activeGarden?.grid.map(g => veggies[g]),
-      activeGarden?.grid
-    );
     setVeggieGrid(activeGarden?.grid.map(g => veggies[g]) || []);
   }, [activeGarden, veggies]);
 
@@ -76,14 +76,41 @@ export default function HomeScreen({
   return gardens?.length && activeGarden ? (
     <MainPageSlot>
       <ScrollView>
-        <GardenSelector />
-        <View
-          style={tw`w-full flex overflow-visible justify-center items-center shadow-brand relative`}>
-          <Image
-            style={tw.style("h-64 w-full rounded-md")}
-            source={{ uri: imageUrl }}></Image>
-          <View style={tw.style(" bg-transparent flex w-full -top-16")}>
-            <GardenGrid draggable={false} veggieGrid={veggieGrid} />
+        <GardenSelector style={tw.style("mt-1")} />
+        <View style={tw.style("shadow-brand rounded-md m-2 flex ")}>
+          <View
+            style={tw`w-full flex overflow-visible justify-center items-center rounded-md relative `}>
+            <Image
+              style={tw.style("h-64 w-full rounded-md")}
+              source={{ uri: imageUrl }}></Image>
+            <View style={tw.style(" bg-transparent flex w-full -top-8")}>
+              <GardenGrid draggable={false} veggieGrid={veggieGrid} />
+            </View>
+            <View
+              style={tw.style(
+                "flex flex-row justify-between  border-t border-gray-200 rounded-md"
+              )}>
+              <IconText
+                style={tw.style("flex-1")}
+                size={20}
+                text="Edit Veggies"
+                name="edit"
+                color="gray"
+                onPress={() => navigation.navigate("GardenScreen")}
+              />
+              <IconText
+                style={tw.style("flex-1")}
+                size={20}
+                text="Information"
+                name="info"
+                color="gray"
+                onPress={() =>
+                  navigation.navigate("GardenInfoScreen", {
+                    userGarden: activeGarden
+                  })
+                }
+              />
+            </View>
           </View>
         </View>
       </ScrollView>

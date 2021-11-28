@@ -12,7 +12,7 @@ interface SlotProps {
 
 export default function GeneralSlot(props: SlotProps) {
   return (
-    <View style={tw`p-4 pt-5 flex flex-col flex-1`}>{props.children}</View>
+    <View style={tw`p-4 pt-8 flex flex-col flex-1`}>{props.children}</View>
   );
 }
 
