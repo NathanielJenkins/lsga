@@ -9,7 +9,7 @@
     "transplantOutdoors": [],
     "seedingNotes": "1/4\" (6mm) deep, succession plant every 2-3 weeks, prefers cool weather and will bolt in summer if they aren’t put in a shady cool area.",
     "earliestPlantingFromLastFrostDate": -14,
-    "earliestPlaningFromFirstFrostDate": 145,
+    "latestPlantingFromFirstFrostDate": 145,
     "spacingPerSquareFoot": 16,
     "sunlight": [4, 6],
     "companions": [
@@ -39,7 +39,7 @@
     "transplantOutdoors": ["June", "July"],
     "seedingNotes": "Sow indoors about 2-3 seeds per cell, 1/4\" deep. Cover them with soil and moisten the soil with water. Once the seed has germinated, thin them to one plant per cell.",
     "earliestPlantingFromLastFrostDate": 80,
-    "earliestPlaningFromFirstFrostDate": 140,
+    "latestPlantingFromFirstFrostDate": 140,
     "spacingPerSquareFoot": 4,
     "sunlight": [6, 8],
     "companions": ["tomatoes", "peppers"],
@@ -59,7 +59,7 @@
     "transplantOutdoors": ["June", "July"],
     "seedingNotes": "Sow indoors about 2-3 seeds per cell, 1/4\" deep. Cover them with soil and moisten the soil with water. Once the seed has germinated, thin them to one plant per cell.",
     "earliestPlantingFromLastFrostDate": 80,
-    "earliestPlaningFromFirstFrostDate": 140,
+    "latestPlantingFromFirstFrostDate": 140,
     "spacingPerSquareFoot": 4,
     "sunlight": [6, 8],
     "companions": ["tomatoes", "peppers"],
@@ -79,7 +79,7 @@
     "transplantOutdoors": [],
     "seedingNotes": "Sow 1cm (½”) deep, 5-10cm (2-4″) apart. Direct sow 4 weeks after last frost to mid-summer. Beets will not produce roots if planted when the soil is too cold. Seeds will germinate in 5-12 days, depending on soil temperature.",
     "earliestPlantingFromLastFrostDate": 30,
-    "earliestPlaningFromFirstFrostDate": 125,
+    "latestPlantingFromFirstFrostDate": 125,
     "spacingPerSquareFoot": 9,
     "sunlight": [4, 8],
     "companions": [
@@ -113,7 +113,7 @@
     "transplantOutdoors": [],
     "seedingNotes": "1 inch deep, spacing 9 seeds per square foot. and 4 inches apart. Try to plant during a warm, dry spell. Soil must be warm – if it is not warm enough, the seeds may rot. The seeds should sprout in 8-16 days, depending on conditions",
     "earliestPlantingFromLastFrostDate": 35,
-    "earliestPlaningFromFirstFrostDate": 100,
+    "latestPlantingFromFirstFrostDate": 100,
     "spacingPerSquareFoot": 9,
     "sunlight": [6, 8],
     "companions": [
@@ -146,7 +146,7 @@
     "transplantOutdoors": [],
     "seedingNotes": " Plant the tiny seeds 5mm (¼”) deep, spacing 16 seeds per square foot. Firm soil lightly after seeding. Make sure the seeds are only just buried, and maintain moisture in that top layer of soil until they germinate",
     "earliestPlantingFromLastFrostDate": 5,
-    "earliestPlaningFromFirstFrostDate": 155,
+    "latestPlantingFromFirstFrostDate": 155,
     "spacingPerSquareFoot": 16,
     "sunlight": [6, 8],
     "companions": [
@@ -188,7 +188,7 @@
     "transplantOutdoors": ["June", "July"],
     "seedingNotes": "Start your cucumber seeds indoors about three weeks before the last frost date. The seeds will sprout in about 4-8 days at room temperature and when the shoots start to appear move your seedlings to full sunlight.  Transplant your seedlings into the ground at proper plant spacing.",
     "earliestPlantingFromLastFrostDate": 50,
-    "earliestPlaningFromFirstFrostDate": 105,
+    "latestPlantingFromFirstFrostDate": 105,
     "spacingPerSquareFoot": 1,
     "sunlight": [6, 8],
     "companions": [
@@ -227,7 +227,7 @@
     "transplantOutdoors": ["March", "April", "August", "September"],
     "seedingNotes": "",
     "earliestPlantingFromLastFrostDate": -28,
-    "earliestPlaningFromFirstFrostDate": 155,
+    "latestPlantingFromFirstFrostDate": 155,
     "spacingPerSquareFoot": 1,
     "sunlight": [4, 8],
     "companions": ["chamomile", "dill", "mint", "rosemary", "tomatoes"],
@@ -255,7 +255,7 @@
     "transplantOutdoors": ["March", "April", "September"],
     "seedingNotes": "Starting indoors: Plant 2 seeds in each cell, about 1cm deep. Parsley seeds can be slow to germinate and can be soaked in lukewarm water for 24hrs before planting them, which will speed up the germination process. When you see the shoots appear, move your seeds to a spot where they will receive full sun. Parsley can be moved outdoors five weeks before the last spring frost.  Plant them in your garden at the same depth they grew in the tray.",
     "earliestPlantingFromLastFrostDate": -14,
-    "earliestPlaningFromFirstFrostDate": 155,
+    "latestPlantingFromFirstFrostDate": 155,
     "spacingPerSquareFoot": 4,
     "sunlight": [4, 8],
     "companions": [
@@ -282,7 +282,7 @@
     "transplantOutdoors": ["June"],
     "seedingNotes": "Start indoors six to eight weeks before the last frost date, and grow under bright lights. Seeds should sprout in 10 – 21 days",
     "earliestPlantingFromLastFrostDate": 50,
-    "earliestPlaningFromFirstFrostDate": 100,
+    "latestPlantingFromFirstFrostDate": 100,
     "spacingPerSquareFoot": 1,
     "sunlight": [6, 8],
     "companions": [
@@ -329,7 +329,7 @@
     "transplantOutdoors": [],
     "seedingNotes": "Radishes should always be directly sown into the garden so that their root systems are not disturbed. Directly sow your radish seeds into your containers by planting them 1/2 inch deep in the spring and 1 inch deep in the summer.  Your seeds will sprout in 5-10 days depending on the temperature.",
     "earliestPlantingFromLastFrostDate": 5,
-    "earliestPlaningFromFirstFrostDate": 160,
+    "latestPlantingFromFirstFrostDate": 160,
     "spacingPerSquareFoot": 16,
     "sunlight": [4, 6],
     "companions": [

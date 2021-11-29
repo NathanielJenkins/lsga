@@ -6,7 +6,11 @@ import CardSlot from "../../screens/slots/CardSlot";
 import { RootStackScreenProps } from "../../types";
 import { tw, brandColor } from "../../components/Themed";
 import brand_sample from "../../assets/images/brand_sample.jpg";
-import { SecondaryButton, PrimaryButton } from "../../components/common/Button";
+import {
+  SecondaryButton,
+  PrimaryButton,
+  IconText
+} from "../../components/common/Button";
 import { Camera } from "expo-camera";
 import UserGarden from "../../models/UserGardens";
 import Swiper from "react-native-swiper";
@@ -16,6 +20,7 @@ import brand_logo from "../../assets/images/brand_logo.png";
 import SelectPlanter from "./SelectPlanter";
 import NameGarden from "./NameGarden";
 import AddFrostDate from "./AddFrostDate";
+import { SofiaBoldText } from "../../components/StyledText";
 
 SelectPlanter;
 export default function SetupGarden({
@@ -29,6 +34,7 @@ export default function SetupGarden({
       <View style={tw`w-full flex justify-center items-center mt-6 mb-2 `}>
         <Image source={brand_logo} style={tw``} />
       </View>
+
       <Swiper activeDotColor={brandColor} loop={false} ref={swiper}>
         <SelectLocation
           newGardenState={[newGarden, setNewGarden]}
@@ -51,6 +57,11 @@ export default function SetupGarden({
           swiper={swiper}
         />
       </Swiper>
+      <SofiaBoldText
+        onPress={() => navigation.pop()}
+        style={tw.style("text-center underline text-brand mb-3")}>
+        Exit Without Saving
+      </SofiaBoldText>
     </View>
   );
 }

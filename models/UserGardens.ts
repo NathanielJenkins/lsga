@@ -3,8 +3,9 @@
 import Garden from "./Garden";
 import { auth, firestore, storage } from "../firebase/firebaseTooling";
 import Documents from "./Documents";
-import Veggie from "./Veggie";
+import Veggie, { getPlantingRangeFromUserFrostDates } from "./Veggie";
 import { useDispatch } from "react-redux";
+import { store } from "../store";
 
 const ref = firestore.collection(Documents.UserGardens);
 
@@ -15,6 +16,7 @@ export default interface UserGarden {
   [properties.description]?: string;
   [properties.garden]?: Garden;
   [properties.grid]?: Array<string>;
+  [properties.plantingDates]?: Array<{ first: Date; last: Date }>;
 }
 
 class properties {
@@ -24,6 +26,7 @@ class properties {
   public static readonly _name = "name";
   public static readonly description = "description";
   public static readonly grid = "grid";
+  public static readonly plantingDates: "plantingDates";
 }
 
 export const addUserGarden = async (userGarden: UserGarden) => {
@@ -45,6 +48,22 @@ export const addUserGarden = async (userGarden: UserGarden) => {
 };
 
 export const updateUserGarden = async (userGarden: UserGarden) => {
+  // update the gardenPlantingDates from the grid;
+  const state = store.getState();
+  const { veggies } = state.veggies;
+  const { springFrostDate, fallFrostDate } = state.user;
+
+  const plantingDates: Array<{ first: Date; last: Date }> = new Array();
+
+  userGarden.grid.forEach((veggieName, index) => {
+    const veggie = veggies[veggieName];
+
+    plantingDates.push(
+      getPlantingRangeFromUserFrostDates(veggie, springFrostDate, fallFrostDate)
+    );
+  });
+
+  userGarden.plantingDates = plantingDates;
   await ref.doc(userGarden.name).set(userGarden);
 
   return userGarden;

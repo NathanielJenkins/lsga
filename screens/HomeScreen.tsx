@@ -98,18 +98,6 @@ export default function HomeScreen({
                 color="gray"
                 onPress={() => navigation.navigate("GardenScreen")}
               />
-              <IconText
-                style={tw.style("flex-1")}
-                size={20}
-                text="Information"
-                name="info"
-                color="gray"
-                onPress={() =>
-                  navigation.navigate("GardenInfoScreen", {
-                    userGarden: activeGarden
-                  })
-                }
-              />
             </View>
           </View>
         </View>

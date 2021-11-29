@@ -1,7 +1,9 @@
 /** @format */
 
 import { firestore, storage } from "../firebase/firebaseTooling";
+import { store } from "../store";
 import Documents from "./Documents";
+import { FrostDateParsed } from "./UserProperties";
 
 export class Season {
   public static readonly Spring = "Spring";
@@ -36,7 +38,7 @@ export default interface Veggie {
   transplantOutdoors: Array<Month>;
   seedingNotes: string;
   earliestPlantingFromLastFrostDate: number;
-  earliestPlaningFromFirstFrostDate: number;
+  latestPlantingFromFirstFrostDate: number;
   spacingPerSquareFoot: number;
   sunlight: [number, number];
   companions: Array<string>;
@@ -66,6 +68,38 @@ export const getAllVeggies = async () => {
     veggies[veggie.name] = veggie;
   }
   return veggies;
+};
+
+export const getPlantingRangeFromUserFrostDates = (
+  veggie: Veggie,
+  springFrostDate: FrostDateParsed,
+  fallFrostDate: FrostDateParsed
+) => {
+  // get the frost dates from the user
+  const {
+    latestPlantingFromFirstFrostDate,
+    earliestPlantingFromLastFrostDate
+  } = veggie;
+
+  if (
+    !latestPlantingFromFirstFrostDate ||
+    !earliestPlantingFromLastFrostDate ||
+    !springFrostDate ||
+    !fallFrostDate
+  )
+    return { first: undefined, last: undefined };
+
+  try {
+    const first = new Date(springFrostDate.date);
+    first.setDate(first.getDate() + earliestPlantingFromLastFrostDate);
+
+    const last = new Date(fallFrostDate.date);
+    last.setDate(last.getDate() - latestPlantingFromFirstFrostDate);
+
+    return { first, last };
+  } catch (error) {
+    return { first: undefined, last: undefined };
+  }
 };
 
 export class VeggieState {

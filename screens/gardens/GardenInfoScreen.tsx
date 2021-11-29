@@ -35,17 +35,6 @@ export default function GardenInfoScreen({
         <SofiaBoldText style={tw.style("text-gray-500 text-2xl")}>
           Settings
         </SofiaBoldText>
-
-        <View style={tw.style("flex flex-row")}>
-          <IconText
-            size={25}
-            name="times-circle"
-            text="Close"
-            color="grey"
-            style={tw`mr-2`}
-            onPress={() => navigation.pop()}
-          />
-        </View>
       </View>
       <ScrollView>
         <AddFrostDateComponent />

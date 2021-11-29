@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import UserGarden from "../../models/UserGardens";
 import CardSlot from "../slots/CardSlot";
@@ -12,7 +12,6 @@ import Swiper from "react-native-swiper";
 import { Input } from "../../components/common/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useNavigation } from "@react-navigation/native";
-
 interface Props {
   newGardenState: [
     UserGarden,
@@ -32,6 +31,14 @@ export default function NameGarden(props: Props) {
   const dispatch = useDispatch();
 
   const handleConfirm = async () => {
+    if (!newGarden || !newGarden.garden || !newGarden.name) {
+      Alert.alert(
+        "Failed to Add Garden",
+        "Make sure to enter all the information"
+      );
+      return;
+    }
+
     dispatch(addNewGarden(newGarden));
     navigation.navigate("Root");
   };

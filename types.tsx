@@ -68,6 +68,7 @@ export type RootTabParamList = {
   HomeScreen: undefined;
   AllVeggiesScreen: undefined;
   ScheduleScreen: undefined;
+  GardenInfoScreen: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =

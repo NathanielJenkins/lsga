@@ -34,6 +34,7 @@
     "expo-permissions": "~13.0.3",
     "expo-splash-screen": "~0.13.5",
     "expo-status-bar": "~1.1.0",
+    "expo-three": "^6.0.1",
     "expo-updates": "~0.10.15",
     "expo-web-browser": "~10.0.3",
     "firebase": "^8.10.0",
@@ -58,7 +59,7 @@
     "react-native-svg": "12.1.1",
     "react-native-swiper": "^1.6.0-rc.3",
     "react-native-toast-message": "^1.6.0",
-    "react-native-unimodules": "~0.15.0",
+    "react-native-unimodules": "^0.15.0",
     "react-native-web": "0.17.1",
     "react-redux": "^7.2.6",
     "react-toastify": "^8.1.0",
@@ -66,7 +67,8 @@
     "redux-thunk": "^2.4.0",
     "styled-components": "^5.3.3",
     "styled-system": "^5.1.5",
-    "tailwind-react-native-classnames": "^1.5.1"
+    "tailwind-react-native-classnames": "^1.5.1",
+    "expo-file-system": "~13.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

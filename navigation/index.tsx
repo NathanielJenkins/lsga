@@ -45,6 +45,7 @@ import { useDispatch } from "react-redux";
 import { updateGardens, updateVeggies } from "../store";
 import AllVeggiesScreen from "../screens/gardens/AllVeggiesScreen";
 import GardenInfoScreen from "../screens/gardens/GardenInfoScreen";
+import ArCamera from "../screens/garden_setup/ArCamera";
 export default function Navigation({
   colorScheme
 }: {
@@ -171,6 +172,16 @@ function BottomTabNavigator() {
         options={{
           title: "Veggies",
           tabBarIcon: ({ color }) => <TabBarIcon name="leaf" color={color} />,
+          headerShown: false,
+          tabBarActiveTintColor: brandColor
+        }}
+      />
+      <BottomTab.Screen
+        name="GardenInfoScreen"
+        component={ArCamera}
+        options={{
+          title: "Setting",
+          tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
           headerShown: false,
           tabBarActiveTintColor: brandColor
         }}
