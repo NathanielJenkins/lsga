@@ -16,7 +16,12 @@ export default interface UserGarden {
   [properties.description]?: string;
   [properties.garden]?: Garden;
   [properties.grid]?: Array<string>;
-  [properties.plantingDates]?: Array<{ first: Date; last: Date }>;
+  [properties.plantingDates]?: Array<{
+    veggieName: string;
+    first: Date;
+    last: Date;
+  }>;
+  [properties.veggieSteps]: { [veggieName: string]: Array<Date> };
 }
 
 class properties {
@@ -27,6 +32,7 @@ class properties {
   public static readonly description = "description";
   public static readonly grid = "grid";
   public static readonly plantingDates: "plantingDates";
+  public static readonly veggieSteps: "veggieSteps";
 }
 
 export const addUserGarden = async (userGarden: UserGarden) => {
@@ -43,27 +49,16 @@ export const addUserGarden = async (userGarden: UserGarden) => {
   userGarden.grid = [
     ...Array(userGarden.garden.height * userGarden.garden.width).keys()
   ].map(() => null);
+
+  updatePlantingDates(userGarden);
   await ref.doc(userGarden.name).set(userGarden);
   return userGarden;
 };
 
 export const updateUserGarden = async (userGarden: UserGarden) => {
   // update the gardenPlantingDates from the grid;
-  const state = store.getState();
-  const { veggies } = state.veggies;
-  const { springFrostDate, fallFrostDate } = state.user;
+  updatePlantingDates(userGarden);
 
-  const plantingDates: Array<{ first: Date; last: Date }> = new Array();
-
-  userGarden.grid.forEach((veggieName, index) => {
-    const veggie = veggies[veggieName];
-
-    plantingDates.push(
-      getPlantingRangeFromUserFrostDates(veggie, springFrostDate, fallFrostDate)
-    );
-  });
-
-  userGarden.plantingDates = plantingDates;
   await ref.doc(userGarden.name).set(userGarden);
 
   return userGarden;
@@ -76,6 +71,28 @@ export const getUserGardens = async () => {
   const snapshot = await ref.where(properties.userId, "==", userId).get();
 
   const gardens: Array<UserGarden> = new Array();
-  snapshot.forEach(doc => gardens.push(doc.data() as UserGarden));
+  snapshot.forEach(doc => {
+    const garden = doc.data() as UserGarden;
+    // garden.plantingDates = garden.plantingDates.map(pd => {last})
+    gardens.push(garden);
+  });
   return gardens;
 };
+
+function updatePlantingDates(userGarden: UserGarden) {
+  const state = store.getState();
+  const { veggies } = state.veggies;
+  const { springFrostDate, fallFrostDate } = state.user;
+  const plantingDates: Array<{ veggieName: string; first: Date; last: Date }> =
+    new Array();
+  const veggieNames = [...new Set(userGarden.grid)];
+  veggieNames.forEach((veggieName, index) => {
+    const veggie = veggies[veggieName];
+
+    plantingDates.push(
+      getPlantingRangeFromUserFrostDates(veggie, springFrostDate, fallFrostDate)
+    );
+  });
+
+  userGarden.plantingDates = plantingDates;
+}

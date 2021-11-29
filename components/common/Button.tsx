@@ -36,7 +36,7 @@ interface ImageProps {
 interface IconProps {
   name: React.ComponentProps<typeof FontAwesome5>["name"];
   color: string;
-  text: string;
+  text?: string;
   size: number;
   subText?: string;
   onPress: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
@@ -123,9 +123,11 @@ export function IconText(props: IconProps) {
           )}>
           <FontAwesome5 size={size} style={{}} name={name} color={color} />
 
-          <SofiaRegularText style={tw.style("text-gray-500")}>
-            {text}
-          </SofiaRegularText>
+          {text && (
+            <SofiaRegularText style={tw.style("text-gray-500")}>
+              {text}
+            </SofiaRegularText>
+          )}
         </View>
       </Ripple>
     </View>

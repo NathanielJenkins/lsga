@@ -63,19 +63,18 @@ export const Fall = "2";
 export class FrostDateParsed {
   public day: number;
   public month: Month;
-  public date: Date;
+  public date: string;
 
   constructor(date: Date) {
     this.day = date.getDate();
     this.month = monthNames[date.getMonth()];
-    this.date = date;
+    this.date = date.toISOString();
   }
 }
 
 export const setUserProperties = async () => {
   const userId = auth.currentUser.uid;
   const doc = await ref.doc(userId).get();
-
   if (doc.exists) return doc.data();
   else return null;
 };

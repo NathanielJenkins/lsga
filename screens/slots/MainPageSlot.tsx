@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { FontAwesome } from "@expo/vector-icons";
 import { IconText } from "../../components/common/Button";
 import { useNavigation } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 interface SlotProps {
   children: React.ReactNode;
 }
@@ -18,7 +19,7 @@ export default function MainPageSlot(props: SlotProps) {
   const navigation = useNavigation();
 
   return (
-    <View style={tw`p-4 pt-5 flex flex-col flex-1`}>
+    <ScrollView style={tw`p-4 pt-5 flex flex-col flex-1 bg-white`}>
       <View style={tw`flex content-end items-end`}>
         <View style={tw`flex flex-row content-end items-end`}>
           <IconText
@@ -40,7 +41,7 @@ export default function MainPageSlot(props: SlotProps) {
       </View>
 
       {props.children}
-    </View>
+    </ScrollView>
   );
 }
 

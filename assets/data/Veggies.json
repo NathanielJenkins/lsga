@@ -27,7 +27,24 @@
     "daysToMaturity": [30, 40],
     "whenToHarvest": ["April", "October"],
     "howToHarvest": "When leaves are 4-6 inches long, harvest them. You can harvest the whole plant by pulling or cutting just below soil level, or cut the outer leaves as needed. You can also use the cut and come again method where you cut the entire plant down to 1-2” above the soil, leaving the root system and plant crown intact. The leaves will keep re-growing every few weeks for more harvests. You may find the leaves become more spicy with each cutting.",
-    "whatCropsToPlantAfter": []
+    "whatCropsToPlantAfter": [],
+    "stepsToSuccess": [
+      {
+        "title": "Plant Arugula ",
+        "description": "Plant the plant",
+        "offset": 0
+      },
+      {
+        "title": "Step 2",
+        "description": "Step 2 description",
+        "offset": 10
+      },
+      {
+        "title": "Step 3",
+        "description": "Step 3 description",
+        "offset": 2
+      }
+    ]
   },
   {
     "name": "basil",
@@ -47,28 +64,26 @@
     "daysToMaturity": [40, 50],
     "whenToHarvest": ["July", "August", "September"],
     "howToHarvest": "Harvest basil by pinching the stems just above the leaf node, where new ones will grow. Harvest basil regularly to encourage continuous production, and to ask the plant to bush out and remain lush instead of becoming tall and woody. The more basil you harvest, the more it will grow.",
-    "whatCropsToPlantAfter": ["arugula", "mustard_greens", "spinach"]
+    "whatCropsToPlantAfter": ["arugula", "mustard_greens", "spinach"],
+    "stepsToSuccess": [
+      {
+        "title": "Plant Basil ",
+        "description": "Plant the plant",
+        "offset": 0
+      },
+      {
+        "title": "Step 2",
+        "description": "Step 2 description",
+        "offset": 5
+      },
+      {
+        "title": "Step 3",
+        "description": "Step 3 description",
+        "offset": 4
+      }
+    ]
   },
-  {
-    "name": "basil",
-    "displayName": "Basil",
-    "url": "veggies/basil.png",
-    "seasons": ["Summer"],
-    "directSeed": ["June"],
-    "startIndoors": ["April", "May"],
-    "transplantOutdoors": ["June", "July"],
-    "seedingNotes": "Sow indoors about 2-3 seeds per cell, 1/4\" deep. Cover them with soil and moisten the soil with water. Once the seed has germinated, thin them to one plant per cell.",
-    "earliestPlantingFromLastFrostDate": 80,
-    "latestPlantingFromFirstFrostDate": 140,
-    "spacingPerSquareFoot": 4,
-    "sunlight": [6, 8],
-    "companions": ["tomatoes", "peppers"],
-    "exclusions": [],
-    "daysToMaturity": [40, 50],
-    "whenToHarvest": ["July", "August", "September"],
-    "howToHarvest": "Harvest basil by pinching the stems just above the leaf node, where new ones will grow. Harvest basil regularly to encourage continuous production, and to ask the plant to bush out and remain lush instead of becoming tall and woody. The more basil you harvest, the more it will grow.",
-    "whatCropsToPlantAfter": ["arugula", "mustard_greens", "spinach"]
-  },
+
   {
     "name": "beets",
     "displayName": "Beets",

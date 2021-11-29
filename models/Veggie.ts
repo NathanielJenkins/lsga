@@ -3,6 +3,7 @@
 import { firestore, storage } from "../firebase/firebaseTooling";
 import { store } from "../store";
 import Documents from "./Documents";
+import Task from "./Task";
 import { FrostDateParsed } from "./UserProperties";
 
 export class Season {
@@ -47,6 +48,7 @@ export default interface Veggie {
   daysToMaturity: [number, number];
   howToHarvest: string;
   whatCropsToPlantAfter: Array<string>;
+  stepsToSuccess: Array<Task>;
 }
 
 const ref = firestore.collection(Documents.Veggies);
@@ -87,7 +89,7 @@ export const getPlantingRangeFromUserFrostDates = (
     !springFrostDate ||
     !fallFrostDate
   )
-    return { first: undefined, last: undefined };
+    return { veggieName: undefined, first: undefined, last: undefined };
 
   try {
     const first = new Date(springFrostDate.date);
@@ -96,9 +98,13 @@ export const getPlantingRangeFromUserFrostDates = (
     const last = new Date(fallFrostDate.date);
     last.setDate(last.getDate() - latestPlantingFromFirstFrostDate);
 
-    return { first, last };
+    return {
+      veggieName: veggie.name,
+      first: first.toISOString(),
+      last: last.toISOString()
+    };
   } catch (error) {
-    return { first: undefined, last: undefined };
+    return { veggieName: undefined, first: undefined, last: undefined };
   }
 };
 

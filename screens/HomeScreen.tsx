@@ -34,6 +34,7 @@ import {
   NoGardensPrompt
 } from "../components/garden/GardenItems";
 import { ScrollView } from "react-native-gesture-handler";
+import { ProgressChartIO, Timeline } from "../components/schedule/Charts";
 
 PrimaryButton;
 export default function HomeScreen({
@@ -75,33 +76,38 @@ export default function HomeScreen({
 
   return gardens?.length && activeGarden ? (
     <MainPageSlot>
-      <ScrollView>
-        <GardenSelector style={tw.style("mt-1")} />
-        <View style={tw.style("shadow-brand rounded-md m-2 flex ")}>
-          <View
-            style={tw`w-full flex overflow-visible justify-center items-center rounded-md relative `}>
-            <Image
-              style={tw.style("h-64 w-full rounded-md")}
-              source={{ uri: imageUrl }}></Image>
-            <View style={tw.style(" bg-transparent flex w-full -top-8")}>
-              <GardenGrid draggable={false} veggieGrid={veggieGrid} />
-            </View>
-            <View
-              style={tw.style(
-                "flex flex-row justify-between  border-t border-gray-200 rounded-md"
-              )}>
-              <IconText
-                style={tw.style("flex-1")}
-                size={20}
-                text="Edit Veggies"
-                name="edit"
-                color="gray"
-                onPress={() => navigation.navigate("GardenScreen")}
-              />
-            </View>
+      <GardenSelector style={tw.style("m-2")} />
+      <View style={tw.style("shadow-brand rounded-md m-2 flex ")}>
+        <View
+          style={tw`w-full flex overflow-visible justify-center items-center rounded-md relative `}>
+          <Image
+            style={tw.style("h-64 w-full rounded-md")}
+            source={{ uri: imageUrl }}></Image>
+          <View style={tw.style(" bg-transparent flex w-full -top-8")}>
+            <GardenGrid draggable={false} veggieGrid={veggieGrid} />
           </View>
         </View>
-      </ScrollView>
+
+        <View
+          style={tw.style(
+            "flex flex-row justify-between border-t border-gray-200 rounded-md"
+          )}>
+          <IconText
+            style={tw.style("flex-1")}
+            size={20}
+            text="Edit Veggies"
+            name="edit"
+            color="gray"
+            onPress={() => navigation.navigate("GardenScreen")}
+          />
+        </View>
+      </View>
+      <View>
+        <Timeline />
+      </View>
+      <View>
+        <ProgressChartIO />
+      </View>
     </MainPageSlot>
   ) : (
     <NoGardensPrompt />
