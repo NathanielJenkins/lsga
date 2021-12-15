@@ -1,8 +1,7 @@
 /** @format */
 
 import React from "react";
-import { StyleSheet } from "react-native";
-import { View } from "../../components/Themed";
+import { StyleSheet, View } from "react-native";
 
 import { SofiaBoldText, SofiaSemiBoldText } from "../../components/StyledText";
 import tw from "tailwind-react-native-classnames";
@@ -40,7 +39,7 @@ export default function MainPageSlot(props: SlotProps) {
         </View>
       </View>
 
-      {props.children}
+      <View style={tw.style("mb-5")}>{props.children}</View>
     </ScrollView>
   );
 }

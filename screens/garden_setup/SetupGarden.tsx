@@ -24,7 +24,7 @@ import { SofiaBoldText } from "../../components/StyledText";
 
 SelectPlanter;
 export default function SetupGarden({
-  navigation
+navigation
 }: RootStackScreenProps<"SetupGarden">) {
   const [newGarden, setNewGarden] = useState<UserGarden>({});
   const [hasImage, setHasImage] = useState<boolean>(false);

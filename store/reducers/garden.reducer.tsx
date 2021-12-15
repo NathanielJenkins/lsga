@@ -21,8 +21,6 @@ export function gardenReducer(
   state: GardenState = initialState,
   action: GardenActionTypes
 ): GardenState {
-  console.log(action.type);
-
   switch (action.type) {
     case UPDATE_GARDENS: {
       return {

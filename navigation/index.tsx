@@ -15,7 +15,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { ColorSchemeName, Pressable, View } from "react-native";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -35,7 +35,7 @@ import CreateAccountScreen from "../screens/auth/CreateAccountScreen";
 import LoginScreen from "../screens/auth/LoginScreen";
 import ResetPasswordScreen from "../screens/auth/ResetPasswordScreen";
 import { auth } from "../firebase/firebaseTooling";
-import { brandColor } from "../components/Themed";
+import { brandColor, tw } from "../components/Themed";
 import SetupGarden from "../screens/garden_setup/SetupGarden";
 import ConfirmLocation from "../screens/garden_setup/ConfirmLocation";
 import CameraPreview from "../screens/util/CameraPreview";
@@ -52,9 +52,7 @@ export default function Navigation({
   colorScheme: ColorSchemeName;
 }) {
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <NavigationContainer linking={LinkingConfiguration} theme={DefaultTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -197,5 +195,9 @@ function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+  return (
+    <View style={tw.style("")}>
+      <FontAwesome size={25} {...props} />
+    </View>
+  );
 }

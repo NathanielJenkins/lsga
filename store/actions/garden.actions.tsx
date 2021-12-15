@@ -89,6 +89,11 @@ export function updateActiveUserGarden(garden: UserGarden) {
 
     return updateUserGarden(garden).then(
       response => {
+        const gardens = [...getState().gardens.gardens];
+        const oldGardenIndex = gardens?.findIndex(g => g.name === garden.name);
+        gardens[oldGardenIndex] = garden;
+
+        dispatch(updateStoredGardensSuccess(gardens));
         dispatch(updateActiveGardenSuccess(response));
       },
       error => {

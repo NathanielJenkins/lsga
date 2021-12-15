@@ -9,7 +9,8 @@ import {
   StyleProp,
   TextStyle
 } from "react-native";
-import tw from "tailwind-react-native-classnames";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { tw, brandColor } from "../Themed";
 
 interface InputProps {
   handleOnChangeText: React.Dispatch<React.SetStateAction<string>>;
@@ -27,14 +28,36 @@ export function Input(props: InputProps) {
     <View>
       <TextInput
         style={tw.style(
-          `rounded border border-gray-500 p-3`,
+          `rounded border border-gray-500 p-3 text-gray-700`,
           {
             fontFamily: "sofia-regular"
           },
           style
         )}
         onChangeText={props.handleOnChangeText}
+        placeholderTextColor={"gray"}
         {...rest}
+      />
+    </View>
+  );
+}
+
+interface CheckboxProps {
+  text: string;
+  isChecked: boolean;
+  onPress?: (checked: boolean) => void;
+}
+export function Checkbox(props: CheckboxProps) {
+  return (
+    <View>
+      <BouncyCheckbox
+        size={25}
+        fillColor={brandColor}
+        unfillColor="#FFFFFF"
+        text={props.text}
+        isChecked={props.isChecked}
+        iconStyle={{ borderColor: "#679236" }}
+        onPress={props.onPress}
       />
     </View>
   );

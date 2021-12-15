@@ -6,6 +6,7 @@ import Documents from "./Documents";
 import Veggie, { getPlantingRangeFromUserFrostDates } from "./Veggie";
 import { useDispatch } from "react-redux";
 import { store } from "../store";
+import Task, { TaskDate } from "./Task";
 
 const ref = firestore.collection(Documents.UserGardens);
 
@@ -18,10 +19,13 @@ export default interface UserGarden {
   [properties.grid]?: Array<string>;
   [properties.plantingDates]?: Array<{
     veggieName: string;
-    first: Date;
-    last: Date;
+    first: string;
+    last: string;
+    datePlanted?: Date | string;
   }>;
-  [properties.veggieSteps]: { [veggieName: string]: Array<Date> };
+  [properties.veggieSteps]: {
+    [veggieName: string]: Array<TaskDate>;
+  };
 }
 
 class properties {
@@ -33,6 +37,7 @@ class properties {
   public static readonly grid = "grid";
   public static readonly plantingDates: "plantingDates";
   public static readonly veggieSteps: "veggieSteps";
+  public static readonly datePlanted: "datePlanted";
 }
 
 export const addUserGarden = async (userGarden: UserGarden) => {
@@ -45,20 +50,16 @@ export const addUserGarden = async (userGarden: UserGarden) => {
 
   userGarden.userId = auth.currentUser?.uid;
   userGarden.url = newUrl;
+  userGarden.veggieSteps = {};
 
   userGarden.grid = [
     ...Array(userGarden.garden.height * userGarden.garden.width).keys()
   ].map(() => null);
 
-  updatePlantingDates(userGarden);
-  await ref.doc(userGarden.name).set(userGarden);
-  return userGarden;
+  return updateUserGarden(userGarden);
 };
 
 export const updateUserGarden = async (userGarden: UserGarden) => {
-  // update the gardenPlantingDates from the grid;
-  updatePlantingDates(userGarden);
-
   await ref.doc(userGarden.name).set(userGarden);
 
   return userGarden;
@@ -79,12 +80,15 @@ export const getUserGardens = async () => {
   return gardens;
 };
 
-function updatePlantingDates(userGarden: UserGarden) {
+export function updatePlantingDates(userGarden: UserGarden) {
   const state = store.getState();
   const { veggies } = state.veggies;
   const { springFrostDate, fallFrostDate } = state.user;
-  const plantingDates: Array<{ veggieName: string; first: Date; last: Date }> =
-    new Array();
+  const plantingDates: Array<{
+    veggieName: string;
+    first: string;
+    last: string;
+  }> = new Array();
   const veggieNames = [...new Set(userGarden.grid)];
   veggieNames.forEach((veggieName, index) => {
     const veggie = veggies[veggieName];
@@ -95,4 +99,9 @@ function updatePlantingDates(userGarden: UserGarden) {
   });
 
   userGarden.plantingDates = plantingDates;
+}
+
+export function getUniqueVeggieIdsFromGrid(userGarden: UserGarden) {
+  const veggieIds = [...new Set(userGarden.grid)] || [];
+  return veggieIds;
 }

@@ -1,14 +1,13 @@
 /** @format */
 
 import * as React from "react";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, View, Text } from "react-native";
 import {
   IconText,
   PrimaryButton,
   SecondaryButton
 } from "../components/common/Button";
 import EditScreenInfo from "../components/EditScreenInfo";
-import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { getGardenByName } from "../models/Garden";
 import { RootState } from "../store/reducers";
@@ -25,7 +24,6 @@ import {
   SofiaSemiBoldText
 } from "../components/StyledText";
 import MainPageSlot from "./slots/MainPageSlot";
-import { Picker } from "@react-native-picker/picker";
 import { storage } from "../firebase/firebaseTooling";
 import { updateUserProperties, updateVeggies } from "../store";
 import {
@@ -33,7 +31,6 @@ import {
   GardenSelector,
   NoGardensPrompt
 } from "../components/garden/GardenItems";
-import { ScrollView } from "react-native-gesture-handler";
 import { ProgressChartIO, Timeline } from "../components/schedule/Charts";
 
 PrimaryButton;
@@ -55,7 +52,7 @@ export default function HomeScreen({
       .then((url: string) => {
         setImageUrl(url);
       })
-      .catch((e: Error) => console.log("Errors while downloading => ", e));
+      .catch((e: Error) => console.error("Errors while downloading => ", e));
   }, [activeGarden]);
   const dispatch = useDispatch();
 

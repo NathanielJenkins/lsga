@@ -30,19 +30,25 @@
     "whatCropsToPlantAfter": [],
     "stepsToSuccess": [
       {
+        "id": "x",
+        "type": "plant",
         "title": "Plant Arugula ",
         "description": "Plant the plant",
         "offset": 0
       },
       {
+        "id": "y",
+        "type": "general",
         "title": "Step 2",
         "description": "Step 2 description",
-        "offset": 10
+        "offset": 2
       },
       {
+        "id": "z",
+        "type": "general",
         "title": "Step 3",
         "description": "Step 3 description",
-        "offset": 2
+        "offset": 12
       }
     ]
   },
@@ -67,19 +73,25 @@
     "whatCropsToPlantAfter": ["arugula", "mustard_greens", "spinach"],
     "stepsToSuccess": [
       {
+        "id": "a",
+        "type": "plant",
         "title": "Plant Basil ",
         "description": "Plant the plant",
         "offset": 0
       },
       {
+        "id": "b",
+        "type": "general",
         "title": "Step 2",
         "description": "Step 2 description",
         "offset": 5
       },
       {
+        "id": "c",
+        "type": "general",
         "title": "Step 3",
         "description": "Step 3 description",
-        "offset": 4
+        "offset": 14
       }
     ]
   },

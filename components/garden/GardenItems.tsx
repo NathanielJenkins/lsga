@@ -176,7 +176,7 @@ export function GardenGrid(props: GardenGridProps) {
             draggable={false}
             veggie={props.veggieGrid[i]}
             noShadow={true}
-            size={75}
+            size={80}
           />
         </View>
       )
@@ -241,7 +241,7 @@ export function VeggieItem(props: VeggieItemProps) {
               width: size - 45
             })}
           />
-          <SofiaSemiMediumText style={tw.style("text-center")}>
+          <SofiaSemiMediumText style={tw.style("text-center text-xs")}>
             {props.veggie?.displayName}
           </SofiaSemiMediumText>
         </View>
@@ -300,7 +300,7 @@ export function GardenSelector(props: GardenSelectorProps) {
         </View>
       ) : (
         <View style={tw.style("flex flex-col")}>
-          <View style={tw.style("flex mb-4")}>
+          <View style={tw.style("flex")}>
             <Picker
               selectedValue={activeGarden.name}
               onValueChange={handleUpdateActiveGarden}>

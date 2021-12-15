@@ -9,6 +9,7 @@ import Gardens from "../../assets/data/Gardens.json";
 import { firestore, storage } from "../../firebase/firebaseTooling";
 import Veggie from "../../models/Veggie";
 import Documents from "../../models/Documents";
+import { randomRgb } from "../../utils/Date";
 export default function Admin() {
   const veggieRef = firestore.collection(Documents.Veggies);
   const handleImportVeggies = () => {
@@ -18,6 +19,7 @@ export default function Admin() {
         .getDownloadURL();
 
       const veg = { ...v } as unknown as Veggie;
+      veg.color = randomRgb().toString();
       veg.downloadUrl = url;
 
       veggieRef.doc(veg.name).set(veg);

@@ -154,6 +154,14 @@ export const updateFirebaseFrostDates = (
 const getDateFromString = (f: string) => {
   const monthNumber = parseInt(f.slice(0, 2));
   const dayNumber = parseInt(f.slice(2, 4));
+  const currentDate = new Date();
 
-  return new Date(new Date().getFullYear(), monthNumber, dayNumber);
+  // check if the current month is greater than the month number,
+  // if it is add one year, otherwise, it has not happened yet so use the current year
+  let year: number =
+    monthNumber < currentDate.getDate()
+      ? currentDate.getFullYear() + 1
+      : currentDate.getFullYear() + 0;
+
+  return new Date(year, monthNumber, dayNumber);
 };

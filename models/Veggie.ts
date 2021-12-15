@@ -49,6 +49,7 @@ export default interface Veggie {
   howToHarvest: string;
   whatCropsToPlantAfter: Array<string>;
   stepsToSuccess: Array<Task>;
+  color: string;
 }
 
 const ref = firestore.collection(Documents.Veggies);
@@ -77,21 +78,21 @@ export const getPlantingRangeFromUserFrostDates = (
   springFrostDate: FrostDateParsed,
   fallFrostDate: FrostDateParsed
 ) => {
-  // get the frost dates from the user
-  const {
-    latestPlantingFromFirstFrostDate,
-    earliestPlantingFromLastFrostDate
-  } = veggie;
-
-  if (
-    !latestPlantingFromFirstFrostDate ||
-    !earliestPlantingFromLastFrostDate ||
-    !springFrostDate ||
-    !fallFrostDate
-  )
-    return { veggieName: undefined, first: undefined, last: undefined };
-
   try {
+    // get the frost dates from the user
+    const {
+      latestPlantingFromFirstFrostDate,
+      earliestPlantingFromLastFrostDate
+    } = veggie;
+
+    if (
+      !latestPlantingFromFirstFrostDate ||
+      !earliestPlantingFromLastFrostDate ||
+      !springFrostDate ||
+      !fallFrostDate
+    )
+      return { veggieName: null, first: null, last: null };
+
     const first = new Date(springFrostDate.date);
     first.setDate(first.getDate() + earliestPlantingFromLastFrostDate);
 
@@ -104,7 +105,7 @@ export const getPlantingRangeFromUserFrostDates = (
       last: last.toISOString()
     };
   } catch (error) {
-    return { veggieName: undefined, first: undefined, last: undefined };
+    return { veggieName: null, first: null, last: null };
   }
 };
 

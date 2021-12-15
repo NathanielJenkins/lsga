@@ -89,7 +89,12 @@ export function TextButton(props: ButtonProps) {
   return (
     <View style={tw.style(style)}>
       <TouchableOpacity onPress={onPress}>
-        <SofiaRegularText style={tw`underline`}>{props.title}</SofiaRegularText>
+        <SofiaRegularText
+          style={tw.style(`underline text-brand`, {
+            textDecorationLine: "underline"
+          })}>
+          {props.title}
+        </SofiaRegularText>
       </TouchableOpacity>
     </View>
   );

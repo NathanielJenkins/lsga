@@ -24,6 +24,7 @@ import {
 import Veggie, { VeggieState } from "../../models/Veggie";
 import { CircleIconButton, IconText } from "../../components/common/Button";
 import { updateActiveUserGarden } from "../../store/actions/garden.actions";
+import { updatePlantingDates } from "../../models/UserGardens";
 export default function GardenScreen({
   navigation,
   route
@@ -95,6 +96,10 @@ export default function GardenScreen({
     navigation.pop();
     const userGarden = { ...activeGarden };
     userGarden.grid = workingGrid.map(w => w?.name || null);
+
+    // update the gardenPlantingDates from the grid;
+    updatePlantingDates(userGarden);
+
     dispatch(updateActiveUserGarden(userGarden));
   };
 

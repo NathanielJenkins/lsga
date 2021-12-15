@@ -51,10 +51,12 @@ export default function NameGarden(props: Props) {
   }, [name, description]);
 
   return (
-    <CardSlot
-      title={"Name your Garden"}
-      subtitle={"Add information to keep track of your garden"}>
-      <KeyboardAwareScrollView extraHeight={20}>
+    <KeyboardAwareScrollView
+      extraHeight={20}
+      contentContainerStyle={{ flex: 1 }}>
+      <CardSlot
+        title={"Name your Garden"}
+        subtitle={"Add information to keep track of your garden"}>
         <View style={tw.style("flex my-2")}>
           <Input
             placeholder="name"
@@ -73,8 +75,8 @@ export default function NameGarden(props: Props) {
             style={tw`mt-2`}
           />
         </View>
-      </KeyboardAwareScrollView>
-    </CardSlot>
+      </CardSlot>
+    </KeyboardAwareScrollView>
   );
 }
 

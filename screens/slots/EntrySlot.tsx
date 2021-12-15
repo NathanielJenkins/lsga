@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import {
   StyleSheet,
@@ -19,11 +21,11 @@ interface EntrySlotProps {
 export default function EntrySlot(props: EntrySlotProps) {
   return (
     <KeyboardAwareScrollView extraHeight={20}>
-      <View style={tw`m-4 flex flex-col content-between flex-1`}>
+      <View style={tw`m-4 flex flex-col content-between flex-1 bg-white`}>
         <View style={tw`w-full flex justify-center items-center mt-4 mb-6 `}>
           <Image source={brand_logo} style={tw``} />
         </View>
-        <SofiaSemiBoldText style={tw`text-3xl font-semibold `}>
+        <SofiaSemiBoldText style={tw`text-black text-3xl font-semibold `}>
           Garden Planner
         </SofiaSemiBoldText>
         {props.children}

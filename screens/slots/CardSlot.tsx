@@ -1,8 +1,7 @@
 /** @format */
 
 import React from "react";
-import { StyleSheet, Image } from "react-native";
-import { View } from "../../components/Themed";
+import { StyleSheet, Image, View, StyleProp } from "react-native";
 import {
   SofiaBoldText,
   SofiaSemiBoldText,
@@ -19,7 +18,8 @@ interface SlotProps {
 
 export default function CardSlot(props: SlotProps) {
   return (
-    <View style={tw.style(`p-4 pt-5 flex flex-col flex-1`, props.style)}>
+    <View
+      style={tw.style(`p-4 pt-5 flex flex-col flex-1 bg-white`, props.style)}>
       <View style={tw`shadow-brand p-3`}>
         {props.title && (
           <SofiaSemiBoldText style={tw`text-2xl text-gray-500`}>

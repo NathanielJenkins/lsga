@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Dimensions, StyleSheet } from "react-native";
-
+import moment from "moment";
 import {
   LineChart,
   BarChart,
@@ -11,16 +11,22 @@ import {
   ContributionGraph,
   StackedBarChart
 } from "react-native-chart-kit";
-import { useSelector } from "react-redux";
-import { getWeeklyTasks } from "../../models/Task";
-import { RootState } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import Task, {
+  getAllTasks,
+  getChartData,
+  getPaginationTasks,
+  TaskDate,
+  TaskType
+} from "../../models/Task";
+import { RootState, updateActiveUserGarden, updateGardens } from "../../store";
 import { IconText } from "../common/Button";
 import {
   SofiaBoldText,
   SofiaRegularText,
   SofiaSemiBoldText
 } from "../StyledText";
-import { tw, View } from "../Themed";
+import { brandColorRBG, tw, View } from "../Themed";
 
 import Svg, {
   Circle,
@@ -46,77 +52,194 @@ import Svg, {
   Mask
 } from "react-native-svg";
 import { isNil } from "lodash";
+import { addDays } from "../../utils/Date";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { Checkbox } from "../common/Input";
+import { updateUserGarden } from "../../models/UserGardens";
+import Veggie from "../../models/Veggie";
 
 export const ProgressChartIO = () => {
   const { veggies } = useSelector((state: RootState) => state.veggies);
   const { activeGarden } = useSelector((state: RootState) => state.gardens);
 
-  const [weekOffset, setWeekOffset] = React.useState(0);
-  const curr = new Date(); // get current date
-  const first = curr.getDate() - curr.getDay() + (weekOffset * 7); //prettier-ignore
-  const last = first + 6; // last day is the first day +
   const stringFormat: Intl.DateTimeFormatOptions = {
     weekday: "short",
     month: "short",
     day: "numeric"
   };
 
-  const firstday = new Date(curr.setDate(first)) //prettier-ignore
-  const lastday = new Date(curr.setDate(last)) //prettier-ignore
-
-  const [data, setData] = React.useState({
-    labels: ["Beets", "Beets", "Beets", "Beets", "Beets"], // optional
-    data: [0.4, 0.6, 0.8, 0.4]
-  });
+  const [first, setFirst] = React.useState(moment().startOf("week").toDate()); // First day is the day of the month - the day of the week
+  const [tasks, setTasks] =
+    React.useState<{ [veggieName: string]: Array<[TaskDate, boolean]> }>();
+  const [weeklyTasks, setWeeklyTasks] = React.useState<any>({});
+  const [colors, setColors] = React.useState<Array<string>>([]);
+  const [data, setData] = React.useState<Array<number>>([]);
+  const [labels, setLabels] = React.useState<Array<string>>([]);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    // console.log(getWeeklyTasks(activeGarden, firstday, lastday))
+    const { tasks: _tasks } = getAllTasks(activeGarden); //prettier-ignore
+    setTasks(_tasks);
+    const weeklyTasks = getPaginationTasks(_tasks, first);
+    const {
+      data: _data,
+      labels: _labels,
+      colors: _colors
+    } = getChartData(weeklyTasks, veggies);
 
-    setData({
-      labels: ["d", "d", "d", "d"], // optional
-      data: [Math.random(), Math.random(), Math.random(), Math.random()]
-    });
-  }, [weekOffset]);
+    setWeeklyTasks(weeklyTasks);
+    setLabels(_labels);
+    setData(_data);
+    setColors(_colors);
+  }, [veggies, activeGarden]);
+
+  const updateWeek = (inc: boolean) => {
+    const date = inc ? addDays(first, 7) : addDays(first, -7);
+
+    setFirst(date);
+    const weeklyTasks = getPaginationTasks(tasks, date);
+    const {
+      data: _data,
+      labels: _labels,
+      colors: _colors
+    } = getChartData(weeklyTasks, veggies);
+
+    setWeeklyTasks(weeklyTasks);
+    setLabels(_labels);
+    setData(_data);
+    setColors(_colors);
+  };
+
+  const handleAddRemoveTask = (
+    add: boolean,
+    task: Task,
+    veggieName: string
+  ) => {
+    const ug = { ...activeGarden };
+    let currentTasks = ug.veggieSteps[veggieName] || [];
+    currentTasks = [...currentTasks];
+    if (add) currentTasks.push({ task, date: moment().format() });
+    else currentTasks = currentTasks.filter(t => t.task.id !== task.id);
+    if (task.type === TaskType.plant) {
+      const plantingDates = [...ug.plantingDates];
+      const plantingDateIndex = plantingDates.findIndex(
+        p => p.veggieName === veggieName
+      );
+
+      if (plantingDateIndex !== -1) {
+        if (add) {
+          plantingDates[plantingDateIndex] = {
+            ...plantingDates[plantingDateIndex],
+            datePlanted: moment().format()
+          };
+        } else {
+          plantingDates[plantingDateIndex] = {
+            ...plantingDates[plantingDateIndex],
+            datePlanted: null
+          };
+        }
+      }
+      ug.plantingDates = plantingDates;
+    }
+
+    ug.veggieSteps[veggieName] = currentTasks;
+    dispatch(updateActiveUserGarden(ug));
+  };
 
   return (
-    <View style={tw.style("shadow-brand m-2 flex items-center")}>
+    <View style={tw.style("shadow-brand m-2 flex px-4")}>
       <View style={tw.style("flex flex-row items-center justify-between")}>
         <IconText
           size={25}
           name="chevron-left"
           color="grey"
-          onPress={() => setWeekOffset(weekOffset - 1)}
+          onPress={() => updateWeek(false)}
+          style={tw.style("p-2 rounded")}
         />
         <View style={tw.style("flex items-center mx-4")}>
           <SofiaBoldText style={tw.style("text-lg text-gray-500 mt-2")}>
             My Weekly Tasks
           </SofiaBoldText>
           <SofiaRegularText>
-            {firstday.toLocaleString("en-En", stringFormat)} -
-            {lastday.toLocaleString("en-En", stringFormat)}
+            {first.toLocaleString("en-En", stringFormat)} -{" "}
+            {addDays(first, 6).toLocaleString("en-En", stringFormat)}
           </SofiaRegularText>
         </View>
         <IconText
           size={25}
           name="chevron-right"
           color="grey"
-          onPress={() => setWeekOffset(weekOffset + 1)}
+          onPress={() => updateWeek(true)}
+          style={tw.style("p-2 rounded")}
         />
       </View>
-      <ProgressChart
-        data={data}
-        width={Dimensions.get("window").width - 60}
-        height={220}
-        radius={10}
-        chartConfig={{
-          backgroundGradientFrom: "#fff",
-          backgroundGradientTo: "#fff",
-          decimalPlaces: 2, // optional, defaults to 2dp
-          color: (opacity = 1, index) => `rgba(103, 146, 54, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(103, 146, 54, ${opacity})`
-        }}
-        hideLegend={true}
-      />
+      {data.length !== 0 && (
+        <ProgressChart
+          data={{ data, labels }}
+          width={Dimensions.get("window").width - 120}
+          height={200}
+          radius={32}
+          chartConfig={{
+            backgroundGradientFrom: "#fff",
+            backgroundGradientTo: "#fff",
+            decimalPlaces: 2, // optional, defaults to 2dp
+            color: (opacity = 1, index) =>
+              `rgba(${
+                colors[index] || brandColorRBG.map(r => r.toString())
+              }, ${opacity})`
+          }}
+          hideLegend={true}
+        />
+      )}
+      <View style={tw.style("flex justify-center items-center")}>
+        <View style={tw.style("flex")}>
+          {data?.map((c, i) => (
+            <View key={i} style={tw.style("flex flex-row items-center mt-1")}>
+              <View
+                style={tw.style(
+                  { backgroundColor: `rgb(${colors[i]})` },
+                  "h-4 w-4 rounded mr-2"
+                )}
+              />
+              <SofiaRegularText>{labels[i]}</SofiaRegularText>
+            </View>
+          ))}
+        </View>
+      </View>
+
+      <View style={tw.style("flex my-4")}>
+        {Object.entries(weeklyTasks).length ? (
+          Object.entries(weeklyTasks)?.map(([veggieName, td], i) => (
+            <View key={veggieName + "task-cont"} style={tw.style("flex")}>
+              <SofiaRegularText
+                style={tw.style("text-gray-500 text-lg  underline")}>
+                {veggies[veggieName]?.displayName}
+              </SofiaRegularText>
+              <View style={tw.style("flex mt-2")}>
+                {td.map(task => (
+                  <View style={tw.style("my-0.5")}>
+                    <Checkbox
+                      key={task[0].task.id}
+                      onPress={(isChecked: boolean) =>
+                        handleAddRemoveTask(isChecked, task[0].task, veggieName)
+                      }
+                      isChecked={task[1]}
+                      text={task[0].task.title}
+                    />
+                  </View>
+                ))}
+              </View>
+            </View>
+          ))
+        ) : (
+          <View style={tw.style("my-0.5")}>
+            <SofiaRegularText
+              style={tw.style("text-gray-500 text-lg text-center")}>
+              No Tasks!
+            </SofiaRegularText>
+          </View>
+        )}
+      </View>
     </View>
   );
 };
@@ -125,32 +248,40 @@ export function Timeline() {
   const { activeGarden } = useSelector((state: RootState) => state.gardens);
   const { veggies } = useSelector((state: RootState) => state.veggies);
 
-  const gardenVeggies = [...new Set(activeGarden.grid)]
-    .map(g => veggies[g])
-    .filter(g => !isNil(g));
+  const [gardenVeggies, setGardenVeggies] = React.useState<Veggie[]>([]);
+
+  React.useEffect(() => {
+    setGardenVeggies(
+      [...new Set(activeGarden.grid)]
+        .map(g => veggies[g])
+        .filter(g => !isNil(g))
+    );
+  }, [activeGarden]);
 
   const width = Dimensions.get("window").width - 80;
   const xStart = 50;
-  const section = (width - xStart) / 11;
-  const sections = [...Array(11).keys()];
+  const section = (width - xStart) / 12;
+  const sections = [...Array(12).keys()];
   const stringFormat: Intl.DateTimeFormatOptions = {
     month: "short",
     day: "numeric"
   };
   return (
     <View style={tw.style("flex justify-center items-center shadow-brand m-2")}>
-      <SofiaSemiBoldText style={tw.style("text-lg text-gray-500 text-left")}>
+      <SofiaSemiBoldText style={tw.style("text-lg text-gray-500 my-2")}>
         Planting Dates
       </SofiaSemiBoldText>
-      {gardenVeggies.map(g => {
-        const plantingDates = activeGarden.plantingDates.find(
+      {gardenVeggies.map((g, index) => {
+        const plantingDates = activeGarden.plantingDates?.find(
           pd => pd.veggieName === g?.name
         );
         const first = plantingDates?.first;
         const last = plantingDates?.last;
+        const planted = plantingDates?.datePlanted;
 
-        const firstDate = new Date(first);
-        const lastDate = new Date(last);
+        const lastDate = new Date(first);
+        const firstDate = new Date(last);
+        const plantedDate = planted ? new Date(planted) : null;
 
         const xFirst =
           xStart +
@@ -161,8 +292,20 @@ export function Timeline() {
           lastDate.getMonth() * section +
           (lastDate.getDate() / 30) * section;
 
+        const xDatePlanted = planted
+          ? xStart +
+            plantedDate.getMonth() * section +
+            (plantedDate.getDate() / 30) * section
+          : null;
+
+        if (!plantingDates)
+          return (
+            <View>
+              <SofiaRegularText>No planting dates set yet!</SofiaRegularText>
+            </View>
+          );
         return (
-          <Svg key={g.name} height="70" width={width}>
+          <Svg key={g.name + index} height="70" width={width}>
             <Image
               x="5"
               y="5"
@@ -172,50 +315,76 @@ export function Timeline() {
             />
             {sections.map(s => (
               <Line
+                key={s}
                 x1={s * section + xStart}
                 y1="20"
                 x2={s * section + xStart}
                 y2="30"
                 stroke="rgba(103,146,54, 0.5)"
-                strokeWidth="3"
+                strokeWidth="2"
               />
             ))}
             <Line
-              x1={xFirst}
-              y1="25"
-              x2={xLast}
-              y2="25"
-              stroke="rgba(103,146,54, 1)"
-              strokeWidth="3"
-            />
-            <Line
               x1={xStart}
               y1="25"
-              x2="400"
+              x2={width}
               y2="25"
               stroke="rgba(103,146,54, 0.2)"
-              strokeWidth="3"
+              strokeWidth="2"
             />
-            <Circle cx={xFirst} cy="25" r="5" fill="rgba(103,146,54)" />
-            <Circle cx={xLast} cy="25" r="5" fill="rgba(103,146,54)" />
-            <Text
-              fill="black"
-              stroke="transparent"
-              fontSize="12"
-              x={xFirst}
-              y="45"
-              textAnchor="start">
-              {firstDate.toLocaleString("en-En", stringFormat)}
-            </Text>
-            <Text
-              fill="black"
-              stroke="transparent"
-              fontSize="12"
-              x={xLast}
-              y={lastDate.getMonth() === firstDate.getMonth() ? 15 : 45}
-              textAnchor="end">
-              {lastDate.toLocaleString("en-En", stringFormat)}
-            </Text>
+
+            {planted ? (
+              <G>
+                <Circle
+                  cx={xDatePlanted}
+                  cy="25"
+                  r="4"
+                  strokeWidth={2}
+                  fill={"rgba(103,146,54, 0.4)"}
+                  stroke={"rgba(103,146,54)"}
+                />
+                <Text
+                  fill="gray"
+                  stroke="transparent"
+                  fontSize="12"
+                  x={xDatePlanted}
+                  y="45"
+                  textAnchor="middle">
+                  Planted
+                </Text>
+              </G>
+            ) : (
+              <G>
+                <Circle cx={xFirst} cy="25" r="4" fill="rgba(103,146,54)" />
+                <Circle cx={xLast} cy="25" r="4" fill="rgba(103,146,54)" />
+                <Line
+                  x1={xFirst}
+                  y1="25"
+                  x2={xLast}
+                  y2="25"
+                  stroke="rgba(103,146,54, 1)"
+                  strokeWidth="2.5"
+                />
+                <Text
+                  fill="gray"
+                  stroke="transparent"
+                  fontSize="14"
+                  x={xFirst}
+                  y="45"
+                  textAnchor="start">
+                  {firstDate.toLocaleString("en-En", stringFormat)}
+                </Text>
+                <Text
+                  fill="gray"
+                  stroke="transparent"
+                  fontSize="14"
+                  x={xLast}
+                  y={15}
+                  textAnchor="end">
+                  {lastDate.toLocaleString("en-En", stringFormat)}
+                </Text>
+              </G>
+            )}
           </Svg>
         );
       })}

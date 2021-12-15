@@ -15,7 +15,6 @@ export default function SelectLocation({
   route
 }: RootStackScreenProps<"ConfirmLocation">) {
   const [newGarden, setNewGarden] = route.params.newGardenState;
-  console.log(newGarden);
   return (
     <CardSlot
       title="How does it look ?"
