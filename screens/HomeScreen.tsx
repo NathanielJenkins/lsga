@@ -23,7 +23,7 @@ import {
   SofiaRegularText,
   SofiaSemiBoldText
 } from "../components/StyledText";
-import MainPageSlot from "./slots/MainPageSlot";
+import { MainPageSlot } from "./slots/MainPageSlot";
 import { storage } from "../firebase/firebaseTooling";
 import { updateUserProperties, updateVeggies } from "../store";
 import {
@@ -32,11 +32,10 @@ import {
   NoGardensPrompt
 } from "../components/garden/GardenItems";
 import { ProgressChartIO, Timeline } from "../components/schedule/Charts";
+import { GalleryCard } from "../components/gallery";
 
 PrimaryButton;
-export default function HomeScreen({
-  navigation
-}: RootTabScreenProps<"HomeScreen">) {
+export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   const [imageUrl, setImageUrl] = React.useState(undefined);
   const { gardens, activeGarden } = useSelector(
     (state: RootState) => state.gardens
@@ -104,6 +103,9 @@ export default function HomeScreen({
       </View>
       <View>
         <ProgressChartIO />
+      </View>
+      <View>
+        <GalleryCard />
       </View>
     </MainPageSlot>
   ) : (

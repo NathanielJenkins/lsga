@@ -8,7 +8,7 @@ import {
 import { RootStackScreenProps } from "../../types";
 import { Input } from "../../components/common/Input";
 import { SofiaRegularText } from "../../components/StyledText";
-import EntrySlot from "../slots/EntrySlot";
+import { EntrySlot } from "../slots/EntrySlot";
 import Spinner from "../../components/common/Spinner";
 
 import { StyleSheet, Text, View } from "react-native";
@@ -17,9 +17,7 @@ import React, { useEffect, useState } from "react";
 
 import { auth } from "../../firebase/firebaseTooling";
 import { useUser } from "../../hooks/useAuth";
-export default function LoginScreen({
-  navigation
-}: RootStackScreenProps<"Login">) {
+export function LoginScreen({ navigation }: RootStackScreenProps<"Login">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

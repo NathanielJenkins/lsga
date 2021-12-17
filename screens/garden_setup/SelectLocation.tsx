@@ -8,7 +8,7 @@ import {
   Text,
   DeviceEventEmitter
 } from "react-native";
-import CardSlot from "../../screens/slots/CardSlot";
+import { CardSlot } from "../../screens/slots/CardSlot";
 import { RootStackParamList, RootStackScreenProps } from "../../types";
 import { tw, brandColor } from "../../components/Themed";
 import brand_sample from "../../assets/images/brand_sample.jpg";
@@ -26,9 +26,7 @@ interface SelectLocationProps {
   hasImageState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 }
 
-export default function SelectLocation(
-  SelectLocationProps: SelectLocationProps
-) {
+export function SelectLocation(SelectLocationProps: SelectLocationProps) {
   const [newGarden, setNewGarden] = SelectLocationProps.newGardenState;
   const [hasImage, setHasImage] = SelectLocationProps.hasImageState;
   const [title, setTitle] = useState<string>("Select a Location");
@@ -77,7 +75,11 @@ export default function SelectLocation(
               />
             </View>
             <View style={tw`flex-1 `}>
-              <SecondaryButton title="Photos" style={tw` `} />
+              <SecondaryButton
+                title="Photos"
+                style={tw` `}
+                onPress={() => {}}
+              />
             </View>
           </View>
         </View>

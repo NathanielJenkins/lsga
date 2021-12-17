@@ -34,7 +34,7 @@ import {
   DraxProvider,
   DraxView
 } from "react-native-drax";
-import MainPageSlot from "../../screens/slots/MainPageSlot";
+import { MainPageSlot } from "../../screens/slots/MainPageSlot";
 import { SofiaRegularText } from "../../components/StyledText";
 import no_gardens from "../../assets/images/no_gardens.png";
 import { IconText, PrimaryButton, SecondaryButton } from "../common/Button";
@@ -46,7 +46,8 @@ import { Info } from "../common/Display";
 import * as Location from "expo-location";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { setFrostDateFromLngLat } from "../../models/UserProperties";
-
+import UserGarden from "../../models/UserGardens";
+import { deleteGarden } from "../../store";
 export function NoGardensPrompt() {
   const navigation = useNavigation();
   return (
@@ -299,7 +300,10 @@ export function GardenSelector(props: GardenSelectorProps) {
           </SofiaSemiBoldText>
         </View>
       ) : (
-        <View style={tw.style("flex flex-col")}>
+        <View style={tw.style("flex flex-col ")}>
+          <SofiaSemiBoldText style={tw.style("text-2xl text-gray-500")}>
+            My Gardens
+          </SofiaSemiBoldText>
           <View style={tw.style("flex")}>
             <Picker
               selectedValue={activeGarden.name}
@@ -423,7 +427,48 @@ export function TextPill(props: TextPillProps) {
   );
 }
 
-export default function AddFrostDateComponent() {
+export function ListGardens() {
+  const { gardens } = useSelector((state: RootState) => state.gardens);
+  const dispatch = useDispatch();
+
+  const handleDelete = (garden: UserGarden) => {
+    const alertMsg: [string, string, any] = [
+      `Confirm Delete "${garden.name}"`,
+      `Are you sure you want to delete "${garden.name}", this will delete all data associated with this garden.`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "OK",
+          onPress: () => dispatch(deleteGarden(garden))
+        }
+      ]
+    ];
+    Alert.alert(...alertMsg);
+  };
+
+  return (
+    <Info title="My Gardens">
+      {gardens.map(g => (
+        <View
+          key={g.name}
+          style={tw.style("flex flex-1 flex-row items-center justify-between")}>
+          <SofiaRegularText>{g.name}</SofiaRegularText>
+          <IconText
+            name="trash"
+            color="grey"
+            size={20}
+            onPress={() => handleDelete(g)}
+          />
+        </View>
+      ))}
+    </Info>
+  );
+}
+
+export function AddFrostDateComponent() {
   const { springFrostDate, fallFrostDate } = useSelector(
     (state: RootState) => state.user
   );

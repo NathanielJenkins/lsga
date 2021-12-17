@@ -3,7 +3,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function ArCamera() {
+export function ArCamera() {
   return (
     <View>
       <Text>AR CAMERA</Text>

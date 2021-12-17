@@ -10,7 +10,7 @@ interface SlotProps {
   children: React.ReactNode;
 }
 
-export default function GeneralSlot(props: SlotProps) {
+export function GeneralSlot(props: SlotProps) {
   return (
     <View style={tw`p-4 pt-8 flex flex-col flex-1 bg-white`}>
       {props.children}

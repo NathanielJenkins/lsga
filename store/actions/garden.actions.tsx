@@ -6,11 +6,13 @@ import {
   UPDATE_GARDENS,
   GardenActionTypes,
   NEW_GARDEN,
-  UPDATE_ACTIVE_GARDEN
+  UPDATE_ACTIVE_GARDEN,
+  DELETE_GARDEN
 } from "../types";
 import UserGarden, {
   getUserGardens,
   addUserGarden,
+  deleteUserGarden,
   updateUserGarden
 } from "../../models/UserGardens";
 import { useSelector } from "react-redux";
@@ -70,9 +72,29 @@ export function addNewGarden(garden: UserGarden) {
     return addUserGarden(garden).then(
       response => {
         dispatch(addNewGardenSuccess(response));
+        dispatch(updateActiveGardenSuccess(response));
+      },
+      error => {
+        console.error(error);
+        dispatch(failure("Server error."));
+      }
+    );
+  };
+}
+
+export function deleteGarden(garden: UserGarden) {
+  // check if an of the fields of the user garden are null
+
+  return (dispatch: Dispatch, getState: () => RootState) => {
+    // async action: uses Redux-Thunk middleware to return a function instead of an action creator
+    dispatch(request());
+
+    return deleteUserGarden(garden).then(
+      response => {
+        dispatch({ type: DELETE_GARDEN, payload: garden });
         const { activeGarden } = getState().gardens;
-        if (!activeGarden && response)
-          dispatch(updateActiveGardenSuccess(response));
+        if (activeGarden.name === garden.name)
+          dispatch(updateActiveGardenSuccess(null));
       },
       error => {
         console.error(error);

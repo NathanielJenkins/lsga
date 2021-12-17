@@ -1,9 +1,11 @@
+/** @format */
+
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { RootStackScreenProps } from "types";
+import { RootStackScreenProps } from "../../types";
 
-export default function TypeOfSpace({
-  navigation,
+export function TypeOfSpace({
+  navigation
 }: RootStackScreenProps<"TypeOfSpace">) {
   return (
     <View>

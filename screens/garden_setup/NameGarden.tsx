@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import UserGarden from "../../models/UserGardens";
-import CardSlot from "../slots/CardSlot";
-import { addNewGarden } from "../../store/actions/garden.actions";
+import { CardSlot } from "../slots/CardSlot";
+import { addNewGarden } from "../../store";
 import { tw } from "../../components/Themed";
 import { PrimaryButton, ThumbnailCard } from "../../components/common/Button";
 import Swiper from "react-native-swiper";
@@ -20,7 +20,7 @@ interface Props {
   swiper: React.MutableRefObject<Swiper>;
 }
 
-export default function NameGarden(props: Props) {
+export function NameGarden(props: Props) {
   const [newGarden, setNewGarden] = props.newGardenState;
 
   const [name, setName] = useState<string>("My Garden");
@@ -40,7 +40,9 @@ export default function NameGarden(props: Props) {
     }
 
     dispatch(addNewGarden(newGarden));
+
     navigation.navigate("Root");
+    navigation.navigate("GardenScreen");
   };
 
   React.useEffect(() => {

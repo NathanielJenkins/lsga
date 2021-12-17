@@ -7,7 +7,7 @@ import { StyleSheet, View, Text, Dimensions, Platform } from "react-native";
 import { tw } from "../../components/Themed";
 import { CircleIconButton } from "../../components/common/Button";
 import { storage, auth } from "../../firebase/firebaseTooling";
-export default function CameraPreview({
+export function CameraPreview({
   navigation,
   route
 }: RootStackScreenProps<"CameraPreview">) {
@@ -36,7 +36,7 @@ export default function CameraPreview({
   const handleTakePhoto = async () => {
     const photo = await camera.takePictureAsync();
 
-    setNewGarden({ url: photo.uri });
+    setNewGarden({ url: photo.uri } as any);
     navigation.navigate("SetupGarden");
   };
 

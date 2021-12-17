@@ -18,9 +18,9 @@ interface EntrySlotProps {
   children: React.ReactNode;
 }
 
-export default function EntrySlot(props: EntrySlotProps) {
+export function EntrySlot(props: EntrySlotProps) {
   return (
-    <KeyboardAwareScrollView extraHeight={20}>
+    <KeyboardAwareScrollView extraHeight={20} style={tw.style("bg-white")}>
       <View style={tw`m-4 flex flex-col content-between flex-1 bg-white`}>
         <View style={tw`w-full flex justify-center items-center mt-4 mb-6 `}>
           <Image source={brand_logo} style={tw``} />

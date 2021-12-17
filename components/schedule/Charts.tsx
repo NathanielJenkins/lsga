@@ -51,7 +51,7 @@ import Svg, {
   Pattern,
   Mask
 } from "react-native-svg";
-import { isNil } from "lodash";
+import { flatten, isEmpty, isNil } from "lodash";
 import { addDays } from "../../utils/Date";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Checkbox } from "../common/Input";
@@ -91,6 +91,10 @@ export const ProgressChartIO = () => {
     setLabels(_labels);
     setData(_data);
     setColors(_colors);
+
+    // const isDone =
+    //   !isEmpty(weeklyTasks) &&
+    //   !flatten(Object.values(weeklyTasks)).some(x => x[1] === false);
   }, [veggies, activeGarden]);
 
   const updateWeek = (inc: boolean) => {
@@ -115,6 +119,7 @@ export const ProgressChartIO = () => {
     task: Task,
     veggieName: string
   ) => {
+    console.log("x");
     const ug = { ...activeGarden };
     let currentTasks = ug.veggieSteps[veggieName] || [];
     currentTasks = [...currentTasks];
@@ -174,22 +179,24 @@ export const ProgressChartIO = () => {
         />
       </View>
       {data.length !== 0 && (
-        <ProgressChart
-          data={{ data, labels }}
-          width={Dimensions.get("window").width - 120}
-          height={200}
-          radius={32}
-          chartConfig={{
-            backgroundGradientFrom: "#fff",
-            backgroundGradientTo: "#fff",
-            decimalPlaces: 2, // optional, defaults to 2dp
-            color: (opacity = 1, index) =>
-              `rgba(${
-                colors[index] || brandColorRBG.map(r => r.toString())
-              }, ${opacity})`
-          }}
-          hideLegend={true}
-        />
+        <View style={tw.style("flex justify-center items-center")}>
+          <ProgressChart
+            data={{ data, labels }}
+            width={Dimensions.get("window").width - 120}
+            height={200}
+            radius={32}
+            chartConfig={{
+              backgroundGradientFrom: "#fff",
+              backgroundGradientTo: "#fff",
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 1, index) =>
+                `rgba(${
+                  colors[index] || brandColorRBG.map(r => r.toString())
+                }, ${opacity})`
+            }}
+            hideLegend={true}
+          />
+        </View>
       )}
       <View style={tw.style("flex justify-center items-center")}>
         <View style={tw.style("flex")}>
@@ -217,9 +224,8 @@ export const ProgressChartIO = () => {
               </SofiaRegularText>
               <View style={tw.style("flex mt-2")}>
                 {td.map(task => (
-                  <View style={tw.style("my-0.5")}>
+                  <View style={tw.style("my-0.5")} key={task[0].task.id}>
                     <Checkbox
-                      key={task[0].task.id}
                       onPress={(isChecked: boolean) =>
                         handleAddRemoveTask(isChecked, task[0].task, veggieName)
                       }
@@ -243,11 +249,13 @@ export const ProgressChartIO = () => {
     </View>
   );
 };
-
+//
 export function Timeline() {
   const { activeGarden } = useSelector((state: RootState) => state.gardens);
   const { veggies } = useSelector((state: RootState) => state.veggies);
-
+  const { springFrostDate, fallFrostDate } = useSelector(
+    (state: RootState) => state.user
+  );
   const [gardenVeggies, setGardenVeggies] = React.useState<Veggie[]>([]);
 
   React.useEffect(() => {
@@ -256,7 +264,7 @@ export function Timeline() {
         .map(g => veggies[g])
         .filter(g => !isNil(g))
     );
-  }, [activeGarden]);
+  }, [activeGarden, veggies, springFrostDate, fallFrostDate]);
 
   const width = Dimensions.get("window").width - 80;
   const xStart = 50;
@@ -298,12 +306,7 @@ export function Timeline() {
             (plantedDate.getDate() / 30) * section
           : null;
 
-        if (!plantingDates)
-          return (
-            <View>
-              <SofiaRegularText>No planting dates set yet!</SofiaRegularText>
-            </View>
-          );
+        if (!plantingDates) return <View></View>;
         return (
           <Svg key={g.name + index} height="70" width={width}>
             <Image

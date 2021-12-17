@@ -16,7 +16,7 @@ interface SlotProps {
   style?: StyleProp<any>;
 }
 
-export default function CardSlot(props: SlotProps) {
+export function CardSlot(props: SlotProps) {
   return (
     <View
       style={tw.style(`p-4 pt-5 flex flex-col flex-1 bg-white`, props.style)}>

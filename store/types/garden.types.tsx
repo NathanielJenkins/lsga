@@ -16,13 +16,18 @@ interface UpdateActiveGardenAction {
 }
 
 export const NEW_GARDEN = "NEW_GARDEN";
-
 interface NewGardenAction {
   type: typeof NEW_GARDEN;
   payload: UserGarden;
 }
 
+export const DELETE_GARDEN = "DELETE_GARDEN";
+interface DeleteGardenAction {
+  type: typeof DELETE_GARDEN;
+  payload: UserGarden;
+}
 export type GardenActionTypes =
   | UpdateGardenAction
   | NewGardenAction
-  | UpdateActiveGardenAction;
+  | UpdateActiveGardenAction
+  | DeleteGardenAction;

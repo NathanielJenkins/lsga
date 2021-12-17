@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Image, View } from "react-native";
-import CardSlot from "../../screens/slots/CardSlot";
+import { CardSlot } from "../../screens/slots/CardSlot";
 import { RootStackScreenProps } from "../../types";
 import { tw } from "../../components/Themed";
 import brand_sample from "../../assets/images/brand_sample.jpg";
@@ -10,7 +10,7 @@ import { SecondaryButton } from "../../components/common/Button";
 import { Camera } from "expo-camera";
 import UserGarden from "../../models/UserGardens";
 
-export default function SelectLocation({
+export function ConfirmLocation({
   navigation,
   route
 }: RootStackScreenProps<"ConfirmLocation">) {
@@ -42,7 +42,7 @@ export default function SelectLocation({
             />
           </View>
           <View style={tw`flex-1 `}>
-            <SecondaryButton title="Photos" style={tw` `} />
+            <SecondaryButton title="Photos" style={tw` `} onPress={() => {}} />
           </View>
         </View>
       </View>

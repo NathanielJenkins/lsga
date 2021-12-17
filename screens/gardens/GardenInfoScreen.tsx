@@ -14,7 +14,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { SofiaBoldText, SofiaRegularText } from "../../components/StyledText";
 import { tw } from "../../components/Themed";
 import { RootStackScreenProps } from "../../types";
-import GeneralSlot from "../slots/GeneralSlot";
+import { GeneralSlot } from "../slots";
 import Ripple from "react-native-material-ripple";
 import { IconText, SecondaryButton } from "../../components/common/Button";
 import { Info } from "../../components/common/Display";
@@ -22,8 +22,10 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import { setFrostDateFromLngLat } from "../../models/UserProperties";
-import AddFrostDate from "../../components/garden/GardenItems";
-import AddFrostDateComponent from "../../components/garden/GardenItems";
+import {
+  AddFrostDateComponent,
+  ListGardens
+} from "../../components/garden/GardenItems";
 
 export default function GardenInfoScreen({
   navigation,
@@ -37,7 +39,12 @@ export default function GardenInfoScreen({
         </SofiaBoldText>
       </View>
       <ScrollView>
-        <AddFrostDateComponent />
+        <View style={tw.style("shadow-brand p-2 my-2 mx-1")}>
+          <AddFrostDateComponent />
+        </View>
+        <View style={tw.style("shadow-brand p-2 my-2 mx-1")}>
+          <ListGardens />
+        </View>
       </ScrollView>
     </GeneralSlot>
   );

@@ -12,7 +12,7 @@ export const Info = (props: {
   children?: React.ReactNode;
 }) => {
   return (
-    <View style={tw.style(props.style, "flex mt-4")}>
+    <View style={tw.style(props.style, "flex")}>
       <SofiaRegularText style={tw.style("text-brand text-lg")}>
         {props.title}
       </SofiaRegularText>

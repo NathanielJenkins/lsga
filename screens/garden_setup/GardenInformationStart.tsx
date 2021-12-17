@@ -4,7 +4,7 @@ import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { tw } from "../../components/Themed";
 import UserGarden from "../../models/UserGardens";
-import CardSlot from "../slots/CardSlot";
+import { CardSlot } from "../slots/CardSlot";
 import brand_sample from "../../assets/images/brand_sample.jpg";
 import { PrimaryButton } from "../../components/common/Button";
 import Swiper from "react-native-swiper";
@@ -18,7 +18,7 @@ interface GardenInformationStartProps {
   swiper: React.MutableRefObject<Swiper>;
 }
 
-export default function GardenInformationStart(
+export function GardenInformationStart(
   gardenInformationStartProps: GardenInformationStartProps
 ) {
   const [newGarden, setNewGarden] = gardenInformationStartProps.newGardenState;

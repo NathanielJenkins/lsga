@@ -19,9 +19,7 @@ import { ColorSchemeName, Pressable, View } from "react-native";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
-import ModalScreen from "../screens/ModalScreen";
-import NotFoundScreen from "../screens/NotFoundScreen";
-import HomeScreen from "../screens/HomeScreen";
+import { Gallery, HomeScreen, ModalScreen, NotFoundScreen } from "../screens";
 import GardenScreen from "../screens/gardens/GardenScreen";
 import {
   RootStackParamList,
@@ -30,22 +28,22 @@ import {
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
-import EntrySlot from "../screens/slots/EntrySlot";
-import CreateAccountScreen from "../screens/auth/CreateAccountScreen";
-import LoginScreen from "../screens/auth/LoginScreen";
-import ResetPasswordScreen from "../screens/auth/ResetPasswordScreen";
 import { auth } from "../firebase/firebaseTooling";
 import { brandColor, tw } from "../components/Themed";
-import SetupGarden from "../screens/garden_setup/SetupGarden";
-import ConfirmLocation from "../screens/garden_setup/ConfirmLocation";
-import CameraPreview from "../screens/util/CameraPreview";
+import {
+  ConfirmLocation,
+  CameraPreview,
+  AllVeggiesScreen,
+  SetupGarden,
+  LoginScreen,
+  ResetPasswordScreen,
+  CreateAccountScreen
+} from "../screens";
 import Admin from "../screens/admin/Admin";
 import Veggie from "../screens/gardens/VeggieScreen";
 import { useDispatch } from "react-redux";
 import { updateGardens, updateVeggies } from "../store";
-import AllVeggiesScreen from "../screens/gardens/AllVeggiesScreen";
 import GardenInfoScreen from "../screens/gardens/GardenInfoScreen";
-import ArCamera from "../screens/garden_setup/ArCamera";
 export default function Navigation({
   colorScheme
 }: {
@@ -174,11 +172,22 @@ function BottomTabNavigator() {
           tabBarActiveTintColor: brandColor
         }}
       />
+      {/* <BottomTab.Screen
+        name="Gallery"
+        component={Gallery}
+        options={{
+          title: "Gallery",
+          tabBarIcon: ({ color }) => <TabBarIcon name="image" color={color} />,
+          headerShown: false,
+          tabBarActiveTintColor: brandColor
+        }}
+      /> */}
+
       <BottomTab.Screen
         name="GardenInfoScreen"
-        component={ArCamera}
+        component={GardenInfoScreen}
         options={{
-          title: "Setting",
+          title: "Settings",
           tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
           headerShown: false,
           tabBarActiveTintColor: brandColor

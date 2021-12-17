@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
 import Garden, { getAllGardens } from "../../models/Garden";
 import UserGarden from "../../models/UserGardens";
-import CardSlot from "../slots/CardSlot";
+import { CardSlot } from "../slots/CardSlot";
 import { updateGardens } from "../../store/actions/garden.actions";
 import { tw } from "../../components/Themed";
 import { PrimaryButton, ThumbnailCard } from "../../components/common/Button";
@@ -19,7 +19,7 @@ interface SelectPlanterProps {
   swiper: React.MutableRefObject<Swiper>;
 }
 
-export default function SelectPlanter(selectPlanterProps: SelectPlanterProps) {
+export function SelectPlanter(selectPlanterProps: SelectPlanterProps) {
   const [newGarden, setNewGarden] = selectPlanterProps.newGardenState;
   const [activeGarden, setActiveGarden] = useState<Garden>();
   const [gardens, setGardens] = useState(new Array<Garden>());

@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Image, View, Text } from "react-native";
-import CardSlot from "../../screens/slots/CardSlot";
 import { RootStackScreenProps } from "../../types";
 import { tw, brandColor } from "../../components/Themed";
 import brand_sample from "../../assets/images/brand_sample.jpg";
@@ -14,19 +13,21 @@ import {
 import { Camera } from "expo-camera";
 import UserGarden from "../../models/UserGardens";
 import Swiper from "react-native-swiper";
-import SelectLocation from "./SelectLocation";
-import GardenInformationStart from "./GardenInformationStart";
 import brand_logo from "../../assets/images/brand_logo.png";
-import SelectPlanter from "./SelectPlanter";
-import NameGarden from "./NameGarden";
-import AddFrostDate from "./AddFrostDate";
+import {
+  AddFrostDate,
+  NameGarden,
+  SelectPlanter,
+  GardenInformationStart,
+  SelectLocation
+} from ".";
 import { SofiaBoldText } from "../../components/StyledText";
 
 SelectPlanter;
-export default function SetupGarden({
-navigation
+export function SetupGarden({
+  navigation
 }: RootStackScreenProps<"SetupGarden">) {
-  const [newGarden, setNewGarden] = useState<UserGarden>({});
+  const [newGarden, setNewGarden] = useState<UserGarden>(undefined);
   const [hasImage, setHasImage] = useState<boolean>(false);
   const swiper = useRef(null);
   return (

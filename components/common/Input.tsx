@@ -14,7 +14,7 @@ import { tw, brandColor } from "../Themed";
 
 interface InputProps {
   handleOnChangeText: React.Dispatch<React.SetStateAction<string>>;
-  value: string;
+  value?: string;
   placeholder: string;
   secureTextEntry?: boolean;
   style?: StyleProp<any>;

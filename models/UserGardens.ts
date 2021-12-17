@@ -7,6 +7,7 @@ import Veggie, { getPlantingRangeFromUserFrostDates } from "./Veggie";
 import { useDispatch } from "react-redux";
 import { store } from "../store";
 import Task, { TaskDate } from "./Task";
+import { Photo } from "./Photo";
 
 const ref = firestore.collection(Documents.UserGardens);
 
@@ -26,6 +27,7 @@ export default interface UserGarden {
   [properties.veggieSteps]: {
     [veggieName: string]: Array<TaskDate>;
   };
+  [properties.gallery]: Array<Photo>;
 }
 
 class properties {
@@ -38,11 +40,13 @@ class properties {
   public static readonly plantingDates: "plantingDates";
   public static readonly veggieSteps: "veggieSteps";
   public static readonly datePlanted: "datePlanted";
+  public static readonly gallery: "gallery";
 }
 
 export const addUserGarden = async (userGarden: UserGarden) => {
+  console.log(userGarden);
   const blob = await (await fetch(userGarden.url)).blob();
-  const newUrl = `${auth.currentUser.uid}/${encodeURIComponent(
+  const newUrl = `${auth.currentUser.uid}/profile/${encodeURIComponent(
     userGarden.name
   )}`;
 
@@ -57,6 +61,18 @@ export const addUserGarden = async (userGarden: UserGarden) => {
   ].map(() => null);
 
   return updateUserGarden(userGarden);
+};
+
+export const deleteUserGarden = async (userGarden: UserGarden) => {
+  // delete the garden from firebase
+  ref.doc(userGarden.name).delete();
+
+  // delete all the photos that are associated with the garden
+  const url = `${auth.currentUser.uid}/profile/${encodeURIComponent(
+    userGarden.name
+  )}`;
+
+  storage.ref().child(url).delete();
 };
 
 export const updateUserGarden = async (userGarden: UserGarden) => {

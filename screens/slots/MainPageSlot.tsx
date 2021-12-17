@@ -14,7 +14,7 @@ interface SlotProps {
   children: React.ReactNode;
 }
 
-export default function MainPageSlot(props: SlotProps) {
+export function MainPageSlot(props: SlotProps) {
   const navigation = useNavigation();
 
   return (

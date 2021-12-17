@@ -11,8 +11,8 @@ import { VeggieSearchItem } from "../../components/garden/GardenItems";
 import { SofiaBoldText } from "../../components/StyledText";
 import { RootState } from "../../store";
 import { RootTabScreenProps } from "../../types";
-import GeneralSlot from "../slots/GeneralSlot";
-export default function AllVeggiesScreen({
+import { GeneralSlot } from "../slots";
+export function AllVeggiesScreen({
   navigation
 }: RootTabScreenProps<"AllVeggiesScreen">) {
   const { veggies } = useSelector((state: RootState) => state.veggies);

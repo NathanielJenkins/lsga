@@ -25,8 +25,8 @@ export interface TaskDate {
 }
 
 export const getPlantingTask = (veggie: Veggie) => {
-  const title = `Plant ${veggie.displayName}`;
-  const description = veggie.seedingNotes;
+  const title = `Plant ${veggie?.displayName}`;
+  const description = veggie?.seedingNotes;
   const offset = 0;
 
   return { title, description, offset };
@@ -108,9 +108,11 @@ export const getChartData = (
     [name: string]: Veggie;
   }
 ) => {
+  if (!veggies) return;
+
   const labels =
-    Object.keys(veggieTasks).map(k => veggies[k].displayName) || [];
-  const colors = Object.keys(veggieTasks).map(k => veggies[k].color) || [];
+    Object.keys(veggieTasks).map(k => veggies[k]?.displayName) || [];
+  const colors = Object.keys(veggieTasks).map(k => veggies[k]?.color) || [];
 
   const data: Array<number> =
     Object.keys(veggieTasks).map(l => {

@@ -1,6 +1,8 @@
+/** @format */
+
 import React, { useState } from "react";
 import { StyleSheet, Text, View, KeyboardAvoidingView } from "react-native";
-import EntrySlot from "../slots/EntrySlot";
+import { EntrySlot } from "../slots/EntrySlot";
 import { Input } from "../../components/common/Input";
 import Spinner from "../../components/common/Spinner";
 import { SofiaRegularText } from "../../components/StyledText";
@@ -13,7 +15,7 @@ import { tw } from "../../components/Themed";
 import { RootStackScreenProps } from "../../types";
 import { auth } from "../../firebase/firebaseTooling";
 
-export default function CreateAccountScreen({
+export function CreateAccountScreen({
   navigation
 }: RootStackScreenProps<"CreateAccount">) {
   const [email, setEmail] = useState("");
