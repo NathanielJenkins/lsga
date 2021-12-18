@@ -32,8 +32,6 @@ export function NameGarden(props: Props) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const { activeGarden } = useSelector((state: RootState) => state.gardens);
-
   const handleConfirm = async () => {
     if (!newGarden || !newGarden.garden || !newGarden.name) {
       Alert.alert(
@@ -44,13 +42,6 @@ export function NameGarden(props: Props) {
     }
     dispatch(addNewGarden(newGarden));
   };
-
-  React.useEffect(() => {
-    if (isEmpty(activeGarden)) return;
-
-    navigation.navigate("Root");
-    navigation.navigate("GardenScreen");
-  }, [activeGarden]);
 
   React.useEffect(() => {
     const ng = { ...newGarden };

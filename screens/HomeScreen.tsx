@@ -65,11 +65,6 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
     setVeggieGrid(activeGarden?.grid.map(g => veggies[g]) || []);
   }, [activeGarden, veggies]);
 
-  const handleUpdateActiveGarden = (gardenName: string) => {
-    const garden = gardens.find(g => g.name === gardenName);
-    dispatch(updateActiveGarden(garden));
-  };
-
   return gardens?.length && activeGarden ? (
     <MainPageSlot>
       <GardenSelector style={tw.style("m-2")} />
