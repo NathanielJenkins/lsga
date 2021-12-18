@@ -17,7 +17,7 @@ import { SofiaBoldText, SofiaRegularText } from "../../components/StyledText";
 import { tw } from "../../components/Themed";
 import { RootState } from "../../store";
 import { RootStackScreenProps } from "../../types";
-import GeneralSlot from "../slots/GeneralSlot";
+import { GeneralSlot } from "../slots/GeneralSlot";
 import { IconText } from "../../components/common/Button";
 import Ripple from "react-native-material-ripple";
 import { Info } from "../../components/common/Display";

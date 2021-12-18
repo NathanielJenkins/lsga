@@ -2,6 +2,7 @@
 
 export const FETCH_REQUEST = "FETCH_REQUEST";
 export const FETCH_FAILURE = "FETCH_FAILURE";
+export const SET_LOADING = "SET_LOADING";
 
 interface FetchRequestAction {
   type: typeof FETCH_REQUEST;
@@ -12,4 +13,12 @@ interface FetchFailureAction {
   payload: any;
 }
 
-export type FetchActionTypes = FetchRequestAction | FetchFailureAction;
+interface SetLoading {
+  type: typeof SET_LOADING;
+  payload: boolean;
+}
+
+export type CommonActionTypes =
+  | FetchRequestAction
+  | FetchFailureAction
+  | SetLoading;

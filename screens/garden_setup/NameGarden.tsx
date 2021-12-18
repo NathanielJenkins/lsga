@@ -5,13 +5,15 @@ import { Alert, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import UserGarden from "../../models/UserGardens";
 import { CardSlot } from "../slots/CardSlot";
-import { addNewGarden } from "../../store";
+import { addNewGarden, RootState, setLoading } from "../../store";
 import { tw } from "../../components/Themed";
 import { PrimaryButton, ThumbnailCard } from "../../components/common/Button";
 import Swiper from "react-native-swiper";
 import { Input } from "../../components/common/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useNavigation } from "@react-navigation/native";
+import Spinner from "../../components/common/Spinner";
+import { isEmpty } from "lodash";
 interface Props {
   newGardenState: [
     UserGarden,
@@ -25,10 +27,12 @@ export function NameGarden(props: Props) {
 
   const [name, setName] = useState<string>("My Garden");
   const [description, setDescription] = useState<string>("");
-
+  const { loading } = useSelector((state: RootState) => state.common);
   const swiper = props.swiper;
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const { activeGarden } = useSelector((state: RootState) => state.gardens);
 
   const handleConfirm = async () => {
     if (!newGarden || !newGarden.garden || !newGarden.name) {
@@ -38,12 +42,15 @@ export function NameGarden(props: Props) {
       );
       return;
     }
-
     dispatch(addNewGarden(newGarden));
+  };
+
+  React.useEffect(() => {
+    if (isEmpty(activeGarden)) return;
 
     navigation.navigate("Root");
     navigation.navigate("GardenScreen");
-  };
+  }, [activeGarden]);
 
   React.useEffect(() => {
     const ng = { ...newGarden };

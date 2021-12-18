@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { store } from "../store";
 import Task, { TaskDate } from "./Task";
 import { Photo } from "./Photo";
+import { uniqueId } from "lodash";
 
 const ref = firestore.collection(Documents.UserGardens);
 
@@ -44,21 +45,32 @@ class properties {
 }
 
 export const addUserGarden = async (userGarden: UserGarden) => {
-  console.log(userGarden);
   const blob = await (await fetch(userGarden.url)).blob();
   const newUrl = `${auth.currentUser.uid}/profile/${encodeURIComponent(
     userGarden.name
   )}`;
 
   await storage.ref().child(newUrl).put(blob);
-
   userGarden.userId = auth.currentUser?.uid;
   userGarden.url = newUrl;
   userGarden.veggieSteps = {};
-
+  // userGarden.gallery =
   userGarden.grid = [
     ...Array(userGarden.garden.height * userGarden.garden.width).keys()
   ].map(() => null);
+
+  const uri = await storage.ref(newUrl).getDownloadURL();
+
+  const photo: Photo = {
+    id: uniqueId(),
+    url: newUrl,
+    dateAdded: new Date().toISOString(),
+    title: "Created My New Garden!",
+    description: "Check out my new garden!",
+    uri: uri
+  };
+
+  userGarden.gallery = [photo];
 
   return updateUserGarden(userGarden);
 };

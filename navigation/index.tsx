@@ -172,7 +172,7 @@ function BottomTabNavigator() {
           tabBarActiveTintColor: brandColor
         }}
       />
-      {/* <BottomTab.Screen
+      <BottomTab.Screen
         name="Gallery"
         component={Gallery}
         options={{
@@ -181,7 +181,7 @@ function BottomTabNavigator() {
           headerShown: false,
           tabBarActiveTintColor: brandColor
         }}
-      /> */}
+      />
 
       <BottomTab.Screen
         name="GardenInfoScreen"
@@ -205,8 +205,8 @@ function TabBarIcon(props: {
   color: string;
 }) {
   return (
-    <View style={tw.style("")}>
-      <FontAwesome size={25} {...props} />
+    <View style={tw.style("flex")}>
+      <FontAwesome size={22} {...props} />
     </View>
   );
 }

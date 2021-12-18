@@ -22,14 +22,22 @@ import {
   SelectLocation
 } from ".";
 import { SofiaBoldText } from "../../components/StyledText";
+import Spinner from "../../components/common/Spinner";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 SelectPlanter;
 export function SetupGarden({
   navigation
 }: RootStackScreenProps<"SetupGarden">) {
-  const [newGarden, setNewGarden] = useState<UserGarden>(undefined);
+  const [newGarden, setNewGarden] = useState<UserGarden>();
   const [hasImage, setHasImage] = useState<boolean>(false);
+  const { loading } = useSelector((state: RootState) => state.common);
+
   const swiper = useRef(null);
+
+  if (loading) return <Spinner />;
+
   return (
     <View style={tw.style("flex flex-1 bg-white")}>
       <View style={tw`w-full flex justify-center items-center mt-6 mb-2 `}>

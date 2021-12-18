@@ -124,12 +124,12 @@ export function IconText(props: IconProps) {
       <Ripple onPress={onPress}>
         <View
           style={tw.style(
-            "flex flex-col justify-center items-center  p-1 rounded"
+            "flex flex-col justify-center items-center p-1 rounded"
           )}>
           <FontAwesome5 size={size} style={{}} name={name} color={color} />
 
           {text && (
-            <SofiaRegularText style={tw.style("text-gray-500")}>
+            <SofiaRegularText style={tw.style("text-gray-500 mt-1")}>
               {text}
             </SofiaRegularText>
           )}

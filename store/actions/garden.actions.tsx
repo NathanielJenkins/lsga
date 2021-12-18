@@ -1,7 +1,7 @@
 /** @format */
 
 import { ActionCreator, Dispatch } from "redux";
-import { request, failure } from "./common.actions";
+import { request, failure, setLoading } from "./common.actions";
 import {
   UPDATE_GARDENS,
   GardenActionTypes,
@@ -17,7 +17,7 @@ import UserGarden, {
 } from "../../models/UserGardens";
 import { useSelector } from "react-redux";
 import { RootState } from "..";
-
+import { loadingAction } from ".";
 const updateStoredGardensSuccess: ActionCreator<GardenActionTypes> = (
   gardens: UserGarden[]
 ) => {
@@ -67,16 +67,19 @@ export function addNewGarden(garden: UserGarden) {
 
   return (dispatch: Dispatch, getState: () => RootState) => {
     // async action: uses Redux-Thunk middleware to return a function instead of an action creator
+    dispatch(loadingAction(true));
     dispatch(request());
 
     return addUserGarden(garden).then(
       response => {
         dispatch(addNewGardenSuccess(response));
         dispatch(updateActiveGardenSuccess(response));
+        dispatch(loadingAction(false));
       },
       error => {
         console.error(error);
         dispatch(failure("Server error."));
+        dispatch(loadingAction(false));
       }
     );
   };
@@ -93,7 +96,7 @@ export function deleteGarden(garden: UserGarden) {
       response => {
         dispatch({ type: DELETE_GARDEN, payload: garden });
         const { activeGarden } = getState().gardens;
-        if (activeGarden.name === garden.name)
+        if (activeGarden?.name === garden.name)
           dispatch(updateActiveGardenSuccess(null));
       },
       error => {

@@ -94,7 +94,7 @@ export const setFrostDateFromLngLat = async (lat: number, lon: number) => {
   if (stationResponse.status !== 200) return;
 
   const station: Station = stationResponse.data[0];
-
+  console.log(stationResponse.data);
   // using the station id perform another request for the frost dates;
   const springFrostParams = new URLSearchParams({
     station: station.id,
@@ -111,9 +111,9 @@ export const setFrostDateFromLngLat = async (lat: number, lon: number) => {
 
   if (springFrostResponse.status !== 200 || fallFrostResponse.status !== 200)
     return;
-
-  const date1 = getDateFromString(springFrostResponse.data[0].prob_10);
-  const date2 = getDateFromString(fallFrostResponse.data[0].prob_10);
+  console.log(springFrostResponse.data, fallFrostResponse.data);
+  const date1 = getDateFromString(springFrostResponse.data[1].prob_30);
+  const date2 = getDateFromString(fallFrostResponse.data[1].prob_30);
 
   const springFrostDate = new FrostDateParsed(date1);
   const fallFrostDate = new FrostDateParsed(date2);
