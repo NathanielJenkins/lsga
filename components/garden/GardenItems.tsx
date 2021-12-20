@@ -287,7 +287,7 @@ export function GardenSelector(props: GardenSelectorProps) {
   const dispatch = useDispatch();
 
   const handleUpdateActiveGarden = (gardenName: string) => {
-    const garden = gardens.find(g => g?.name === gardenName);
+    const garden = gardens.find(g => g?.id === gardenName);
     dispatch(updateActiveGarden(garden));
   };
 
@@ -306,10 +306,10 @@ export function GardenSelector(props: GardenSelectorProps) {
           </SofiaSemiBoldText>
           <View style={tw.style("flex")}>
             <Picker
-              selectedValue={activeGarden.name}
+              selectedValue={activeGarden.id}
               onValueChange={handleUpdateActiveGarden}>
               {gardens.map((g, i) => (
-                <Picker.Item key={i} label={g.name} value={g.name} />
+                <Picker.Item key={i} label={g.name} value={g.id} />
               ))}
             </Picker>
           </View>
@@ -453,7 +453,7 @@ export function ListGardens() {
     <Info title="My Gardens">
       {gardens.map(g => (
         <View
-          key={g.name}
+          key={g.id}
           style={tw.style("flex flex-1 flex-row items-center justify-between")}>
           <SofiaRegularText>{g.name}</SofiaRegularText>
           <IconText

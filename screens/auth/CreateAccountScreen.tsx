@@ -77,7 +77,6 @@ export function CreateAccountScreen({
           style={tw`text-red-500 justify-center text-center mt-2`}>
           {error}
         </SofiaRegularText>
-
         <View
           style={tw`border border-2 flex-1 border-gray-300 rounded mt-4`}></View>
         <View style={tw.style("mt-auto items-center")}>

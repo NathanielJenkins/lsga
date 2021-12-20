@@ -9,7 +9,6 @@ import {
 } from "../components/common/Button";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { RootTabScreenProps } from "../types";
-import { getGardenByName } from "../models/Garden";
 import { RootState } from "../store/reducers";
 import { useSelector, useDispatch } from "react-redux";
 import {

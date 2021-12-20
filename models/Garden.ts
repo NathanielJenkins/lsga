@@ -6,22 +6,24 @@ import Documents from "./Documents";
 const gardenRef = firestore.collection(Documents.Gardens);
 
 class properties {
-  public static readonly _name = "name";
+  public static readonly _displayName = "displayName";
+  public static readonly _id = "id";
   public static readonly _height = "height";
   public static readonly _width = "width";
   public static readonly _img = "img";
 }
 
 export default interface Garden {
-  [properties._name]: string;
+  [properties._id]: string;
+  [properties._displayName]: string;
   [properties._height]: number;
   [properties._width]: number;
   [properties._img]: string;
 }
 
-export const getGardenByName = async (name: string) => {
+export const getGardenByPropId = async (id: string) => {
   const snapshot = await gardenRef
-    .where(properties._name, "==", name)
+    .where(properties._id, "==", id)
     .limit(1)
     .get();
 

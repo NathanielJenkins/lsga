@@ -7,7 +7,7 @@ import { RootStackScreenProps } from "../../types";
 import { tw } from "../../components/Themed";
 import brand_sample from "../../assets/images/brand_sample.jpg";
 import { SecondaryButton } from "../../components/common/Button";
-import { Camera } from "expo-camera";
+import { Camera, CameraCapturedPicture } from "expo-camera";
 import UserGarden from "../../models/UserGardens";
 
 export function ConfirmLocation({
@@ -36,7 +36,10 @@ export function ConfirmLocation({
               style={tw` `}
               onPress={() =>
                 navigation.push("CameraPreview", {
-                  newGardenState: [newGarden, setNewGarden]
+                  photoCallback: (photo: CameraCapturedPicture) => {
+                    setNewGarden({ url: photo.uri } as any);
+                    navigation.navigate("SetupGarden");
+                  }
                 })
               }
             />

@@ -96,7 +96,7 @@ export function deleteGarden(garden: UserGarden) {
       response => {
         dispatch({ type: DELETE_GARDEN, payload: garden });
         const { activeGarden } = getState().gardens;
-        if (activeGarden?.name === garden.name)
+        if (activeGarden?.id === garden.id)
           dispatch(updateActiveGardenSuccess(null));
       },
       error => {
@@ -110,19 +110,24 @@ export function deleteGarden(garden: UserGarden) {
 export function updateActiveUserGarden(garden: UserGarden) {
   return (dispatch: Dispatch, getState: () => RootState) => {
     // async action: uses Redux-Thunk middleware to return a function instead of an action creator
+    dispatch(loadingAction(true));
     dispatch(request());
 
     return updateUserGarden(garden).then(
       response => {
         const gardens = [...getState().gardens.gardens];
-        const oldGardenIndex = gardens?.findIndex(g => g.name === garden.name);
+        const oldGardenIndex = gardens?.findIndex(g => g.id === garden.id);
         gardens[oldGardenIndex] = garden;
 
         dispatch(updateStoredGardensSuccess(gardens));
         dispatch(updateActiveGardenSuccess(response));
+
+        dispatch(loadingAction(false));
       },
       error => {
         console.error(error);
+
+        dispatch(loadingAction(false));
         dispatch(failure("Server error."));
       }
     );

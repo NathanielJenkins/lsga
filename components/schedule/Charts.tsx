@@ -223,7 +223,7 @@ export const ProgressChartIO = () => {
                 {veggies[veggieName]?.displayName}
               </SofiaRegularText>
               <View style={tw.style("flex mt-2")}>
-                {td.map(task => (
+                {(td as Array<[TaskDate, boolean]>).map(task => (
                   <View style={tw.style("my-0.5")} key={task[0].task.id}>
                     <Checkbox
                       onPress={(isChecked: boolean) =>

@@ -44,11 +44,11 @@ export function SelectPlanter(selectPlanterProps: SelectPlanterProps) {
         <View style={tw.style(" mt-4")}>
           {gardens.map(g => (
             <ThumbnailCard
-              title={g.name}
+              title={g.displayName}
               img={g.img}
               style={tw.style("mb-2")}
-              key={g.name}
-              active={activeGarden?.name === g.name}
+              key={g.id}
+              active={activeGarden?.id === g.id}
               onPress={() => setActiveGarden(g)}
             />
           ))}

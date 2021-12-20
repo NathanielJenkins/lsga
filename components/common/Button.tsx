@@ -39,7 +39,7 @@ interface IconProps {
   text?: string;
   size: number;
   subText?: string;
-  onPress: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
+  onPress?: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
   style?: StyleProp<any>;
 }
 
@@ -142,10 +142,12 @@ export function IconText(props: IconProps) {
 export function CircleIconButton(props: CircleIconProps) {
   const { name, onPress, style, size } = props;
   const color = props.color || "white";
+  const borderColor =
+    color === "white" || color === "black" ? color : color + "-400";
   return (
     <View
       style={tw.style(
-        `flex rounded-full  border-${color}`,
+        `flex rounded-full  border-${borderColor}`,
         size === "sm" ? "border" : "border-4",
         style
       )}>
@@ -234,7 +236,7 @@ export function RoundedOutlineButton(props: ButtonProps) {
 
 const styles = StyleSheet.create({
   base: tw`rounded p-4 flex rounded text-center items-center `,
-  primary: tw.style(` bg-brand `),
+  primary: tw.style(` bg-brand border-2 border-brand`),
   secondary: tw.style(`border-brand border-2 bg-white text-brand`),
   image: tw`rounded items-center flex shadow p-2 bg-white `
 });

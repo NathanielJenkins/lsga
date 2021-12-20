@@ -37,7 +37,8 @@ import {
   SetupGarden,
   LoginScreen,
   ResetPasswordScreen,
-  CreateAccountScreen
+  CreateAccountScreen,
+  AddGalleryPhotoScreen
 } from "../screens";
 import Admin from "../screens/admin/Admin";
 import Veggie from "../screens/gardens/VeggieScreen";
@@ -124,6 +125,12 @@ function RootNavigator() {
       <Stack.Screen
         name="Admin"
         component={Admin}
+        options={{ headerShown: false, animation: "none" }}
+      />
+
+      <Stack.Screen
+        name="AddGalleryPhotoScreen"
+        component={AddGalleryPhotoScreen}
         options={{ headerShown: false, animation: "none" }}
       />
 

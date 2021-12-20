@@ -44,7 +44,7 @@ export function gardenReducer(
     case DELETE_GARDEN: {
       return {
         ...state,
-        gardens: state.gardens.filter(f => f.name !== action.payload.name)
+        gardens: state.gardens.filter(f => f.id !== action.payload.id)
       };
     }
 

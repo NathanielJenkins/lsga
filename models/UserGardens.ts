@@ -9,6 +9,8 @@ import { store } from "../store";
 import Task, { TaskDate } from "./Task";
 import { Photo } from "./Photo";
 import { uniqueId } from "lodash";
+import { CameraCapturedPicture } from "expo-camera";
+import { v4 as uuidv4 } from "uuid";
 
 const ref = firestore.collection(Documents.UserGardens);
 
@@ -29,9 +31,11 @@ export default interface UserGarden {
     [veggieName: string]: Array<TaskDate>;
   };
   [properties.gallery]: Array<Photo>;
+  [properties.id]: string;
 }
 
 class properties {
+  public static readonly id = "id";
   public static readonly userId = "userId";
   public static readonly garden = "garden";
   public static readonly url = "url";
@@ -45,12 +49,13 @@ class properties {
 }
 
 export const addUserGarden = async (userGarden: UserGarden) => {
+  const id = uuidv4();
+
   const blob = await (await fetch(userGarden.url)).blob();
-  const newUrl = `${auth.currentUser.uid}/profile/${encodeURIComponent(
-    userGarden.name
-  )}`;
+  const newUrl = `${auth.currentUser.uid}/profile/${encodeURIComponent(id)}`;
 
   await storage.ref().child(newUrl).put(blob);
+  userGarden.id = id;
   userGarden.userId = auth.currentUser?.uid;
   userGarden.url = newUrl;
   userGarden.veggieSteps = {};
@@ -62,7 +67,7 @@ export const addUserGarden = async (userGarden: UserGarden) => {
   const uri = await storage.ref(newUrl).getDownloadURL();
 
   const photo: Photo = {
-    id: uniqueId(),
+    id: uuidv4(),
     url: newUrl,
     dateAdded: new Date().toISOString(),
     title: "Created My New Garden!",
@@ -75,20 +80,54 @@ export const addUserGarden = async (userGarden: UserGarden) => {
   return updateUserGarden(userGarden);
 };
 
+export const addGalleryPhoto = async (
+  photo: CameraCapturedPicture,
+  userGarden: UserGarden,
+  photoData: Photo
+) => {
+  photoData.id = uuidv4();
+
+  const blob = await (await fetch(photo.uri)).blob();
+  const newUrl = `${auth.currentUser.uid}/gallery/${encodeURIComponent(
+    userGarden.id
+  )}/${photoData.id}`;
+
+  await storage.ref().child(newUrl).put(blob);
+
+  photoData.dateAdded = new Date().toISOString();
+  photoData.uri = await storage.ref(newUrl).getDownloadURL();
+  photoData.url = newUrl;
+
+  userGarden.gallery = [...userGarden.gallery, photoData];
+};
+
+export const deleteGalleryPhoto = async (
+  photoData: Photo,
+  userGarden: UserGarden
+) => {
+  console.log(photoData);
+
+  await storage.ref(photoData.url).delete();
+
+  userGarden.gallery = userGarden.gallery.filter(p => p.id !== photoData.id);
+
+  photoData = undefined;
+};
+
 export const deleteUserGarden = async (userGarden: UserGarden) => {
   // delete the garden from firebase
-  ref.doc(userGarden.name).delete();
+  ref.doc(userGarden.id).delete();
 
   // delete all the photos that are associated with the garden
   const url = `${auth.currentUser.uid}/profile/${encodeURIComponent(
-    userGarden.name
+    userGarden.id
   )}`;
 
   storage.ref().child(url).delete();
 };
 
 export const updateUserGarden = async (userGarden: UserGarden) => {
-  await ref.doc(userGarden.name).set(userGarden);
+  await ref.doc(userGarden.id).set(userGarden);
 
   return userGarden;
 };

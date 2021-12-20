@@ -6,10 +6,14 @@ import { tw } from "../../components/Themed";
 
 export default function Spinner() {
   return (
-    <View style={tw`absolute top-0 h-full w-full  justify-center `}>
-      <ActivityIndicator size={100} color="rgb(103,146,54)"></ActivityIndicator>
+    <View style={tw`absolute top-0 h-full w-full justify-center bg-white`}>
+      <ActivityIndicator
+        size={"large"}
+        color="rgb(103,146,54)"></ActivityIndicator>
     </View>
   );
 }
+
+export { Spinner };
 
 const styles = StyleSheet.create({});

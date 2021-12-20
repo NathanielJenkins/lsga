@@ -1,14 +1,14 @@
 [
   {
     "displayName": "Low Rider",
-    "name": "low_rider",
+    "id": "low_rider",
     "img": "lowrider.jpg",
     "height": 2,
     "width": 3
   },
   {
     "displayName": "Salad Bar",
-    "name": "salad_bar",
+    "id": "salad_bar",
     "img": "saladbar.jpg",
     "height": 3,
     "width": 3

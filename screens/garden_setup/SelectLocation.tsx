@@ -13,7 +13,7 @@ import { RootStackParamList, RootStackScreenProps } from "../../types";
 import { tw, brandColor } from "../../components/Themed";
 import brand_sample from "../../assets/images/brand_sample.jpg";
 import { SecondaryButton, PrimaryButton } from "../../components/common/Button";
-import { Camera } from "expo-camera";
+import { Camera, CameraCapturedPicture } from "expo-camera";
 import UserGarden from "../../models/UserGardens";
 import Swiper from "react-native-swiper";
 import { useNavigation } from "@react-navigation/native";
@@ -69,7 +69,10 @@ export function SelectLocation(SelectLocationProps: SelectLocationProps) {
                 style={tw` `}
                 onPress={() =>
                   navigation.navigate("CameraPreview", {
-                    newGardenState: [newGarden, setNewGarden]
+                    photoCallback: (photo: CameraCapturedPicture) => {
+                      setNewGarden({ url: photo.uri } as any);
+                      navigation.navigate("SetupGarden");
+                    }
                   })
                 }
               />

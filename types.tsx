@@ -11,7 +11,7 @@ import {
   NavigatorScreenParams
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Camera } from "expo-camera";
+import { Camera, CameraCapturedPicture } from "expo-camera";
 import { NativeSyntheticEvent, NativeTouchEvent } from "react-native";
 import UserGarden from "./models/UserGardens";
 import Veggie from "./models/Veggie";
@@ -48,17 +48,16 @@ export type RootStackParamList = {
   };
 
   CameraPreview: {
-    newGardenState: [
-      UserGarden,
-      React.Dispatch<React.SetStateAction<UserGarden>>
-    ];
+    photoCallback: (photo: CameraCapturedPicture) => void;
   };
   Veggie: {
     veggie: Veggie;
   };
   GardenInfoScreen: {};
-
   Admin: undefined;
+  AddGalleryPhotoScreen: {
+    photo: CameraCapturedPicture;
+  };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

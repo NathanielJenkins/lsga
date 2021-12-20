@@ -18,7 +18,7 @@ export function MainPageSlot(props: SlotProps) {
   const navigation = useNavigation();
 
   return (
-    <ScrollView style={tw`p-4 pt-5 flex flex-col flex-1 bg-white`}>
+    <ScrollView style={tw`p-4 pt-6 flex flex-col flex-1 bg-white`}>
       <View style={tw`flex content-end items-end`}>
         <View style={tw`flex flex-row content-end items-end`}>
           <IconText

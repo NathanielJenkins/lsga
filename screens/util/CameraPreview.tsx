@@ -1,6 +1,6 @@
 /** @format */
 
-import { Camera } from "expo-camera";
+import { Camera, CameraCapturedPicture } from "expo-camera";
 import { RootStackScreenProps } from "../../types";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Dimensions, Platform } from "react-native";
@@ -11,11 +11,11 @@ export function CameraPreview({
   navigation,
   route
 }: RootStackScreenProps<"CameraPreview">) {
-  //  camera permissions
+  const { photoCallback } = route.params;
+
   const [hasCameraPermission, setHasCameraPermission] =
     useState<boolean>(false);
   const [camera, setCamera] = useState<Camera>();
-  const [newGarden, setNewGarden] = route.params.newGardenState;
 
   // Screen Ratio and image padding
   const [imagePadding, setImagePadding] = useState(0);
@@ -27,7 +27,7 @@ export function CameraPreview({
   // on screen  load, ask for permission to use the camera
   useEffect(() => {
     async function getCameraStatus() {
-      const { status } = await Camera.requestPermissionsAsync();
+      const { status } = await Camera.requestCameraPermissionsAsync();
       setHasCameraPermission(status == "granted");
     }
     getCameraStatus();
@@ -35,9 +35,7 @@ export function CameraPreview({
 
   const handleTakePhoto = async () => {
     const photo = await camera.takePictureAsync();
-
-    setNewGarden({ url: photo.uri } as any);
-    navigation.navigate("SetupGarden");
+    photoCallback && photoCallback(photo);
   };
 
   // set the camera ratio and padding.
@@ -107,11 +105,12 @@ export function CameraPreview({
     return (
       <View style={styles.container}>
         {/* 
-        We created a Camera height by adding margins to the top and bottom, 
-        but we could set the width/height instead 
-        since we know the screen dimensions
-        */}
+      We created a Camera height by adding margins to the top and bottom, 
+      but we could set the width/height instead 
+      since we know the screen dimensions
+      */}
         <Camera
+          autoFocus={true}
           style={[
             styles.cameraPreview,
             { marginTop: imagePadding, marginBottom: imagePadding }
@@ -134,7 +133,7 @@ export function CameraPreview({
           <CircleIconButton
             name={"times"}
             size={"sm"}
-            onPress={() => navigation.pop()}
+            onPress={() => navigation.goBack()}
           />
         </View>
       </View>
