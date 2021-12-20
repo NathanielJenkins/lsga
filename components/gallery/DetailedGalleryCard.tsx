@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { storage } from "../../firebase/firebaseTooling";
-import { Photo } from "../../models/Photo";
+import { Photo, profileId } from "../../models/Photo";
 import UserGarden, { deleteGalleryPhoto } from "../../models/UserGardens";
 import { updateActiveUserGarden } from "../../store";
 import { IconText } from "../common/Button";
@@ -17,6 +17,15 @@ export interface DetailedGalleryCardProps {
 
 export function DetailedGalleryCard(props: DetailedGalleryCardProps) {
   const { photo, userGarden } = props;
+  const cannotDeleteMsg: [string, string, any] = [
+    `Cannot Delete`,
+    `You may not delete the garden profile photo, in order to delete you must delete the entire garden`,
+    [
+      {
+        text: "OK"
+      }
+    ]
+  ];
 
   const dispatch = useDispatch();
   const handleDelete = async () => {
@@ -37,7 +46,9 @@ export function DetailedGalleryCard(props: DetailedGalleryCardProps) {
         }
       ]
     ];
-    Alert.alert(...alertMsg);
+
+    if (photo.id === profileId) Alert.alert(...cannotDeleteMsg);
+    else Alert.alert(...alertMsg);
   };
 
   if (!photo) return <View></View>;

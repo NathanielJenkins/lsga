@@ -7,7 +7,7 @@ import Veggie, { getPlantingRangeFromUserFrostDates } from "./Veggie";
 import { useDispatch } from "react-redux";
 import { store } from "../store";
 import Task, { TaskDate } from "./Task";
-import { Photo } from "./Photo";
+import { Photo, profileId } from "./Photo";
 import { uniqueId } from "lodash";
 import { CameraCapturedPicture } from "expo-camera";
 import { v4 as uuidv4 } from "uuid";
@@ -67,7 +67,7 @@ export const addUserGarden = async (userGarden: UserGarden) => {
   const uri = await storage.ref(newUrl).getDownloadURL();
 
   const photo: Photo = {
-    id: uuidv4(),
+    id: profileId,
     url: newUrl,
     dateAdded: new Date().toISOString(),
     title: "Created My New Garden!",
