@@ -17,6 +17,8 @@ const ref = firestore.collection(Documents.UserGardens);
 export default interface UserGarden {
   [properties.userId]?: string;
   [properties.url]?: string;
+  [properties.uri]?: string;
+
   [properties._name]?: string;
   [properties.description]?: string;
   [properties.garden]?: Garden;
@@ -39,6 +41,7 @@ class properties {
   public static readonly userId = "userId";
   public static readonly garden = "garden";
   public static readonly url = "url";
+  public static readonly uri = "uri";
   public static readonly _name = "name";
   public static readonly description = "description";
   public static readonly grid = "grid";
@@ -48,31 +51,36 @@ class properties {
   public static readonly gallery: "gallery";
 }
 
+export const setGardenProfile = async (userGarden: UserGarden) => {
+  const blob = await (await fetch(userGarden.url)).blob();
+  const newUrl = `${auth.currentUser.uid}/profile/${encodeURIComponent(
+    userGarden.id
+  )}`;
+  await storage.ref().child(newUrl).put(blob);
+  const uri = await storage.ref(newUrl).getDownloadURL();
+  userGarden.uri = uri;
+  userGarden.url = newUrl;
+};
+
 export const addUserGarden = async (userGarden: UserGarden) => {
   const id = uuidv4();
-
-  const blob = await (await fetch(userGarden.url)).blob();
-  const newUrl = `${auth.currentUser.uid}/profile/${encodeURIComponent(id)}`;
-
-  await storage.ref().child(newUrl).put(blob);
   userGarden.id = id;
+
   userGarden.userId = auth.currentUser?.uid;
-  userGarden.url = newUrl;
+  await setGardenProfile(userGarden);
   userGarden.veggieSteps = {};
   // userGarden.gallery =
   userGarden.grid = [
     ...Array(userGarden.garden.height * userGarden.garden.width).keys()
   ].map(() => null);
 
-  const uri = await storage.ref(newUrl).getDownloadURL();
-
   const photo: Photo = {
     id: profileId,
-    url: newUrl,
+    url: userGarden.url,
     dateAdded: new Date().toISOString(),
-    title: "Created My New Garden!",
+    title: "Created My Garden!",
     description: "Check out my new garden!",
-    uri: uri
+    uri: userGarden.uri
   };
 
   userGarden.gallery = [photo];
@@ -131,7 +139,6 @@ export const updateUserGarden = async (userGarden: UserGarden) => {
 
   return userGarden;
 };
-
 
 export const getUserGardens = async () => {
   const userId = auth.currentUser?.uid;

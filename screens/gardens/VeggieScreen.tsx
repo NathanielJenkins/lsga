@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
-import { CircleIconButton } from "../../components/common/Button";
+import { CircleIconButton } from "../../components/common";
 import { TextPill, VeggieItem } from "../../components/garden/GardenItems";
 import { SofiaBoldText, SofiaRegularText } from "../../components/StyledText";
 import { tw } from "../../components/Themed";
@@ -214,7 +214,7 @@ export default function VeggieScreen({
             <IconText
               size={25}
               name="snowflake"
-              text={`${veggie.earliestPlaningFromFirstFrostDate} | ${veggie.earliestPlantingFromLastFrostDate} days`}
+              text={`${veggie.earliestPlantingFromLastFrostDate} | ${veggie.earliestPlantingFromLastFrostDate} days`}
               color="grey"
               style={tw`p-1 flex text-center flex-1`}
               onPress={() => {}}

@@ -32,7 +32,7 @@ import {
 } from "../components/garden/GardenItems";
 import { ProgressChartIO, Timeline } from "../components/schedule/Charts";
 import { GalleryCard } from "../components/gallery";
-
+import { Spinner } from "../components/common";
 PrimaryButton;
 export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   const [imageUrl, setImageUrl] = React.useState(undefined);
@@ -41,7 +41,7 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   );
   const { veggies } = useSelector((state: RootState) => state.veggies);
   const [veggieGrid, setVeggieGrid] = React.useState([]);
-
+  const { loading } = useSelector((state: RootState) => state.common);
   React.useEffect(() => {
     if (!activeGarden?.url) return;
     storage
@@ -64,6 +64,7 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
     setVeggieGrid(activeGarden?.grid.map(g => veggies[g]) || []);
   }, [activeGarden, veggies]);
 
+  if (loading) return <Spinner />;
   return gardens?.length && activeGarden ? (
     <MainPageSlot>
       <GardenSelector style={tw.style("m-2")} />

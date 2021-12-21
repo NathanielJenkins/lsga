@@ -9,7 +9,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Alert
+  Alert,
+  Modal
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { storage } from "../../firebase/firebaseTooling";
@@ -17,7 +18,8 @@ import Veggie, { VeggieState } from "../../models/Veggie";
 import {
   RootState,
   updateFrostDatesByLngLat,
-  updateFrostDatesFromDate
+  updateFrostDatesFromDate,
+  updateActiveUserGarden
 } from "../../store";
 import { tw } from "../Themed";
 import { Picker } from "@react-native-picker/picker";
@@ -37,7 +39,12 @@ import {
 import { MainPageSlot } from "../../screens/slots/MainPageSlot";
 import { SofiaRegularText } from "../../components/StyledText";
 import no_gardens from "../../assets/images/no_gardens.png";
-import { IconText, PrimaryButton, SecondaryButton } from "../common/Button";
+import {
+  IconText,
+  PrimaryButton,
+  SecondaryButton,
+  CircleIconButton
+} from "../common/Button";
 import { useNavigation } from "@react-navigation/native";
 import { chunk } from "lodash";
 import { FontAwesome } from "@expo/vector-icons";
@@ -46,8 +53,12 @@ import { Info } from "../common/Display";
 import * as Location from "expo-location";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { setFrostDateFromLngLat } from "../../models/UserProperties";
-import UserGarden from "../../models/UserGardens";
+import UserGarden, { setGardenProfile } from "../../models/UserGardens";
 import { deleteGarden } from "../../store";
+import { CameraCapturedPicture } from "expo-camera";
+import { Input } from "../common";
+import { GeneralSlot } from "../../screens";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 export function NoGardensPrompt() {
   const navigation = useNavigation();
   return (
@@ -427,7 +438,11 @@ export function TextPill(props: TextPillProps) {
   );
 }
 
-export function ListGardens() {
+export interface ListGardenProps {
+  setActiveModalGarden: React.Dispatch<React.SetStateAction<UserGarden>>;
+}
+export function ListGardens(props: ListGardenProps) {
+  const { setActiveModalGarden } = props;
   const { gardens } = useSelector((state: RootState) => state.gardens);
   const dispatch = useDispatch();
 
@@ -448,7 +463,6 @@ export function ListGardens() {
     ];
     Alert.alert(...alertMsg);
   };
-
   return (
     <Info title="My Gardens">
       {gardens.map(g => (
@@ -456,17 +470,124 @@ export function ListGardens() {
           key={g.id}
           style={tw.style("flex flex-1 flex-row items-center justify-between")}>
           <SofiaRegularText>{g.name}</SofiaRegularText>
-          <IconText
-            name="trash"
-            color="grey"
-            size={20}
-            onPress={() => handleDelete(g)}
-          />
+          <View style={tw.style("flex flex-row")}>
+            <IconText
+              name="info"
+              color="grey"
+              size={20}
+              onPress={() => setActiveModalGarden(g)}
+              style={tw.style("mr-2")}
+            />
+            <IconText
+              name="trash"
+              color="grey"
+              size={20}
+              onPress={() => handleDelete(g)}
+            />
+          </View>
         </View>
       ))}
     </Info>
   );
 }
+
+export interface GardenModalProps {
+  garden: UserGarden;
+  setActiveModalGarden: React.Dispatch<React.SetStateAction<UserGarden>>;
+}
+export const GardenModal = (props: GardenModalProps) => {
+  const { setActiveModalGarden, garden } = props;
+  const [title, setTitle] = useState(garden.name);
+  const [description, setDescription] = useState(garden.description);
+  const gardenCopy = { ...garden };
+
+  const dispatch = useDispatch();
+  const handleUpdateGarden = () => {
+    gardenCopy.name = title;
+    gardenCopy.description = description;
+
+    dispatch(updateActiveUserGarden(gardenCopy, false));
+    setActiveModalGarden(undefined);
+  };
+
+  const navigation = useNavigation();
+
+  return (
+    <View>
+      <View
+        style={tw.style(
+          "flex flex-row w-full items-center justify-end pb-2 border-b border-gray-300"
+        )}>
+        <CircleIconButton
+          name={"times"}
+          size={"sm"}
+          color={"black"}
+          onPress={() => setActiveModalGarden(undefined)}
+        />
+      </View>
+      <KeyboardAwareScrollView extraHeight={20} style={tw.style("bg-white")}>
+        <GeneralSlot>
+          <SofiaBoldText style={tw.style("text-2xl text-gray-500 mb-4")}>
+            Edit Garden
+          </SofiaBoldText>
+
+          <View style={tw.style(" flex ")}>
+            <Image
+              source={{ uri: garden.uri }}
+              style={tw.style(`rounded-lg h-96 w-full mb-2`)}
+            />
+
+            <View style={tw.style("flex flex-row mb-2")}>
+              <View style={tw.style("flex-1 mr-1")}>
+                <SecondaryButton
+                  title="Photos"
+                  onPress={() => {
+                    navigation.navigate("CameraPreview", {
+                      photoCallback: (photo: CameraCapturedPicture) => {
+                        setGardenProfile(gardenCopy);
+                        handleUpdateGarden();
+                      }
+                    });
+                  }}
+                />
+              </View>
+
+              <View style={tw.style("flex-1")}>
+                <SecondaryButton title="Camera" onPress={() => {}} />
+              </View>
+            </View>
+            <Input
+              style={tw`mb-2`}
+              value={title}
+              handleOnChangeText={setTitle}
+              placeholder="Name"
+            />
+            <Input
+              style={tw`mb-2`}
+              value={description}
+              handleOnChangeText={setDescription}
+              placeholder="Description"
+              numberOfLines={5}
+            />
+            <View style={tw.style("flex flex-row")}>
+              <View style={tw.style("flex-1")}>
+                <PrimaryButton
+                  title="Save"
+                  onPress={() => handleUpdateGarden()}
+                />
+              </View>
+            </View>
+          </View>
+          <SofiaBoldText
+            onPress={() => setActiveModalGarden(undefined)}
+            style={tw.style("text-center underline text-brand mt-5")}>
+            Exit Without Saving
+          </SofiaBoldText>
+        </GeneralSlot>
+      </KeyboardAwareScrollView>
+    </View>
+  );
+};
 
 export function AddFrostDateComponent() {
   const { springFrostDate, fallFrostDate } = useSelector(

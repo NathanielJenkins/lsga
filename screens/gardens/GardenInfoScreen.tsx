@@ -8,7 +8,8 @@ import {
   Image,
   StyleProp,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
+  Modal
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SofiaBoldText, SofiaRegularText } from "../../components/StyledText";
@@ -24,13 +25,18 @@ import * as Permissions from "expo-permissions";
 import { setFrostDateFromLngLat } from "../../models/UserProperties";
 import {
   AddFrostDateComponent,
+  GardenModal,
   ListGardens
 } from "../../components/garden/GardenItems";
+import UserGarden from "../../models/UserGardens";
+import { isNil } from "lodash";
 
 export default function GardenInfoScreen({
   navigation,
   route
 }: RootStackScreenProps<"GardenInfoScreen">) {
+  const [activeModalGarden, setActiveModalGarden] = useState<UserGarden>();
+
   return (
     <GeneralSlot>
       <View style={tw.style("flex flex-row justify-between items-center")}>
@@ -43,7 +49,12 @@ export default function GardenInfoScreen({
           <AddFrostDateComponent />
         </View>
         <View style={tw.style("shadow-brand p-2 my-2 mx-1")}>
-          <ListGardens />
+          <ListGardens setActiveModalGarden={setActiveModalGarden} />
+          <Modal animationType="slide" visible={!isNil(activeModalGarden)}>
+            <GardenModal
+              garden={activeModalGarden}
+              setActiveModalGarden={setActiveModalGarden}></GardenModal>
+          </Modal>
         </View>
       </ScrollView>
     </GeneralSlot>

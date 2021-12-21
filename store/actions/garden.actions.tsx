@@ -27,6 +27,8 @@ const updateStoredGardensSuccess: ActionCreator<GardenActionTypes> = (
 export function updateGardens() {
   return (dispatch: Dispatch, getState: () => RootState) => {
     // async action: uses Redux-Thunk middleware to return a function instead of an action creator
+
+    dispatch(loadingAction(true));
     dispatch(request());
 
     return getUserGardens().then(
@@ -36,8 +38,11 @@ export function updateGardens() {
 
         if (!activeGarden && response.length)
           dispatch(updateActiveGardenSuccess(response[0]));
+
+        dispatch(loadingAction(false));
       },
       error => {
+        dispatch(loadingAction(false));
         dispatch(failure("Server error."));
       }
     );
@@ -107,7 +112,10 @@ export function deleteGarden(garden: UserGarden) {
   };
 }
 
-export function updateActiveUserGarden(garden: UserGarden) {
+export function updateActiveUserGarden(
+  garden: UserGarden,
+  updateActive = true
+) {
   return (dispatch: Dispatch, getState: () => RootState) => {
     // async action: uses Redux-Thunk middleware to return a function instead of an action creator
     dispatch(loadingAction(true));
@@ -120,7 +128,7 @@ export function updateActiveUserGarden(garden: UserGarden) {
         gardens[oldGardenIndex] = garden;
 
         dispatch(updateStoredGardensSuccess(gardens));
-        dispatch(updateActiveGardenSuccess(response));
+        updateActive && dispatch(updateActiveGardenSuccess(response));
 
         dispatch(loadingAction(false));
       },

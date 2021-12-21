@@ -53,9 +53,7 @@ export function DetailedGalleryCard(props: DetailedGalleryCardProps) {
   };
 
   const handleShare = async () => {
-    dispatch(setLoading(true));
     await shareImage(photo);
-    dispatch(setLoading(false));
   };
 
   if (!photo) return <View></View>;
