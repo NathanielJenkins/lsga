@@ -132,6 +132,7 @@ export const updateUserGarden = async (userGarden: UserGarden) => {
   return userGarden;
 };
 
+
 export const getUserGardens = async () => {
   const userId = auth.currentUser?.uid;
   if (!userId) return [];

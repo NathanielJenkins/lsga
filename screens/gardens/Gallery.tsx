@@ -26,7 +26,7 @@ export function Gallery({ navigation }: RootTabScreenProps<"Gallery">) {
   if (loading) return <Spinner />;
   return (
     <React.Fragment>
-      <ScrollView style={tw.style("bg-white")}>
+      <ScrollView style={tw.style("bg-white ")}>
         <GeneralSlot>
           <SofiaBoldText style={tw.style("text-2xl text-gray-500")}>
             {activeGarden?.name}
@@ -45,12 +45,11 @@ export function Gallery({ navigation }: RootTabScreenProps<"Gallery">) {
                     date={g.dateAdded as string}
                   />
                 </View>
-                <View style={tw.style("flex")}>
-                  <DetailedGalleryCard photo={g} userGarden={activeGarden} />
-                </View>
+                <DetailedGalleryCard photo={g} userGarden={activeGarden} />
               </View>
             ))}
           </View>
+          <View style={tw.style("h-28")}></View>
         </GeneralSlot>
       </ScrollView>
       <View

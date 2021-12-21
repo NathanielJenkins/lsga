@@ -23,11 +23,7 @@ export default function App() {
       <SafeAreaProvider>
         <Provider store={store}>
           <Navigation colorScheme={colorScheme} />
-          <StatusBar
-            style={"dark"}
-            backgroundColor="white"
-            translucent={false}
-          />
+          <StatusBar style={"dark"} backgroundColor="white" />
         </Provider>
       </SafeAreaProvider>
     );

@@ -188,7 +188,7 @@ export default function GardenScreen({
           </DraxScrollView>
         </SafeAreaView>
       </DraxProvider>
-      <View style={tw.style(" p-4")}>
+      <View style={tw.style("p-1")}>
         <SofiaRegularText style={tw.style("text-lg text-center")}>
           Drag and Drop Veggies
         </SofiaRegularText>
