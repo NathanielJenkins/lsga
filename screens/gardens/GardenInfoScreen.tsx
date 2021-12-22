@@ -30,6 +30,7 @@ import {
 } from "../../components/garden/GardenItems";
 import UserGarden from "../../models/UserGardens";
 import { isNil } from "lodash";
+import { Logout } from "../../components/account";
 
 export default function GardenInfoScreen({
   navigation,
@@ -55,6 +56,9 @@ export default function GardenInfoScreen({
               garden={activeModalGarden}
               setActiveModalGarden={setActiveModalGarden}></GardenModal>
           </Modal>
+        </View>
+        <View style={tw.style("shadow-brand p-2 my-2 mx-1")}>
+          <Logout />
         </View>
       </ScrollView>
     </GeneralSlot>

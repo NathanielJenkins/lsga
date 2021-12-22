@@ -45,7 +45,11 @@ export function AllVeggiesScreen({
           handleOnChangeText={setSearchString}
         />
         {filteredVeggies.map(v => (
-          <VeggieSearchItem key={v.name} veggie={v} style={tw.style("m-2")} />
+          <VeggieSearchItem
+            key={v.name}
+            veggie={v}
+            style={tw.style("my-1 mx-2")}
+          />
         ))}
       </ScrollView>
     </GeneralSlot>

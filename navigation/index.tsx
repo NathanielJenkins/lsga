@@ -147,12 +147,8 @@ function RootNavigator() {
  */
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 function BottomTabNavigator() {
-  const navigation = useNavigation<any>();
-
   const colorScheme = useColorScheme();
-  const handleSignOut = () => {
-    auth.signOut().then(() => navigation.replace("Login"));
-  };
+
   return (
     <BottomTab.Navigator
       initialRouteName="HomeScreen"

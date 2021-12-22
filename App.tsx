@@ -9,12 +9,15 @@ import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
 import tw from "tailwind-react-native-classnames";
+import { LogBox } from "react-native";
+
 // import { initializedFirebaseApp } from "./firebaseTooling";
 
 export default function App() {
   // initializedFirebaseApp();
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+  LogBox.ignoreLogs(["Setting a timer"]);
 
   if (!isLoadingComplete) {
     return null;

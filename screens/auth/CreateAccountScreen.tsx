@@ -14,6 +14,8 @@ import {
 import { tw } from "../../components/Themed";
 import { RootStackScreenProps } from "../../types";
 import { auth } from "../../firebase/firebaseTooling";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, setLoading } from "../../store";
 
 export function CreateAccountScreen({
   navigation
@@ -22,26 +24,22 @@ export function CreateAccountScreen({
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
+  const { loading } = useSelector((state: RootState) => state.common);
+  const dispatch = useDispatch();
   const handleUserSignUp = async () => {
-    setLoading(true);
     // check that the password and password confirm are the same
     if (password !== passwordConfirm) {
       setError("Passwords do not match");
       return;
     }
 
+    dispatch(setLoading(true));
     try {
-      const response = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
-      setLoading(false);
+      await auth.createUserWithEmailAndPassword(email, password);
     } catch (error: any) {
       setError(error.message);
-      setLoading(false);
     }
+    dispatch(setLoading(true));
   };
 
   return !loading ? (
@@ -56,12 +54,16 @@ export function CreateAccountScreen({
           value={email}
           handleOnChangeText={setEmail}
           placeholder="email"
+          autoCapitalize="none"
+          autoCorrect={false}
+          autoCompleteType="email"
         />
         <Input
           style={tw`mb-4`}
           value={password}
           handleOnChangeText={setPassword}
           placeholder="password"
+          autoCapitalize="none"
           secureTextEntry={true}
         />
         <Input
@@ -69,6 +71,7 @@ export function CreateAccountScreen({
           value={passwordConfirm}
           handleOnChangeText={setPasswordConfirm}
           placeholder="repeat password"
+          autoCapitalize="none"
           secureTextEntry={true}
         />
 

@@ -140,6 +140,11 @@ export const updateUserGarden = async (userGarden: UserGarden) => {
   return userGarden;
 };
 
+export const deleteAllUserGardens = async () => {
+  const gardens = await getUserGardens();
+  gardens.forEach(g => deleteUserGarden(g));
+};
+
 export const getUserGardens = async () => {
   const userId = auth.currentUser?.uid;
   if (!userId) return [];

@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { auth, firestore } from "../firebase/firebaseTooling";
 import { store } from "../store";
 import Documents from "./Documents";
+import { deleteAllUserGardens } from "./UserGardens";
 
 const ref = firestore.collection("user_properties");
 const monthNames = [
@@ -94,7 +95,6 @@ export const setFrostDateFromLngLat = async (lat: number, lon: number) => {
   if (stationResponse.status !== 200) return;
 
   const station: Station = stationResponse.data[0];
-  console.log(stationResponse.data);
   // using the station id perform another request for the frost dates;
   const springFrostParams = new URLSearchParams({
     station: station.id,
@@ -164,4 +164,10 @@ const getDateFromString = (f: string) => {
       : currentDate.getFullYear() + 0;
 
   return new Date(year, monthNumber, dayNumber);
+};
+
+export const deleteAccount = async () => {
+  // delete all the images associated with the user
+  await deleteAllUserGardens();
+  await auth.currentUser.delete();
 };

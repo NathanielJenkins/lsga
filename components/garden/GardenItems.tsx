@@ -463,30 +463,37 @@ export function ListGardens(props: ListGardenProps) {
     ];
     Alert.alert(...alertMsg);
   };
+
   return (
     <Info title="My Gardens">
-      {gardens.map(g => (
-        <View
-          key={g.id}
-          style={tw.style("flex flex-1 flex-row items-center justify-between")}>
-          <SofiaRegularText>{g.name}</SofiaRegularText>
-          <View style={tw.style("flex flex-row")}>
-            <IconText
-              name="info"
-              color="grey"
-              size={20}
-              onPress={() => setActiveModalGarden(g)}
-              style={tw.style("mr-2")}
-            />
-            <IconText
-              name="trash"
-              color="grey"
-              size={20}
-              onPress={() => handleDelete(g)}
-            />
+      {gardens.length !== 0 ? (
+        gardens.map(g => (
+          <View
+            key={g.id}
+            style={tw.style(
+              "flex flex-1 flex-row items-center justify-between"
+            )}>
+            <SofiaRegularText>{g.name}</SofiaRegularText>
+            <View style={tw.style("flex flex-row")}>
+              <IconText
+                name="info"
+                color="grey"
+                size={20}
+                onPress={() => setActiveModalGarden(g)}
+                style={tw.style("mr-2")}
+              />
+              <IconText
+                name="trash"
+                color="grey"
+                size={20}
+                onPress={() => handleDelete(g)}
+              />
+            </View>
           </View>
-        </View>
-      ))}
+        ))
+      ) : (
+        <SofiaRegularText>No Gardens</SofiaRegularText>
+      )}
     </Info>
   );
 }

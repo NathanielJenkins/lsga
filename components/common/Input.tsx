@@ -19,6 +19,9 @@ interface InputProps {
   secureTextEntry?: boolean;
   style?: StyleProp<any>;
   numberOfLines?: number;
+  autoCapitalize?: "none" | "sentences" | "words" | "characters";
+  autoCompleteType?: any;
+  autoCorrect?: boolean;
 }
 
 export function Input(props: InputProps) {

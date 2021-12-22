@@ -2,17 +2,23 @@
 
 import { ActionCreator, Dispatch } from "redux";
 import { request, failure } from "./common.actions";
-import { UPDATE_FROST_DATE, UPDATE_USER_PROPERTIES } from "../types";
+import {
+  LOGOUT_USER,
+  UPDATE_FROST_DATE,
+  UPDATE_USER_PROPERTIES
+} from "../types";
 
 import { useSelector } from "react-redux";
 import { RootState } from "..";
 import {
+  deleteAccount,
   FrostDateParsed,
   setFrostDateFromDate,
   setFrostDateFromLngLat,
   setUserProperties,
   updateFirebaseFrostDates
 } from "../../models/UserProperties";
+import { loadingAction } from ".";
 
 export function updateFrostDatesByLngLat(lat: number, lon: number) {
   // check if an of the fields of the user garden are null
@@ -72,6 +78,40 @@ export function updateUserProperties() {
       },
       error => {
         dispatch(failure("Server error"));
+      }
+    );
+  };
+}
+
+export function logoutUser() {
+  // check if an of the fields of the user garden are null
+  return (dispatch: Dispatch) => {
+    // async action: uses Redux-Thunk middleware to return a function instead of an action creator
+    dispatch({
+      type: LOGOUT_USER,
+      payload: undefined
+    });
+  };
+}
+
+export function deleteUser() {
+  // check if an of the fields of the user garden are null
+  return (dispatch: Dispatch) => {
+    // async action: uses Redux-Thunk middleware to return a function instead of an action creator
+    dispatch(request());
+    dispatch(loadingAction(true));
+    return deleteAccount().then(
+      response => {
+        dispatch({
+          type: LOGOUT_USER,
+          payload: undefined
+        });
+
+        dispatch(loadingAction(false));
+      },
+      error => {
+        dispatch(failure("Server error"));
+        dispatch(loadingAction(false));
       }
     );
   };

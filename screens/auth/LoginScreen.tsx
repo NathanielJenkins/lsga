@@ -74,6 +74,17 @@ export function LoginScreen({ navigation }: RootStackScreenProps<"Login">) {
             />
           </View>
         </View>
+        <View style={tw.style("mt-4 items-center")}>
+          <View style={tw`text-gray-500 my-4 flex flex-row `}>
+            <SofiaRegularText style={tw`text-gray-500 `}>
+              Don't have an account?{" "}
+            </SofiaRegularText>
+            <TextButton
+              title="Sign up"
+              onPress={() => navigation.navigate("CreateAccount")}
+            />
+          </View>
+        </View>
       </View>
     </EntrySlot>
   ) : (
