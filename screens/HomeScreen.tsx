@@ -67,7 +67,7 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   if (loading) return <Spinner />;
   return gardens?.length && activeGarden ? (
     <MainPageSlot>
-      <GardenSelector style={tw.style("m-2")} />
+      <GardenSelector style={tw.style("m-2 z-20")} />
       <View style={tw.style("shadow-brand rounded-md m-2 flex ")}>
         <View
           style={tw`w-full flex overflow-visible justify-center items-center rounded-md relative `}>

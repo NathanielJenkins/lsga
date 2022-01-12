@@ -47,6 +47,7 @@ export function LoginScreen({ navigation }: RootStackScreenProps<"Login">) {
           value={email}
           handleOnChangeText={setEmail}
           placeholder="email"
+          autoCapitalize="none"
         />
         <Input
           style={tw`mb-4`}
@@ -54,6 +55,7 @@ export function LoginScreen({ navigation }: RootStackScreenProps<"Login">) {
           handleOnChangeText={setPassword}
           placeholder="password"
           secureTextEntry={true}
+          autoCapitalize="none"
         />
 
         <PrimaryButton title="Login" onPress={handleUserLogin} />

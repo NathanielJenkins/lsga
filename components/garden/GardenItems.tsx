@@ -58,6 +58,7 @@ import { deleteGarden } from "../../store";
 import { CameraCapturedPicture } from "expo-camera";
 import { Input } from "../common";
 import { GeneralSlot } from "../../screens";
+import DropDownPicker, { ValueType } from "react-native-dropdown-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 export function NoGardensPrompt() {
   const navigation = useNavigation();
@@ -302,6 +303,22 @@ export function GardenSelector(props: GardenSelectorProps) {
     dispatch(updateActiveGarden(garden));
   };
 
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(activeGarden.id as ValueType);
+  const [items, setItems] = useState(
+    gardens.map(g => {
+      return { label: g.name, value: g.id };
+    })
+  );
+
+  useEffect(() => {
+    setItems(
+      gardens.map(g => {
+        return { label: g.name, value: g.id };
+      })
+    );
+  }, [gardens]);
+
   return (
     <View style={tw.style(props.style)}>
       {gardens.length === 1 ? (
@@ -315,14 +332,19 @@ export function GardenSelector(props: GardenSelectorProps) {
           <SofiaSemiBoldText style={tw.style("text-2xl text-gray-500")}>
             My Gardens
           </SofiaSemiBoldText>
-          <View style={tw.style("flex")}>
-            <Picker
-              selectedValue={activeGarden.id}
-              onValueChange={handleUpdateActiveGarden}>
-              {gardens.map((g, i) => (
-                <Picker.Item key={i} label={g.name} value={g.id} />
-              ))}
-            </Picker>
+          <View style={tw.style("flex z-10")}>
+            <DropDownPicker
+              listMode="SCROLLVIEW"
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              onChangeValue={(v: ValueType) =>
+                handleUpdateActiveGarden(v as string)
+              }
+            />
           </View>
         </View>
       )}
@@ -466,7 +488,7 @@ export function ListGardens(props: ListGardenProps) {
 
   return (
     <Info title="My Gardens">
-      {gardens.length !== 0 ? (
+      {gardens?.length !== 0 ? (
         gardens.map(g => (
           <View
             key={g.id}

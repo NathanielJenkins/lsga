@@ -38,12 +38,20 @@ export function Logout() {
     <Info title="My Account">
       <View style={tw.style("flex flex-row justify-between items-center")}>
         <SofiaRegularText>{user.email}</SofiaRegularText>
-        <IconText
-          name="trash"
-          color="grey"
-          size={20}
-          onPress={() => handleDeleteAccount()}
-        />
+        <View style={tw.style("flex flex-row")}>
+          <IconText
+            name="info"
+            color="grey"
+            size={20}
+            style={tw.style("mr-1")}
+          />
+          <IconText
+            name="trash"
+            color="grey"
+            size={20}
+            onPress={() => handleDeleteAccount()}
+          />
+        </View>
       </View>
     </Info>
   );

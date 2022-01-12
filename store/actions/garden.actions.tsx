@@ -133,8 +133,6 @@ export function updateActiveUserGarden(
         dispatch(loadingAction(false));
       },
       error => {
-        console.error(error);
-
         dispatch(loadingAction(false));
         dispatch(failure("Server error."));
       }
