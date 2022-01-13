@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import UserGarden from "../../models/UserGardens";
+import UserGarden, { setUpNewGarden } from "../../models/UserGardens";
 import { CardSlot } from "../slots/CardSlot";
 import { addNewGarden, RootState, setLoading } from "../../store";
 import { tw } from "../../components/Themed";
@@ -14,6 +14,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useNavigation } from "@react-navigation/native";
 import Spinner from "../../components/common/Spinner";
 import { isEmpty } from "lodash";
+import { firestore } from "../../firebase/firebaseTooling";
+import Documents from "../../models/Documents";
+import GardenScreen from "../gardens/GardenScreen";
 interface Props {
   newGardenState: [
     UserGarden,
@@ -41,6 +44,9 @@ export function NameGarden(props: Props) {
       return;
     }
     dispatch(addNewGarden(newGarden));
+
+    navigation.navigate("Root");
+    navigation.navigate("GardenScreen", { garden: newGarden });
   };
 
   React.useEffect(() => {

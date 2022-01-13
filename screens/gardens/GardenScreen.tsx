@@ -23,30 +23,28 @@ import {
 } from "../../types";
 import Veggie, { VeggieState } from "../../models/Veggie";
 import { CircleIconButton, IconText } from "../../components/common/Button";
-import { updateActiveUserGarden } from "../../store/actions/garden.actions";
+import {
+  updateActiveUserGarden,
+  addNewGarden
+} from "../../store/actions/garden.actions";
 import { updatePlantingDates } from "../../models/UserGardens";
+import { Spinner } from "../../components/common";
 export default function GardenScreen({
   navigation,
   route
 }: RootStackScreenProps<"GardenScreen">) {
-  const dispatch = useDispatch();
+  const activeGarden = route?.params?.garden;
 
+  const { loading } = useSelector((state: RootState) => state.common);
+  const dispatch = useDispatch();
   const { veggies } = useSelector((state: RootState) => state.veggies);
 
-  const { activeGarden } = useSelector((state: RootState) => state.gardens);
   const veggieGrid =
-    useSelector((state: RootState) =>
-      state.gardens?.activeGarden?.grid?.map(veggieName => veggies[veggieName])
-    ) || [];
+    activeGarden?.grid?.map(veggieName => veggies[veggieName]) || [];
   const [workingGrid, setWorkingGrid] = React.useState(veggieGrid);
   const [stateGrid, setStateGrid] = React.useState(
     veggieGrid.map(() => VeggieState.None)
   );
-
-  React.useEffect(() => {
-    setWorkingGrid(veggieGrid);
-    setStateGrid(veggieGrid.map(() => VeggieState.None));
-  }, [activeGarden]);
 
   const [isDraggingPallet, setIsDraggingPallet] = React.useState(false);
   const [isDraggingGrid, setIsDraggingGrid] = React.useState(false);
@@ -93,17 +91,15 @@ export default function GardenScreen({
   }, [veggieDragging]);
 
   const handleSaveGarden = () => {
-    navigation.pop();
     const userGarden = { ...activeGarden };
     userGarden.grid = workingGrid.map(w => w?.name || null);
-
     // update the gardenPlantingDates from the grid;
     updatePlantingDates(userGarden);
 
     dispatch(updateActiveUserGarden(userGarden));
+    navigation.navigate("Root");
   };
 
-  if (!activeGarden) return <NoGardensPrompt />;
   return (
     <View style={tw.style("bg-white  flex flex-1  pt-8")}>
       <View style={tw.style("flex flex-row justify-between items-center px-2")}>
@@ -141,6 +137,7 @@ export default function GardenScreen({
             stateGrid={stateGrid}
             onDragStart={() => setIsDraggingGrid(true)}
             onDragEnd={() => setIsDraggingGrid(false)}
+            activeGarden={activeGarden}
           />
           <DropSection
             isDraggingPallet={isDraggingPallet}

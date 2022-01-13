@@ -62,12 +62,6 @@ export const ProgressChartIO = () => {
   const { veggies } = useSelector((state: RootState) => state.veggies);
   const { activeGarden } = useSelector((state: RootState) => state.gardens);
 
-  const stringFormat: Intl.DateTimeFormatOptions = {
-    weekday: "short",
-    month: "short",
-    day: "numeric"
-  };
-
   const [first, setFirst] = React.useState(moment().startOf("week").toDate()); // First day is the day of the month - the day of the week
   const [tasks, setTasks] =
     React.useState<{ [veggieName: string]: Array<[TaskDate, boolean]> }>();
@@ -166,8 +160,8 @@ export const ProgressChartIO = () => {
             My Weekly Tasks
           </SofiaBoldText>
           <SofiaRegularText>
-            {first.toLocaleString("en-En", stringFormat)} -{" "}
-            {addDays(first, 6).toLocaleString("en-En", stringFormat)}
+            {moment(first).format("l")} -{" "}
+            {moment(addDays(first, 6)).format("l")}
           </SofiaRegularText>
         </View>
         <IconText
@@ -270,10 +264,7 @@ export function Timeline() {
   const xStart = 50;
   const section = (width - xStart) / 12;
   const sections = [...Array(12).keys()];
-  const stringFormat: Intl.DateTimeFormatOptions = {
-    month: "short",
-    day: "numeric"
-  };
+
   return (
     <View style={tw.style("flex justify-center items-center shadow-brand m-2")}>
       <SofiaSemiBoldText style={tw.style("text-lg text-gray-500 my-2")}>
@@ -375,7 +366,7 @@ export function Timeline() {
                   x={xFirst}
                   y="45"
                   textAnchor="start">
-                  {firstDate.toLocaleString("en-En", stringFormat)}
+                  {moment(firstDate).format("l")}
                 </Text>
                 <Text
                   fill="gray"
@@ -384,7 +375,7 @@ export function Timeline() {
                   x={xLast}
                   y={15}
                   textAnchor="end">
-                  {lastDate.toLocaleString("en-En", stringFormat)}
+                  {moment(lastDate).format("l")}
                 </Text>
               </G>
             )}

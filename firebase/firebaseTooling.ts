@@ -1,6 +1,7 @@
 /** @format */
 
 import * as fb from "firebase";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDkzA1RFBkMSbxuYSldNdQ4NdSNjL_BnDQ",
   authDomain: "lifespace-app.firebaseapp.com",

@@ -5,13 +5,12 @@ import { auth, firestore, storage } from "../firebase/firebaseTooling";
 import Documents from "./Documents";
 import Veggie, { getPlantingRangeFromUserFrostDates } from "./Veggie";
 import { useDispatch } from "react-redux";
-import { store } from "../store";
+import { setLoading, store } from "../store";
 import Task, { TaskDate } from "./Task";
 import { Photo, profileId } from "./Photo";
-import { uniqueId } from "lodash";
+import { uniqueId, cloneDeep } from "lodash";
 import { CameraCapturedPicture } from "expo-camera";
-import { v4 as uuidv4 } from "uuid";
-
+import uuid from "react-native-uuid";
 const ref = firestore.collection(Documents.UserGardens);
 
 export default interface UserGarden {
@@ -63,11 +62,13 @@ export const setGardenProfile = async (userGarden: UserGarden) => {
 };
 
 export const addUserGarden = async (userGarden: UserGarden) => {
-  const id = uuidv4();
-  userGarden.id = id;
+  const id = new String(uuid.v4()).valueOf();
 
+  userGarden.id = id;
   userGarden.userId = auth.currentUser?.uid;
+
   await setGardenProfile(userGarden);
+
   userGarden.veggieSteps = {};
   // userGarden.gallery =
   userGarden.grid = [
@@ -93,7 +94,7 @@ export const addGalleryPhoto = async (
   userGarden: UserGarden,
   photoData: Photo
 ) => {
-  photoData.id = uuidv4();
+  photoData.id = new String(uuid.v4()).valueOf();
 
   const blob = await (await fetch(photo.uri)).blob();
   const newUrl = `${auth.currentUser.uid}/gallery/${encodeURIComponent(
@@ -113,8 +114,6 @@ export const deleteGalleryPhoto = async (
   photoData: Photo,
   userGarden: UserGarden
 ) => {
-  console.log(photoData);
-
   await storage.ref(photoData.url).delete();
 
   userGarden.gallery = userGarden.gallery.filter(p => p.id !== photoData.id);
@@ -131,7 +130,7 @@ export const deleteUserGarden = async (userGarden: UserGarden) => {
     userGarden.id
   )}`;
 
-  storage.ref().child(url).delete();
+  await storage.ref().child(url).delete();
 };
 
 export const updateUserGarden = async (userGarden: UserGarden) => {

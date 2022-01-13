@@ -67,15 +67,19 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   if (loading) return <Spinner />;
   return gardens?.length && activeGarden ? (
     <MainPageSlot>
-      <GardenSelector style={tw.style("m-2 z-20")} />
-      <View style={tw.style("shadow-brand rounded-md m-2 flex ")}>
+      <GardenSelector style={tw.style("m-2 z-20 flex ", { zIndex: 1 })} />
+      <View style={tw.style("shadow-brand rounded-md m-2 flex", { zIndex: 0 })}>
         <View
           style={tw`w-full flex overflow-visible justify-center items-center rounded-md relative `}>
           <Image
             style={tw.style("h-64 w-full rounded-md")}
             source={{ uri: imageUrl }}></Image>
           <View style={tw.style(" bg-transparent flex w-full -top-8")}>
-            <GardenGrid draggable={false} veggieGrid={veggieGrid} />
+            <GardenGrid
+              draggable={false}
+              veggieGrid={veggieGrid}
+              activeGarden={activeGarden}
+            />
           </View>
         </View>
 
@@ -89,7 +93,9 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
             text="Edit Veggies"
             name="edit"
             color="gray"
-            onPress={() => navigation.navigate("GardenScreen")}
+            onPress={() =>
+              navigation.navigate("GardenScreen", { garden: activeGarden })
+            }
           />
         </View>
       </View>

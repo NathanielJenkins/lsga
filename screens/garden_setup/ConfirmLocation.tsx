@@ -37,7 +37,9 @@ export function ConfirmLocation({
               onPress={() =>
                 navigation.push("CameraPreview", {
                   photoCallback: (photo: CameraCapturedPicture) => {
-                    setNewGarden({ url: photo.uri } as any);
+                    const g = { ...newGarden };
+                    g.url = photo.uri;
+                    setNewGarden(g);
                     navigation.navigate("SetupGarden");
                   }
                 })

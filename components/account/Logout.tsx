@@ -6,7 +6,7 @@ import { Alert, StyleSheet, Text, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { auth } from "../../firebase/firebaseTooling";
 import { deleteAccount } from "../../models/UserProperties";
-import { deleteUser, logoutUser } from "../../store";
+import { deleteUser } from "../../store";
 import { IconText, Info } from "../common";
 import { SofiaRegularText } from "../StyledText";
 import { tw } from "../Themed";

@@ -3,7 +3,7 @@
 import { ActionCreator, Dispatch } from "redux";
 import { request, failure } from "./common.actions";
 import {
-  LOGOUT_USER,
+  CLEAR_USER,
   UPDATE_FROST_DATE,
   UPDATE_USER_PROPERTIES
 } from "../types";
@@ -83,17 +83,6 @@ export function updateUserProperties() {
   };
 }
 
-export function logoutUser() {
-  // check if an of the fields of the user garden are null
-  return (dispatch: Dispatch) => {
-    // async action: uses Redux-Thunk middleware to return a function instead of an action creator
-    dispatch({
-      type: LOGOUT_USER,
-      payload: undefined
-    });
-  };
-}
-
 export function deleteUser() {
   // check if an of the fields of the user garden are null
   return (dispatch: Dispatch) => {
@@ -102,11 +91,6 @@ export function deleteUser() {
     dispatch(loadingAction(true));
     return deleteAccount().then(
       response => {
-        dispatch({
-          type: LOGOUT_USER,
-          payload: undefined
-        });
-
         dispatch(loadingAction(false));
       },
       error => {

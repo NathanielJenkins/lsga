@@ -4,7 +4,8 @@ import UserProperties from "../../models/UserProperties";
 import {
   UserActionTypes,
   UPDATE_FROST_DATE,
-  UPDATE_USER_PROPERTIES
+  UPDATE_USER_PROPERTIES,
+  CLEAR_USER
 } from "../types";
 
 const initialState: UserProperties = {
@@ -29,6 +30,10 @@ export function userReducer(
       return {
         ...action.payload
       };
+    }
+
+    case CLEAR_USER: {
+      return initialState;
     }
 
     default:

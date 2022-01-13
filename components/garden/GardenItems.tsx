@@ -60,6 +60,7 @@ import { Input } from "../common";
 import { GeneralSlot } from "../../screens";
 import DropDownPicker, { ValueType } from "react-native-dropdown-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { GardenPack } from "../../models";
 export function NoGardensPrompt() {
   const navigation = useNavigation();
   return (
@@ -158,9 +159,10 @@ interface GardenGridProps {
   onDragEnd?: (data: DraxDragEndEventData) => DraxProtocolDragEndResponse;
   stateGrid?: Array<VeggieState>;
   draggable?: boolean;
+  activeGarden: UserGarden;
 }
 export function GardenGrid(props: GardenGridProps) {
-  const { activeGarden } = useSelector((state: RootState) => state.gardens);
+  const { activeGarden } = props;
   const { veggies } = useSelector((state: RootState) => state.veggies);
   const height = activeGarden?.garden.height || 0;
   const width = activeGarden?.garden.width || 0;
@@ -332,9 +334,9 @@ export function GardenSelector(props: GardenSelectorProps) {
           <SofiaSemiBoldText style={tw.style("text-2xl text-gray-500")}>
             My Gardens
           </SofiaSemiBoldText>
-          <View style={tw.style("flex z-10")}>
+          <View style={tw.style("flex z-10 mt-2")}>
             <DropDownPicker
-              listMode="SCROLLVIEW"
+              listMode="MODAL"
               open={open}
               value={value}
               items={items}
@@ -437,6 +439,30 @@ export function VeggieSearchItem(props: VeggieSearchItemProps) {
       />
       <SofiaBoldText style={tw.style("text-2xl text-gray-500 text-center")}>
         {props.veggie?.displayName}
+      </SofiaBoldText>
+    </Ripple>
+  );
+}
+
+interface GardenPackSearchItemProps {
+  gardenPack: GardenPack;
+  style?: StyleProp<any>;
+}
+export function GardenPackSearchItem(props: GardenPackSearchItemProps) {
+  const navigation = useNavigation();
+
+  return (
+    <Ripple
+      style={tw.style(
+        "flex flex-row items-center shadow-brand p-2",
+        props.style
+      )}>
+      <Image
+        source={{ uri: props.gardenPack?.downloadUrl }}
+        style={tw.style(`resize-contain h-14 w-14 mr-4`)}
+      />
+      <SofiaBoldText style={tw.style("text-2xl text-gray-500 text-center")}>
+        {props.gardenPack?.displayName}
       </SofiaBoldText>
     </Ripple>
   );

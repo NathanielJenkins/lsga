@@ -1,0 +1,57 @@
+[
+  {
+    "name": "tomato_sauce_garden",
+    "displayName": "The Tomato Sauce Garden",
+    "description": "",
+    "spring": ["arugula", "peas", "spinach"],
+    "summer": ["tomatoes", "basil"],
+    "spring": ["arugula", "peas", "spinach"],
+    "url": "garden_packs/tomato_sauce_garden"
+  },
+  {
+    "name": "cool_cucumbers",
+    "displayName": "Cool Cucumbers",
+    "description": "",
+    "spring": ["arugula", "peas", "spinach"],
+    "summer": ["cucumber", "basil", "salad_greens"],
+    "spring": ["arugula", "peas", "spinach"],
+    "url": "garden_packs/cool_cucumbers"
+  },
+  {
+    "name": "peas_and_peppers",
+    "displayName": "Peas & Peppers",
+    "description": "",
+    "spring": ["arugula", "peas", "spinach"],
+    "summer": ["peppers", "basil", "salad_greens"],
+    "spring": ["arugula", "peas"],
+    "url": "garden_packs/peas_and_peppers"
+  },
+  {
+    "name": "simply_salads",
+    "displayName": "Simply Salads",
+    "description": "",
+    "spring": ["arugula", "peas", "chard"],
+    "summer": ["peppers", "lettuce", "kale", "chard"],
+    "spring": ["spinach", "kale", "chard"],
+    "url": "garden_packs/simply_salads"
+  },
+  {
+    "name": "roots_and_shoots",
+    "displayName": "Roots & Shoots",
+    "description": "",
+    "spring": ["radish", "peas", "carrots"],
+    "summer": ["beets", "bush_beans", "carrots"],
+    "spring": ["radishes", "peas", "carrots"],
+    "url": "garden_packs/roots_and_shoots"
+  },
+
+  {
+    "name": "herb_garden",
+    "displayName": "The Herb Garden",
+    "description": "",
+    "spring": ["green_onion", "cilantro", "parsley"],
+    "summer": ["basil", "dill", "parsley"],
+    "spring": ["green_onion", "peas", "carrots"],
+    "url": "garden_packs/herb_garden"
+  }
+]

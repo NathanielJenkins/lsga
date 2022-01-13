@@ -36,17 +36,6 @@ export function SetupGarden({
   const { loading } = useSelector((state: RootState) => state.common);
 
   const swiper = useRef(null);
-  const { activeGarden } = useSelector((state: RootState) => state.gardens);
-  const didMount = React.useRef(false);
-
-  React.useEffect(() => {
-    if (didMount.current) {
-      navigation.navigate("Root");
-      navigation.navigate("GardenScreen");
-    } else {
-      didMount.current = true;
-    }
-  }, [activeGarden]);
 
   if (loading) return <Spinner />;
 
@@ -62,16 +51,16 @@ export function SetupGarden({
           hasImageState={[hasImage, setHasImage]}
         />
 
-        <GardenInformationStart
+        {/* <GardenInformationStart
           newGardenState={[newGarden, setNewGarden]}
           hasImageState={[hasImage, setHasImage]}
           swiper={swiper}
-        />
+        /> */}
         <SelectPlanter
           newGardenState={[newGarden, setNewGarden]}
           swiper={swiper}
         />
-        <AddFrostDate swiper={swiper} />
+        {/* <AddFrostDate swiper={swiper} /> */}
 
         <NameGarden
           newGardenState={[newGarden, setNewGarden]}

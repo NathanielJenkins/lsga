@@ -8,6 +8,7 @@ import { auth, firestore } from "../firebase/firebaseTooling";
 import { store } from "../store";
 import Documents from "./Documents";
 import { deleteAllUserGardens } from "./UserGardens";
+import { useNavigation } from "@react-navigation/native";
 
 const ref = firestore.collection("user_properties");
 const monthNames = [
@@ -169,5 +170,7 @@ const getDateFromString = (f: string) => {
 export const deleteAccount = async () => {
   // delete all the images associated with the user
   await deleteAllUserGardens();
-  await auth.currentUser.delete();
+
+  auth.currentUser.delete();
+  auth.signOut();
 };

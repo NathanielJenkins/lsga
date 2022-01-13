@@ -69,6 +69,7 @@
     "react-native-swiper": "^1.6.0-rc.3",
     "react-native-toast-message": "^1.6.0",
     "react-native-unimodules": "^0.15.0",
+    "react-native-uuid": "^2.0.1",
     "react-native-web": "0.17.1",
     "react-native-webview": "^11.14.4",
     "react-redux": "^7.2.6",
@@ -77,8 +78,7 @@
     "redux-thunk": "^2.4.0",
     "styled-components": "^5.3.3",
     "styled-system": "^5.1.5",
-    "tailwind-react-native-classnames": "^1.5.1",
-    "uuid": "^8.3.2"
+    "tailwind-react-native-classnames": "^1.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

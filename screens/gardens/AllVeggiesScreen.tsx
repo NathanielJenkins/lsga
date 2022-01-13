@@ -1,14 +1,14 @@
 /** @format */
 
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
-import tw from "tailwind-react-native-classnames";
 import { RoundedOutlineButton } from "../../components/common/Button";
 import { Input } from "../../components/common/Input";
 import { VeggieSearchItem } from "../../components/garden/GardenItems";
 import { SofiaBoldText } from "../../components/StyledText";
+import { tw } from "../../components/Themed";
 import { RootState } from "../../store";
 import { RootTabScreenProps } from "../../types";
 import { GeneralSlot } from "../slots";
@@ -36,9 +36,17 @@ export function AllVeggiesScreen({
   return (
     <GeneralSlot>
       <ScrollView>
-        <SofiaBoldText style={tw.style("text-2xl text-gray-500 mb-2")}>
-          All Veggies
-        </SofiaBoldText>
+        <View style={tw.style("flex flex-row items-center  mb-2")}>
+          <SofiaBoldText style={tw.style("text-2xl text-brand")}>
+            All Veggies
+          </SofiaBoldText>
+          <SofiaBoldText style={tw.style("text-2xl text-gray-400 mx-2")}>
+            |
+          </SofiaBoldText>
+          <SofiaBoldText style={tw.style("text-2xl text-gray-400 ")}>
+            All Garden Packs
+          </SofiaBoldText>
+        </View>
         <Input
           placeholder="Search"
           style={tw.style("mb-4")}

@@ -11,13 +11,15 @@ import {
 } from "../types";
 import UserGarden, {
   getUserGardens,
-  addUserGarden,
   deleteUserGarden,
-  updateUserGarden
+  updateUserGarden,
+  addUserGarden
 } from "../../models/UserGardens";
 import { useSelector } from "react-redux";
 import { RootState } from "..";
 import { loadingAction } from ".";
+import { firestore } from "../../firebase/firebaseTooling";
+import Documents from "../../models/Documents";
 const updateStoredGardensSuccess: ActionCreator<GardenActionTypes> = (
   gardens: UserGarden[]
 ) => {
@@ -100,9 +102,11 @@ export function deleteGarden(garden: UserGarden) {
     return deleteUserGarden(garden).then(
       response => {
         dispatch({ type: DELETE_GARDEN, payload: garden });
-        const { activeGarden } = getState().gardens;
-        if (activeGarden?.id === garden.id)
-          dispatch(updateActiveGardenSuccess(null));
+        const { activeGarden, gardens } = getState().gardens;
+        if (activeGarden?.id === garden.id) {
+          const garden = gardens?.length ? gardens[0] : null;
+          dispatch(updateActiveGardenSuccess(garden));
+        }
       },
       error => {
         console.error(error);
@@ -125,7 +129,8 @@ export function updateActiveUserGarden(
       response => {
         const gardens = [...getState().gardens.gardens];
         const oldGardenIndex = gardens?.findIndex(g => g.id === garden.id);
-        gardens[oldGardenIndex] = garden;
+
+        if (oldGardenIndex !== -1) gardens[oldGardenIndex] = garden;
 
         dispatch(updateStoredGardensSuccess(gardens));
         updateActive && dispatch(updateActiveGardenSuccess(response));

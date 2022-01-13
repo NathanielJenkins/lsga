@@ -5,6 +5,7 @@ import { StyleSheet, View } from "react-native";
 import { PrimaryButton } from "../../components/common/Button";
 import Veggies from "../../assets/data/Veggies.json";
 import Gardens from "../../assets/data/Gardens.json";
+import GardenPacks from "../../assets/data/GardenPacks.json";
 
 import { firestore, storage } from "../../firebase/firebaseTooling";
 import Veggie from "../../models/Veggie";
@@ -28,13 +29,22 @@ export default function Admin() {
 
   const handleImportGardens = () => {
     const gardenRef = firestore.collection(Documents.Gardens);
-    Gardens.forEach(v => gardenRef.doc(v.name).set(v));
+    Gardens.forEach(v => gardenRef.doc(v.id).set(v));
+  };
+
+  const handleImportGardenPacks = () => {
+    const gardenRef = firestore.collection(Documents.GardenPacks);
+    GardenPacks.forEach(v => gardenRef.doc(v.name).set(v));
   };
 
   return (
     <View style={styles.container}>
       <PrimaryButton title="Add Veggies" onPress={handleImportVeggies} />
       <PrimaryButton title="Add Gardens" onPress={handleImportGardens} />
+      <PrimaryButton
+        title="Add Garden Packs"
+        onPress={handleImportGardenPacks}
+      />
     </View>
   );
 }

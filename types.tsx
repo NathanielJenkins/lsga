@@ -44,7 +44,7 @@ export type RootStackParamList = {
   TypeOfSpace: undefined;
   NameGarden: undefined;
   GardenScreen: {
-    garden?: UserGarden;
+    garden: UserGarden;
   };
 
   CameraPreview: {
