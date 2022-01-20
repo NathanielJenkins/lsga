@@ -22,12 +22,8 @@ interface SelectPlanterProps {
 export function SelectPlanter(selectPlanterProps: SelectPlanterProps) {
   const [newGarden, setNewGarden] = selectPlanterProps.newGardenState;
   const [activeGarden, setActiveGarden] = useState<Garden>();
-  const [gardens, setGardens] = useState(new Array<Garden>());
+  const gardens = useSelector((state: RootState) => state.gardens.gardenTypes);
   const swiper = selectPlanterProps.swiper;
-
-  React.useEffect(() => {
-    getAllGardens().then(gs => setGardens(gs));
-  }, []);
 
   React.useEffect(() => {
     if (!activeGarden) return;

@@ -62,6 +62,7 @@ import DropDownPicker, { ValueType } from "react-native-dropdown-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { GardenPack } from "../../models";
 import Hr from "../common/Hr";
+import Garden from "../../models/Garden";
 export function NoGardensPrompt() {
   const navigation = useNavigation();
   return (
@@ -160,13 +161,13 @@ interface GardenGridProps {
   onDragEnd?: (data: DraxDragEndEventData) => DraxProtocolDragEndResponse;
   stateGrid?: Array<VeggieState>;
   draggable?: boolean;
-  activeGarden: UserGarden;
+  garden: Garden;
 }
 export function GardenGrid(props: GardenGridProps) {
-  const { activeGarden } = props;
+  const { garden } = props;
   const { veggies } = useSelector((state: RootState) => state.veggies);
-  const height = activeGarden?.garden.height || 0;
-  const width = activeGarden?.garden.width || 0;
+  const height = garden.height || 0;
+  const width = garden.width || 0;
   const draggable = props.draggable !== undefined ? props.draggable : false;
   const widthGrid: Array<JSX.Element> = [];
   for (let i = 0; i < width * height; i++) {
@@ -461,6 +462,7 @@ export function PackSearchItem(props: PackSearchItemProps) {
 
   return (
     <Ripple
+      onPress={() => navigation.navigate("Pack", { pack: props.gardenPack })}
       style={tw.style(
         "flex items-center justify-center shadow-brand p-4",
         props.style

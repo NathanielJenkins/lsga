@@ -7,7 +7,8 @@ import {
   GardenActionTypes,
   NEW_GARDEN,
   UPDATE_ACTIVE_GARDEN,
-  DELETE_GARDEN
+  DELETE_GARDEN,
+  UPDATE_GARDEN_TYPES
 } from "../types";
 import UserGarden, {
   getUserGardens,
@@ -20,6 +21,7 @@ import { RootState } from "..";
 import { loadingAction } from ".";
 import { firestore } from "../../firebase/firebaseTooling";
 import Documents from "../../models/Documents";
+import { getAllGardens } from "../../models/Garden";
 const updateStoredGardensSuccess: ActionCreator<GardenActionTypes> = (
   gardens: UserGarden[]
 ) => {
@@ -139,6 +141,23 @@ export function updateActiveUserGarden(
       },
       error => {
         dispatch(loadingAction(false));
+        dispatch(failure("Server error."));
+      }
+    );
+  };
+}
+
+export function updateGardenTypes() {
+  return (dispatch: Dispatch) => {
+    // async action: uses Redux-Thunk middleware to return a function instead of an action creator
+
+    dispatch(request());
+
+    return getAllGardens().then(
+      response => {
+        dispatch({ type: UPDATE_GARDEN_TYPES, payload: response });
+      },
+      error => {
         dispatch(failure("Server error."));
       }
     );

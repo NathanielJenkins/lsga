@@ -137,7 +137,7 @@ export default function GardenScreen({
             stateGrid={stateGrid}
             onDragStart={() => setIsDraggingGrid(true)}
             onDragEnd={() => setIsDraggingGrid(false)}
-            activeGarden={activeGarden}
+            garden={activeGarden?.garden}
           />
           <DropSection
             isDraggingPallet={isDraggingPallet}

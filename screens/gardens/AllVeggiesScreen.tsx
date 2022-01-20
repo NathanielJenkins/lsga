@@ -54,14 +54,29 @@ export function AllVeggiesScreen({
     const newFilteredPacks = !packSearchString
       ? packsCopy
       : packsCopy.filter(p => {
-          const searchTerms = p.displayName.split(" ");
+          const searchTerms = p?.displayName.split(" ");
           for (let term of searchTerms)
-            if (term.startsWith(packSearchString)) return true;
+            if (
+              term
+                .toLocaleLowerCase()
+                .startsWith(packSearchString.toLocaleLowerCase())
+            )
+              return true;
 
           // search by veggie included in pack
-          const veggies = [...p.spring, ...p.summer, ...p.autumnWinter];
+          const veggies = [
+            ...(p?.spring || []),
+            ...(p?.summer || []),
+            ...(p?.autumnWinter || [])
+          ];
+
           for (let term of veggies)
-            if (term.startsWith(packSearchString)) return true;
+            if (
+              term
+                .toLocaleLowerCase()
+                .startsWith(packSearchString.toLocaleLowerCase())
+            )
+              return true;
 
           return false;
         });

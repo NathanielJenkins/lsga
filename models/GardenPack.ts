@@ -13,6 +13,13 @@ export interface GardenPack {
   spring: Array<string>;
   summer: Array<string>;
   autumnWinter: Array<string>;
+  grid: {
+    [id: string]: {
+      spring: Array<string>;
+      summer: Array<string>;
+      autumnWinter: Array<string>;
+    };
+  };
 }
 
 export default GardenPack;

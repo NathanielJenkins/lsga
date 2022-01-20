@@ -38,7 +38,8 @@ import {
   LoginScreen,
   ResetPasswordScreen,
   CreateAccountScreen,
-  AddGalleryPhotoScreen
+  AddGalleryPhotoScreen,
+  PackScreen
 } from "../screens";
 import Admin from "../screens/admin/Admin";
 import Veggie from "../screens/gardens/VeggieScreen";
@@ -110,6 +111,11 @@ function RootNavigator() {
       <Stack.Screen
         name="Veggie"
         component={Veggie}
+        options={{ headerShown: false, animation: "fade" }}
+      />
+      <Stack.Screen
+        name="Pack"
+        component={PackScreen}
         options={{ headerShown: false, animation: "fade" }}
       />
       <Stack.Screen
