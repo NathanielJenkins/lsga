@@ -21,6 +21,7 @@ import { GeneralSlot } from "../slots/GeneralSlot";
 import { IconText } from "../../components/common/Button";
 import Ripple from "react-native-material-ripple";
 import { Info } from "../../components/common/Display";
+import FastImage from 'react-native-fast-image'
 
 export default function VeggieScreen({
   navigation,

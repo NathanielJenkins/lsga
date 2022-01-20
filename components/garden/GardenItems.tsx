@@ -61,6 +61,7 @@ import { GeneralSlot } from "../../screens";
 import DropDownPicker, { ValueType } from "react-native-dropdown-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { GardenPack } from "../../models";
+import Hr from "../common/Hr";
 export function NoGardensPrompt() {
   const navigation = useNavigation();
   return (
@@ -440,6 +441,46 @@ export function VeggieSearchItem(props: VeggieSearchItemProps) {
       <SofiaBoldText style={tw.style("text-2xl text-gray-500 text-center")}>
         {props.veggie?.displayName}
       </SofiaBoldText>
+    </Ripple>
+  );
+}
+
+interface PackSearchItemProps {
+  gardenPack: GardenPack;
+  style?: StyleProp<any>;
+}
+export function PackSearchItem(props: PackSearchItemProps) {
+  const navigation = useNavigation();
+  const { veggies } = useSelector((state: RootState) => state.veggies);
+
+  const allVeggies = [
+    ...(props.gardenPack?.spring || []),
+    ...(props.gardenPack?.autumnWinter || []),
+    ...(props.gardenPack?.summer || [])
+  ];
+
+  return (
+    <Ripple
+      style={tw.style(
+        "flex items-center justify-center shadow-brand p-4",
+        props.style
+      )}>
+      <Image
+        source={{ uri: props.gardenPack?.downloadUrl }}
+        style={tw.style(` h-64 w-full rounded`)}
+      />
+      <SofiaBoldText
+        style={tw.style("mt-4 text-2xl text-gray-500 text-center")}>
+        {props.gardenPack?.displayName}
+      </SofiaBoldText>
+
+      <Hr />
+
+      <SofiaRegularText style={tw.style("text-center text-gray-500")}>
+        {allVeggies.map(
+          vn => (veggies[vn] && veggies[vn].displayName + ", ") || vn + ", "
+        )}
+      </SofiaRegularText>
     </Ripple>
   );
 }

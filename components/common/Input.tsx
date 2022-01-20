@@ -13,7 +13,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { tw, brandColor } from "../Themed";
 
 interface InputProps {
-  handleOnChangeText: React.Dispatch<React.SetStateAction<string>>;
+  handleOnChangeText: (text: string) => void;
   value?: string;
   placeholder: string;
   secureTextEntry?: boolean;

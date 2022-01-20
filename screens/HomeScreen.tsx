@@ -24,7 +24,7 @@ import {
 } from "../components/StyledText";
 import { MainPageSlot } from "./slots/MainPageSlot";
 import { storage } from "../firebase/firebaseTooling";
-import { updateUserProperties, updateVeggies } from "../store";
+import { updateUserProperties, updateVeggies, updatePacks } from "../store";
 import {
   GardenGrid,
   GardenSelector,
@@ -55,8 +55,10 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
+    console.log("update");
     dispatch(updateGardens());
     dispatch(updateVeggies());
+    dispatch(updatePacks());
     dispatch(updateUserProperties());
   }, []);
 
