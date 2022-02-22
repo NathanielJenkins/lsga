@@ -1,20 +1,24 @@
 /** @format */
 
+import Garden from "../../models/Garden";
 import UserGarden from "../../models/UserGardens";
 import {
   UPDATE_GARDENS,
   UPDATE_ACTIVE_GARDEN,
   NEW_GARDEN,
   DELETE_GARDEN,
-  GardenActionTypes
+  GardenActionTypes,
+  UPDATE_GARDEN_TYPES
 } from "../types";
 interface GardenState {
   gardens: UserGarden[];
+  gardenTypes: Garden[];
   activeGarden: UserGarden;
 }
 
 const initialState: GardenState = {
   gardens: [],
+  gardenTypes: [],
   activeGarden: undefined
 };
 
@@ -23,6 +27,12 @@ export function gardenReducer(
   action: GardenActionTypes
 ): GardenState {
   switch (action.type) {
+    case UPDATE_GARDEN_TYPES: {
+      return {
+        ...state,
+        gardenTypes: [...action.payload]
+      };
+    }
     case UPDATE_GARDENS: {
       return {
         ...state,

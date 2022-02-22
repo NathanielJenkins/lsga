@@ -24,7 +24,12 @@ import {
 } from "../components/StyledText";
 import { MainPageSlot } from "./slots/MainPageSlot";
 import { storage } from "../firebase/firebaseTooling";
-import { updateUserProperties, updateVeggies } from "../store";
+import {
+  updateUserProperties,
+  updateVeggies,
+  updatePacks,
+  updateGardenTypes
+} from "../store";
 import {
   GardenGrid,
   GardenSelector,
@@ -57,7 +62,9 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   React.useEffect(() => {
     dispatch(updateGardens());
     dispatch(updateVeggies());
+    dispatch(updatePacks());
     dispatch(updateUserProperties());
+    dispatch(updateGardenTypes());
   }, []);
 
   React.useEffect(() => {
@@ -78,7 +85,7 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
             <GardenGrid
               draggable={false}
               veggieGrid={veggieGrid}
-              activeGarden={activeGarden}
+              garden={activeGarden?.garden}
             />
           </View>
         </View>

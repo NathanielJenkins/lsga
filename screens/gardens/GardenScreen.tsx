@@ -10,7 +10,10 @@ import {
   GardenSelector,
   GardenGrid,
   NoGardensPrompt,
-  DropSection
+  DropSection,
+  GardenPackDropSection,
+  GardenPackSearchItem,
+  PackSearchItem
 } from "../../components/garden/GardenItems";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -29,6 +32,7 @@ import {
 } from "../../store/actions/garden.actions";
 import { updatePlantingDates } from "../../models/UserGardens";
 import { Spinner } from "../../components/common";
+import DropDownPicker, { ValueType } from "react-native-dropdown-picker";
 export default function GardenScreen({
   navigation,
   route
@@ -38,6 +42,7 @@ export default function GardenScreen({
   const { loading } = useSelector((state: RootState) => state.common);
   const dispatch = useDispatch();
   const { veggies } = useSelector((state: RootState) => state.veggies);
+  const { packs } = useSelector((state: RootState) => state.packs);
 
   const veggieGrid =
     activeGarden?.grid?.map(veggieName => veggies[veggieName]) || [];
@@ -49,6 +54,15 @@ export default function GardenScreen({
   const [isDraggingPallet, setIsDraggingPallet] = React.useState(false);
   const [isDraggingGrid, setIsDraggingGrid] = React.useState(false);
   const [veggieDragging, setVeggieDragging] = React.useState<Veggie>();
+  const [veggieOrPack, setVeggieOrPack] = React.useState(
+    "veggies" as ValueType
+  );
+  const [dropdownItems, setDropdownItems] = React.useState([
+    { label: "Veggies", value: "veggies" as ValueType },
+    { label: "Garden Packs", value: "packs" as ValueType }
+  ]);
+  const [open, setOpen] = React.useState(false);
+
   React.useEffect(() => {
     let stateGridCopy = [...stateGrid];
     if (!veggieDragging) {
@@ -126,6 +140,17 @@ export default function GardenScreen({
           />
         </View>
       </View>
+      <View style={tw.style("m-2")}>
+        <DropDownPicker
+          value={veggieOrPack}
+          setValue={setVeggieOrPack}
+          items={dropdownItems}
+          setItems={setDropdownItems}
+          open={open}
+          setOpen={setOpen}
+          listMode="MODAL"
+        />
+      </View>
 
       <DraxProvider>
         <View style={tw.style("flex px-4")}>
@@ -137,8 +162,9 @@ export default function GardenScreen({
             stateGrid={stateGrid}
             onDragStart={() => setIsDraggingGrid(true)}
             onDragEnd={() => setIsDraggingGrid(false)}
-            activeGarden={activeGarden}
+            garden={activeGarden?.garden}
           />
+
           <DropSection
             isDraggingPallet={isDraggingPallet}
             isDraggingGrid={isDraggingGrid}
@@ -156,35 +182,60 @@ export default function GardenScreen({
           style={tw.style(
             "flex-1 pt-2 mt-1 border border-gray-200 bg-gray-50"
           )}>
-          <DraxScrollView horizontal={true} style={tw.style("h-full ")}>
-            {Object.values(veggies).length !== 0 && (
-              <FlatList
-                data={Object.values(veggies)}
-                style={tw.style("flex mb-auto")}
-                numColumns={Math.floor(Object.values(veggies).length / 2) + 1}
-                keyExtractor={d => `--${d.name}`}
-                renderItem={({ item, index }) => (
-                  <VeggieItem
-                    index={index}
-                    key={item.name}
-                    draggable={true}
-                    veggie={item}
-                    onDragStart={() => {
-                      setIsDraggingPallet(true);
-                      setVeggieDragging(item);
-                    }}
-                    onDragEnd={() => {
-                      setIsDraggingPallet(false);
-                      setVeggieDragging(undefined);
-                    }}
-                    style={tw.style("m-1")}
+          {veggieOrPack == "veggies" ? (
+            <DraxScrollView horizontal={true} style={tw.style("h-full ")}>
+              {Object.values(veggies).length !== 0 && (
+                <>
+                  <FlatList
+                    data={Object.values(veggies)}
+                    style={tw.style("flex mb-auto")}
+                    horizontal={true}
+                    // numColumns={Math.floor(Object.values(veggies).length / 2) + 1}
+                    keyExtractor={d => `--${d.name}`}
+                    renderItem={({ item, index }) => (
+                      <VeggieItem
+                        index={index}
+                        key={item.name}
+                        draggable={true}
+                        veggie={item}
+                        onDragStart={() => {
+                          setIsDraggingPallet(true);
+                          setVeggieDragging(item);
+                        }}
+                        onDragEnd={() => {
+                          setIsDraggingPallet(false);
+                          setVeggieDragging(undefined);
+                        }}
+                        size={100}
+                        style={tw.style("m-1")}
+                      />
+                    )}
                   />
-                )}
-              />
-            )}
-          </DraxScrollView>
+                </>
+              )}
+            </DraxScrollView>
+          ) : (
+            <DraxScrollView>
+              {Object.values(packs).length !== 0 && (
+                <FlatList
+                  data={Object.values(packs)}
+                  style={tw.style("flex mb-auto")}
+                  keyExtractor={d => `--${d.name}`}
+                  horizontal={true}
+                  renderItem={({ item, index }) => (
+                    <PackSearchItem
+                      key={index}
+                      gardenPack={item}
+                      style={tw.style("my-1 mx-2")}
+                    />
+                  )}
+                />
+              )}
+            </DraxScrollView>
+          )}
         </SafeAreaView>
       </DraxProvider>
+
       <View style={tw.style("p-1")}>
         <SofiaRegularText style={tw.style("text-lg text-center")}>
           Drag and Drop Veggies

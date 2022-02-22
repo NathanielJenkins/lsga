@@ -2,56 +2,98 @@
   {
     "name": "tomato_sauce_garden",
     "displayName": "The Tomato Sauce Garden",
-    "description": "",
+    "description": "For the summer tomato lovers! This garden map & plan will provide you with an early season start to growing spring greens and peas, followed by an abundance of ripe red summer tomatoes. Tomatoes & basil are companions both in your garden, and on your plate, making them the perfect duo.",
     "spring": ["arugula", "peas", "spinach"],
     "summer": ["tomatoes", "basil"],
-    "spring": ["arugula", "peas", "spinach"],
-    "url": "garden_packs/tomato_sauce_garden"
+    "autumnWinter": ["arugula", "peas", "spinach"],
+    "url": "garden_packs/tomato_sauce_garden.png",
+    "grid": {
+      "low_rider": {
+        "spring": ["arugula", "peas", "spinach"],
+        "summer": ["tomatoes", "basil", "tomatoes"],
+        "autumnWinter": ["arugula", "peas", "spinach"]
+      }
+    }
   },
   {
     "name": "cool_cucumbers",
     "displayName": "Cool Cucumbers",
-    "description": "",
+    "description": "Greens, greens, and more greens. Eat them raw, cooked, blended, or juiced. This versatile collection of vegetables will allow you to get creative in the kitchen. From spring peas, to summer cucumbers & basil",
     "spring": ["arugula", "peas", "spinach"],
     "summer": ["cucumber", "basil", "salad_greens"],
-    "spring": ["arugula", "peas", "spinach"],
-    "url": "garden_packs/cool_cucumbers"
+    "autumnWinter": ["arugula", "peas", "spinach"],
+    "url": "garden_packs/cool_cucumbers.png",
+    "grid": {
+      "low_rider": {
+        "spring": ["arugula", "peas", "spinach"],
+        "summer": ["basil", "cucumber", "salad_greens"],
+        "autumnWinter": ["arugula", "peas", "spinach"]
+      }
+    }
   },
   {
     "name": "peas_and_peppers",
     "displayName": "Peas & Peppers",
-    "description": "",
+    "description": "Experience spring peas to the sweet taste of summer cilantro & peppers. Peppers are especially prolific, providing a long harvest window that extends well into the Fall. Peppers are packed with Vitamin C, and can be eaten raw, thrown on the grill, or stuffed. Toss together a summer fresh dish of roasted peppers and cilantro with lime.",
     "spring": ["arugula", "peas", "spinach"],
     "summer": ["peppers", "basil", "salad_greens"],
-    "spring": ["arugula", "peas"],
-    "url": "garden_packs/peas_and_peppers"
+    "autumnWinter": ["arugula", "peas"],
+    "url": "garden_packs/peas_and_peppers.png",
+    "grid": {
+      "low_rider": {
+        "spring": ["arugula", "peas", "spinach"],
+        "summer": ["peppers", "cilantro", "peppers"],
+        "autumnWinter": ["peppers", "peas", "peppers"]
+      }
+    }
   },
   {
     "name": "simply_salads",
     "displayName": "Simply Salads",
-    "description": "",
+    "description": "It’s that simple- this garden will provide big bright salads all year round. Backyard to table has never been easier. Get creative with various combinations of green; eaten fresh, sauteed, or blended into a smoothie. ",
     "spring": ["arugula", "peas", "chard"],
     "summer": ["peppers", "lettuce", "kale", "chard"],
-    "spring": ["spinach", "kale", "chard"],
-    "url": "garden_packs/simply_salads"
+    "autumnWinter": ["spinach", "kale", "chard"],
+    "url": "garden_packs/simply_salads.png",
+    "grid": {
+      "low_rider": {
+        "spring": ["arugula", "spinach", "chard"],
+        "summer": ["romaine", "kale", "chard"],
+        "autumnWinter": ["spinach", "kale", "chard"]
+      }
+    }
   },
   {
     "name": "roots_and_shoots",
     "displayName": "Roots & Shoots",
-    "description": "",
+    "description": "There is nothing more satisfying than pulling root vegetables out of the ground. These seasonal combinations are great for stir-frys, roasts, and summer salads. Did you know that the leafy greens on beets and carrots are also edible? Try making beet rolls, or blending together a carrot top pesto to make the most out of your harvests.",
     "spring": ["radish", "peas", "carrots"],
     "summer": ["beets", "bush_beans", "carrots"],
-    "spring": ["radishes", "peas", "carrots"],
-    "url": "garden_packs/roots_and_shoots"
+    "autumnWinter": ["radishes", "peas", "carrots"],
+    "url": "garden_packs/roots_and_shoots.png",
+    "grid": {
+      "low_rider": {
+        "spring": ["radish", "peas", "carrots"],
+        "summer": ["beets", "bush_beans", "carrots"],
+        "autumnWinter": ["radishes", "peas", "carrots"]
+      }
+    }
   },
 
   {
     "name": "herb_garden",
     "displayName": "The Herb Garden",
-    "description": "",
+    "description": "Designed for the adventurous home chef to brighten up your dishes all year round. Harvest what you need, when you need it. This herb garden is also the perfect addition to your existing growing space, and can easily be placed by your kitchen door or BBQ! Imagine garnishing your salads or blending up a fresh herb chimichurri right from your garden.",
     "spring": ["green_onion", "cilantro", "parsley"],
     "summer": ["basil", "dill", "parsley"],
-    "spring": ["green_onion", "peas", "carrots"],
-    "url": "garden_packs/herb_garden"
+    "autumnWinter": ["green_onion", "peas", "carrots"],
+    "url": "garden_packs/herb_garden.png",
+    "grid": {
+      "low_rider": {
+        "spring": ["green_onion", "cilantro", "parsley"],
+        "summer": ["basil", "dill", "parsley"],
+        "autumnWinter": ["green_onion", "cilantro", "parsley"]
+      }
+    }
   }
 ]

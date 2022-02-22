@@ -1,9 +1,16 @@
 /** @format */
 
+import Garden from "../../models/Garden";
 import UserGarden from "../../models/UserGardens";
 
-export const UPDATE_GARDENS = "UPDATE_GARDENS";
+export const UPDATE_GARDEN_TYPES = "UPDATE_GARDEN_TYPES";
 
+interface UpdateGardenTypesAction {
+  type: typeof UPDATE_GARDEN_TYPES;
+  payload: Garden[];
+}
+
+export const UPDATE_GARDENS = "UPDATE_GARDENS";
 interface UpdateGardenAction {
   type: typeof UPDATE_GARDENS;
   payload: UserGarden[];
@@ -30,4 +37,5 @@ export type GardenActionTypes =
   | UpdateGardenAction
   | NewGardenAction
   | UpdateActiveGardenAction
-  | DeleteGardenAction;
+  | DeleteGardenAction
+  | UpdateGardenTypesAction;

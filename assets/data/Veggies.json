@@ -339,7 +339,7 @@
   },
   {
     "name": "radishes",
-    "displayName": "Radishes",
+    "displayName": "Radishes: French Breakfast",
     "url": "veggies/radishes.png",
     "seasons": ["Spring", "Summer", "Autumn"],
     "directSeed": [

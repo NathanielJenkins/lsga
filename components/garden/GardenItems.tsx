@@ -61,6 +61,8 @@ import { GeneralSlot } from "../../screens";
 import DropDownPicker, { ValueType } from "react-native-dropdown-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { GardenPack } from "../../models";
+import Hr from "../common/Hr";
+import Garden from "../../models/Garden";
 export function NoGardensPrompt() {
   const navigation = useNavigation();
   return (
@@ -159,13 +161,13 @@ interface GardenGridProps {
   onDragEnd?: (data: DraxDragEndEventData) => DraxProtocolDragEndResponse;
   stateGrid?: Array<VeggieState>;
   draggable?: boolean;
-  activeGarden: UserGarden;
+  garden: Garden;
 }
 export function GardenGrid(props: GardenGridProps) {
-  const { activeGarden } = props;
+  const { garden } = props;
   const { veggies } = useSelector((state: RootState) => state.veggies);
-  const height = activeGarden?.garden.height || 0;
-  const width = activeGarden?.garden.width || 0;
+  const height = garden.height || 0;
+  const width = garden.width || 0;
   const draggable = props.draggable !== undefined ? props.draggable : false;
   const widthGrid: Array<JSX.Element> = [];
   for (let i = 0; i < width * height; i++) {
@@ -363,9 +365,10 @@ interface DropSectionProps {
 export function DropSection(props: DropSectionProps) {
   const { isDraggingGrid, isDraggingPallet } = props;
   const [isDraggingOver, setIsDraggingOver] = useState(false);
+
   const navigation = useNavigation();
   return (
-    <View style={tw.style("mt-2 flex  flex justify-center ")}>
+    <View style={tw.style("mt-2 flex  flex justify-center  h-10")}>
       {isDraggingGrid ? (
         <DraxView
           onReceiveDragDrop={({
@@ -411,12 +414,20 @@ export function DropSection(props: DropSectionProps) {
           </SofiaBoldText>
         </DraxView>
       ) : (
-        <View style={tw.style("border border-transparent py-2")}>
-          <SofiaRegularText>Select Veggies</SofiaRegularText>
-        </View>
+        <View style={tw.style("border border-transparent py-2")}></View>
       )}
     </View>
   );
+}
+
+interface PackDropSectionProps {
+  isDraggingPallet: boolean;
+  isDraggingGrid: boolean;
+  onVeggieInfoSelection: (veggie: Veggie) => void;
+  onVeggieDeleteSelection: (index: number) => void;
+}
+export function GardenPackDropSection(props: PackDropSectionProps) {
+  return <View style={tw.style("border border-transparent py-2")}></View>;
 }
 
 interface VeggieSearchItemProps {
@@ -440,6 +451,47 @@ export function VeggieSearchItem(props: VeggieSearchItemProps) {
       <SofiaBoldText style={tw.style("text-2xl text-gray-500 text-center")}>
         {props.veggie?.displayName}
       </SofiaBoldText>
+    </Ripple>
+  );
+}
+
+interface PackSearchItemProps {
+  gardenPack: GardenPack;
+  style?: StyleProp<any>;
+}
+export function PackSearchItem(props: PackSearchItemProps) {
+  const navigation = useNavigation();
+  const { veggies } = useSelector((state: RootState) => state.veggies);
+
+  const allVeggies = [
+    ...(props.gardenPack?.spring || []),
+    ...(props.gardenPack?.autumnWinter || []),
+    ...(props.gardenPack?.summer || [])
+  ];
+
+  return (
+    <Ripple
+      onPress={() => navigation.navigate("Pack", { pack: props.gardenPack })}
+      style={tw.style(
+        "flex items-center justify-center shadow-brand p-4",
+        props.style
+      )}>
+      <Image
+        source={{ uri: props.gardenPack?.downloadUrl }}
+        style={tw.style(` h-64 w-full rounded`)}
+      />
+      <SofiaBoldText
+        style={tw.style("mt-4 text-2xl text-gray-500 text-center")}>
+        {props.gardenPack?.displayName}
+      </SofiaBoldText>
+
+      <Hr />
+
+      <SofiaRegularText style={tw.style("text-center text-gray-500")}>
+        {allVeggies.map(
+          vn => (veggies[vn] && veggies[vn].displayName + ", ") || vn + ", "
+        )}
+      </SofiaRegularText>
     </Ripple>
   );
 }

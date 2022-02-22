@@ -13,6 +13,7 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Camera, CameraCapturedPicture } from "expo-camera";
 import { NativeSyntheticEvent, NativeTouchEvent } from "react-native";
+import { GardenPack } from "./models";
 import UserGarden from "./models/UserGardens";
 import Veggie from "./models/Veggie";
 
@@ -52,6 +53,9 @@ export type RootStackParamList = {
   };
   Veggie: {
     veggie: Veggie;
+  };
+  Pack: {
+    pack: GardenPack;
   };
   GardenInfoScreen: {};
   Admin: undefined;

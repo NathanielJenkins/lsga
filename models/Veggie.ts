@@ -30,9 +30,13 @@ export class Month {
 
 export default interface Veggie {
   name: string;
-  displayName: string;
   url: string;
   downloadUrl?: string;
+  color: string;
+  
+  
+  
+  displayName: string;
   seasons: Array<Season>;
   directSeed: Array<Month>;
   startIndoors: Array<Month>;
@@ -49,7 +53,8 @@ export default interface Veggie {
   howToHarvest: string;
   whatCropsToPlantAfter: Array<string>;
   stepsToSuccess: Array<Task>;
-  color: string;
+
+
 }
 
 const ref = firestore.collection(Documents.Veggies);

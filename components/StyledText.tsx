@@ -6,26 +6,24 @@ import { TextProps } from "./Themed";
 import { Text } from "react-native";
 
 export function MonoText(props: TextProps) {
-  return (
-    <Text {...props} style={[props.style, { fontFamily: "space-mono" }]} />
-  );
+  return <Text {...props} style={[props.style, { fontFamily: "spaceMono" }]} />;
 }
 
 export function SofiaRegularText(props: TextProps) {
   return (
-    <Text {...props} style={[props.style, { fontFamily: "sofia-regular" }]} />
+    <Text {...props} style={[props.style, { fontFamily: "SofiaRegular" }]} />
   );
 }
 
 export function SofiaSemiMediumText(props: TextProps) {
   return (
-    <Text {...props} style={[props.style, { fontFamily: "sofia-medium" }]} />
+    <Text {...props} style={[props.style, { fontFamily: "SofiaMedium" }]} />
   );
 }
 
 export function SofiaSemiBoldText(props: TextProps) {
   return (
-    <Text {...props} style={[props.style, { fontFamily: "sofia-semibold" }]} />
+    <Text {...props} style={[props.style, { fontFamily: "SofiaSemiBold" }]} />
   );
 }
 
