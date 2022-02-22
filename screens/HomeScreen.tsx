@@ -60,6 +60,7 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
+    console.log("update");
     dispatch(updateGardens());
     dispatch(updateVeggies());
     dispatch(updatePacks());
