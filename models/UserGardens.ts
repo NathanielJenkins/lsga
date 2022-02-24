@@ -196,3 +196,15 @@ export function getUniqueVeggieIdsFromGrid(userGarden: UserGarden) {
   const veggieIds = [...new Set(userGarden.grid)] || [];
   return veggieIds;
 }
+
+export function getGridFromGridType(
+  gridType: GridType,
+  userGarden: UserGarden
+) {
+  if (gridType === GridType.spring) return userGarden?.gridSpring || [];
+  if (gridType === GridType.summer) return userGarden?.gridSummer || [];
+  if (gridType === GridType.autumnWinter)
+    return userGarden?.gridAutumnWinter || [];
+
+  return [];
+}

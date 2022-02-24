@@ -35,14 +35,21 @@ import {
 import {
   GardenGrid,
   GardenSelector,
+  GridSwapper,
   NoGardensPrompt
 } from "../components/garden/GardenItems";
 import { ProgressChartIO, Timeline } from "../components/schedule/Charts";
 import { GalleryCard } from "../components/gallery";
 import { Spinner } from "../components/common";
+import { GridType } from "../models";
+import { getGridFromGridType } from "../models/UserGardens";
 PrimaryButton;
 export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   const [imageUrl, setImageUrl] = React.useState(undefined);
+  const [activeGridType, setActiveGridType] = React.useState<GridType>(
+    GridType.summer
+  );
+
   const { gardens, activeGarden } = useSelector(
     (state: RootState) => state.gardens
   );
@@ -70,8 +77,9 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   }, []);
 
   React.useEffect(() => {
-    setVeggieGrid(activeGarden?.gridSummer.map(g => veggies[g]) || []);
-  }, [activeGarden, veggies]);
+    const grid = getGridFromGridType(activeGridType, activeGarden);
+    setVeggieGrid(grid.map(g => veggies[g]) || []);
+  }, [activeGarden, veggies, activeGridType]);
 
   if (loading) return <Spinner />;
   return gardens?.length && activeGarden ? (
@@ -86,22 +94,17 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
           />
           <View
             style={tw.style(
-              " bg-transparent flex w-full flex-row items-center -top-8"
+              " bg-transparent flex w-full items-center -top-8 justify-center"
             )}>
             <GardenGrid
               draggable={false}
               veggieGrid={veggieGrid}
               garden={activeGarden?.garden}
             />
-            <GardenGrid
-              draggable={false}
-              veggieGrid={veggieGrid}
-              garden={activeGarden?.garden}
-            />
-            <GardenGrid
-              draggable={false}
-              veggieGrid={veggieGrid}
-              garden={activeGarden?.garden}
+            <GridSwapper
+              style={tw.style("mt-4")}
+              selectedGrid={activeGridType}
+              setActiveGridType={setActiveGridType}
             />
           </View>
         </View>

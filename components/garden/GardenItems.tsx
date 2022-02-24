@@ -65,6 +65,73 @@ import Hr from "../common/Hr";
 import Garden from "../../models/Garden";
 import Swiper from "react-native-swiper";
 import CachedImage from "react-native-expo-cached-image";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
+interface GridSwapperProps {
+  style?: StyleProp<any>;
+  selectedGrid: GridType;
+  setActiveGridType: React.Dispatch<React.SetStateAction<GridType>>;
+}
+
+export function GridSwapper(props: GridSwapperProps) {
+  interface IconSelectionProps {
+    icon: any;
+    isSelected?: boolean;
+    title: string;
+    setActiveGridType: React.Dispatch<React.SetStateAction<GridType>>;
+    selectedGrid: GridType;
+  }
+
+  const IconSelection = (props: IconSelectionProps) => {
+    return (
+      <TouchableOpacity
+        onPress={() => props.setActiveGridType(props.selectedGrid)}
+        style={tw.style(
+          "shadow-brand m-2 w-16 h-16 items-center justify-center flex ",
+          {
+            "border-brand border-2": props.isSelected
+          }
+        )}>
+        <FontAwesome
+          name={props.icon}
+          size={20}
+          style={tw.style({ "text-brand": props.isSelected })}
+        />
+        <SofiaRegularText
+          style={tw.style("mt-1", { "text-brand": props.isSelected })}>
+          {props.title}
+        </SofiaRegularText>
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <View style={tw.style(props.style, "flex  flex-row")}>
+      <IconSelection
+        icon="cloud"
+        title="Spring"
+        isSelected={props.selectedGrid === GridType.spring}
+        setActiveGridType={props.setActiveGridType}
+        selectedGrid={GridType.spring}
+      />
+      <IconSelection
+        icon="sun-o"
+        title="Summer"
+        isSelected={props.selectedGrid === GridType.summer}
+        setActiveGridType={props.setActiveGridType}
+        selectedGrid={GridType.summer}
+      />
+
+      <IconSelection
+        icon="snowflake-o"
+        title="Autumn"
+        isSelected={props.selectedGrid === GridType.autumnWinter}
+        setActiveGridType={props.setActiveGridType}
+        selectedGrid={GridType.autumnWinter}
+      />
+    </View>
+  );
+}
 
 export function NoGardensPrompt() {
   const navigation = useNavigation();
