@@ -42,7 +42,11 @@ import { ProgressChartIO, Timeline } from "../components/schedule/Charts";
 import { GalleryCard } from "../components/gallery";
 import { Spinner } from "../components/common";
 import { GridType } from "../models";
-import { getGridFromGridType } from "../models/UserGardens";
+import {
+  getGridFromGridType,
+  getPlantingDatesFromGridType,
+  PlantingDate
+} from "../models/UserGardens";
 PrimaryButton;
 export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   const [imageUrl, setImageUrl] = React.useState(undefined);
@@ -55,6 +59,9 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   );
   const { veggies } = useSelector((state: RootState) => state.veggies);
   const [veggieGrid, setVeggieGrid] = React.useState([]);
+  const [plantingDates, setPlantingDates] = React.useState<Array<PlantingDate>>(
+    []
+  );
   const { loading } = useSelector((state: RootState) => state.common);
   React.useEffect(() => {
     if (!activeGarden?.url) return;
@@ -78,7 +85,12 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
 
   React.useEffect(() => {
     const grid = getGridFromGridType(activeGridType, activeGarden);
+    const plantingDates = getPlantingDatesFromGridType(
+      activeGridType,
+      activeGarden
+    );
     setVeggieGrid(grid.map(g => veggies[g]) || []);
+    setPlantingDates(plantingDates);
   }, [activeGarden, veggies, activeGridType]);
 
   if (loading) return <Spinner />;
@@ -126,7 +138,10 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
         </View>
       </View>
       <View>
-        <Timeline />
+        <Timeline
+          gardenVeggies={[...new Set(veggieGrid)]}
+          plantingDates={plantingDates}
+        />
       </View>
       <View>
         <ProgressChartIO />

@@ -57,7 +57,7 @@ import { flatten, isEmpty, isNil } from "lodash";
 import { addDays } from "../../utils/Date";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Checkbox } from "../common/Input";
-import { updateUserGarden } from "../../models/UserGardens";
+import { PlantingDate, updateUserGarden } from "../../models/UserGardens";
 import Veggie from "../../models/Veggie";
 
 export const ProgressChartIO = () => {
@@ -245,21 +245,13 @@ export const ProgressChartIO = () => {
   );
 };
 //
-export function Timeline() {
-  const { activeGarden } = useSelector((state: RootState) => state.gardens);
-  const { veggies } = useSelector((state: RootState) => state.veggies);
-  const { springFrostDate, fallFrostDate } = useSelector(
-    (state: RootState) => state.user
-  );
-  const [gardenVeggies, setGardenVeggies] = React.useState<Veggie[]>([]);
+interface TimelineProps {
+  gardenVeggies: Array<Veggie>;
+  plantingDates: Array<PlantingDate>;
+}
 
-  React.useEffect(() => {
-    setGardenVeggies(
-      [...new Set(activeGarden.grid)]
-        .map(g => veggies[g])
-        .filter(g => !isNil(g))
-    );
-  }, [activeGarden, veggies, springFrostDate, fallFrostDate]);
+export function Timeline(props: TimelineProps) {
+  const { activeGarden } = useSelector((state: RootState) => state.gardens);
 
   const width = Dimensions.get("window").width - 80;
   const xStart = 50;
@@ -271,8 +263,8 @@ export function Timeline() {
       <SofiaSemiBoldText style={tw.style("text-lg text-gray-500 my-2")}>
         Planting Dates
       </SofiaSemiBoldText>
-      {gardenVeggies.map((g, index) => {
-        const plantingDates = activeGarden.plantingDates?.find(
+      {props.gardenVeggies.map((g, index) => {
+        const plantingDates = activeGarden.autumnWinterPlantingDates?.find(
           pd => pd.veggieName === g?.name
         );
         const first = plantingDates?.first;
@@ -301,7 +293,7 @@ export function Timeline() {
         if (!plantingDates) return <View></View>;
         return (
           <Svg key={g.name + index} height="70" width={width}>
-            <CachedImage
+            <Image
               x="5"
               y="5"
               width="35"

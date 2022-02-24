@@ -12,7 +12,15 @@ import { uniqueId, cloneDeep } from "lodash";
 import { CameraCapturedPicture } from "expo-camera";
 import uuid from "react-native-uuid";
 import { GridType } from ".";
+import { FrostDateParsed } from "./UserProperties";
 const ref = firestore.collection(Documents.UserGardens);
+
+export interface PlantingDate {
+  veggieName: string;
+  first: string;
+  last: string;
+  datePlanted?: Date | string;
+}
 
 export default interface UserGarden {
   [properties.userId]?: string;
@@ -23,12 +31,6 @@ export default interface UserGarden {
   [properties.description]?: string;
   [properties.garden]?: Garden;
   [properties.grid]?: Array<string>;
-  [properties.plantingDates]?: Array<{
-    veggieName: string;
-    first: string;
-    last: string;
-    datePlanted?: Date | string;
-  }>;
   [properties.veggieSteps]: {
     [veggieName: string]: Array<TaskDate>;
   };
@@ -38,6 +40,12 @@ export default interface UserGarden {
   [GridType.spring]: Array<string>;
   [GridType.summer]: Array<string>;
   [GridType.autumnWinter]: Array<string>;
+
+  [properties.plantingDates]?: Array<PlantingDate>;
+
+  [properties.springPlantingDates]?: Array<PlantingDate>;
+  [properties.summerPlantingDates]?: Array<PlantingDate>;
+  [properties.autumnWinterPlantingDates]?: Array<PlantingDate>;
 }
 
 class properties {
@@ -50,12 +58,17 @@ class properties {
   public static readonly description = "description";
   public static readonly grid = "grid";
   public static readonly veggieGrid = "veggieGrid";
-  public static readonly plantingDates: "plantingDates";
   public static readonly veggieSteps: "veggieSteps";
   public static readonly datePlanted: "datePlanted";
   public static readonly gallery: "gallery";
   public static readonly isPack: "isPack";
   public static readonly pack: "pack";
+
+  public static readonly summerPlantingDates: "summerPlantingDates";
+  public static readonly springPlantingDates: "springPlantingDates";
+  public static readonly autumnWinterPlantingDates: "autumnWinterPlantingDates";
+
+  public static readonly plantingDates: "plantingDates";
 }
 
 export const setGardenProfile = async (userGarden: UserGarden) => {
@@ -175,12 +188,26 @@ export function updatePlantingDates(userGarden: UserGarden) {
   const state = store.getState();
   const { veggies } = state.veggies;
   const { springFrostDate, fallFrostDate } = state.user;
-  const plantingDates: Array<{
-    veggieName: string;
-    first: string;
-    last: string;
-  }> = new Array();
   const veggieNames = [...new Set(userGarden.grid)];
+
+  const summerVeggiesNames = [...new Set(userGarden.gridSummer)];
+  const springVeggiesNames = [...new Set(userGarden.gridSpring)];
+  const autumnVeggiesNames = [...new Set(userGarden.gridAutumnWinter)];
+
+  userGarden.plantingDates =              addPlantingDate(veggieNames, veggies, springFrostDate, fallFrostDate); //prettier-ignore
+  userGarden.summerPlantingDates =        addPlantingDate(summerVeggiesNames, veggies, springFrostDate, fallFrostDate); //prettier-ignore
+  userGarden.autumnWinterPlantingDates =  addPlantingDate(autumnVeggiesNames, veggies, springFrostDate, fallFrostDate); //prettier-ignore
+  userGarden.springPlantingDates =        addPlantingDate(springVeggiesNames, veggies, springFrostDate, fallFrostDate); //prettier-ignore
+}
+
+function addPlantingDate(
+  veggieNames: string[],
+  veggies: { [name: string]: Veggie },
+  springFrostDate: FrostDateParsed,
+  fallFrostDate: FrostDateParsed
+) {
+  const plantingDates: Array<PlantingDate> = new Array();
+
   veggieNames.forEach((veggieName, index) => {
     const veggie = veggies[veggieName];
 
@@ -189,7 +216,7 @@ export function updatePlantingDates(userGarden: UserGarden) {
     );
   });
 
-  userGarden.plantingDates = plantingDates;
+  return plantingDates;
 }
 
 export function getUniqueVeggieIdsFromGrid(userGarden: UserGarden) {
@@ -205,6 +232,20 @@ export function getGridFromGridType(
   if (gridType === GridType.summer) return userGarden?.gridSummer || [];
   if (gridType === GridType.autumnWinter)
     return userGarden?.gridAutumnWinter || [];
+
+  return [];
+}
+
+export function getPlantingDatesFromGridType(
+  gridType: GridType,
+  userGarden: UserGarden
+) {
+  if (gridType === GridType.spring)
+    return userGarden?.springPlantingDates || [];
+  if (gridType === GridType.summer)
+    return userGarden?.summerPlantingDates || [];
+  if (gridType === GridType.autumnWinter)
+    return userGarden?.autumnWinterPlantingDates || [];
 
   return [];
 }
