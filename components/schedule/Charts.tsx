@@ -251,8 +251,6 @@ interface TimelineProps {
 }
 
 export function Timeline(props: TimelineProps) {
-  const { activeGarden } = useSelector((state: RootState) => state.gardens);
-
   const width = Dimensions.get("window").width - 80;
   const xStart = 50;
   const section = (width - xStart) / 12;
@@ -264,7 +262,7 @@ export function Timeline(props: TimelineProps) {
         Planting Dates
       </SofiaSemiBoldText>
       {props.gardenVeggies.map((g, index) => {
-        const plantingDates = activeGarden.autumnWinterPlantingDates?.find(
+        const plantingDates = props.plantingDates?.find(
           pd => pd.veggieName === g?.name
         );
         const first = plantingDates?.first;
