@@ -8,6 +8,7 @@ import {
   Image,
   KeyboardAvoidingView
 } from "react-native";
+import CachedImage from "react-native-expo-cached-image";
 
 import brand_logo from "../../assets/images/brand_logo.png";
 import { SofiaBoldText, SofiaSemiBoldText } from "../../components/StyledText";
@@ -23,7 +24,7 @@ export function EntrySlot(props: EntrySlotProps) {
     <KeyboardAwareScrollView extraHeight={20} style={tw.style("bg-white")}>
       <View style={tw`m-4 flex flex-col content-between flex-1 bg-white`}>
         <View style={tw`w-full flex justify-center items-center mt-4 mb-6 `}>
-          <Image source={brand_logo} style={tw``} />
+          <CachedImage source={brand_logo} style={tw``} />
         </View>
         <SofiaSemiBoldText style={tw`text-black text-3xl font-semibold `}>
           Garden Planner

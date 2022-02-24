@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Image, View, Text } from "react-native";
 import { RootStackScreenProps } from "../../types";
 import { tw, brandColor } from "../../components/Themed";
+import CachedImage from "react-native-expo-cached-image";
+
 import brand_sample from "../../assets/images/brand_sample.jpg";
 import {
   SecondaryButton,
@@ -42,7 +44,7 @@ export function SetupGarden({
   return (
     <View style={tw.style("flex flex-1 bg-white")}>
       <View style={tw`w-full flex justify-center items-center mt-6 mb-2 `}>
-        <Image source={brand_logo} style={tw``} />
+        <CachedImage source={brand_logo} style={tw``} />
       </View>
 
       <Swiper activeDotColor={brandColor} loop={false} ref={swiper}>

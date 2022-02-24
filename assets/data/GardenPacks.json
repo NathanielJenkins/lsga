@@ -9,9 +9,35 @@
     "url": "garden_packs/tomato_sauce_garden.png",
     "grid": {
       "low_rider": {
-        "spring": ["arugula", "peas", "spinach"],
-        "summer": ["tomatoes", "basil", "tomatoes"],
-        "autumnWinter": ["arugula", "peas", "spinach"]
+        "gridSpring": ["arugula", "peas", "spinach"],
+        "gridSummer": ["tomatoes", "basil", "tomatoes"],
+        "gridAutumnWinter": ["arugula", "peas", "spinach"]
+      },
+      "salad_bar": {
+        "gridSpring": [
+          "arugula",
+          "peas",
+          "spinach",
+          "arugula",
+          "peas",
+          "spinach"
+        ],
+        "gridSummer": [
+          "tomatoes",
+          "basil",
+          "tomatoes",
+          "tomatoes",
+          "basil",
+          "tomatoes"
+        ],
+        "gridAutumnWinter": [
+          "arugula",
+          "peas",
+          "spinach",
+          "arugula",
+          "peas",
+          "spinach"
+        ]
       }
     }
   },
@@ -25,9 +51,35 @@
     "url": "garden_packs/cool_cucumbers.png",
     "grid": {
       "low_rider": {
-        "spring": ["arugula", "peas", "spinach"],
-        "summer": ["basil", "cucumber", "salad_greens"],
-        "autumnWinter": ["arugula", "peas", "spinach"]
+        "gridSpring": ["arugula", "peas", "spinach"],
+        "gridSummer": ["basil", "cucumber", "salad_greens"],
+        "gridAutumnWinter": ["arugula", "peas", "spinach"]
+      },
+      "salad_bar": {
+        "gridSpring": [
+          "arugula",
+          "peas",
+          "spinach",
+          "arugula",
+          "peas",
+          "spinach"
+        ],
+        "gridSummer": [
+          "basil",
+          "cucumber",
+          "salad_greens",
+          "basil",
+          "cucumber",
+          "salad_greens"
+        ],
+        "gridAutumnWinter": [
+          "arugula",
+          "peas",
+          "spinach",
+          "arugula",
+          "peas",
+          "spinach"
+        ]
       }
     }
   },
@@ -41,9 +93,35 @@
     "url": "garden_packs/peas_and_peppers.png",
     "grid": {
       "low_rider": {
-        "spring": ["arugula", "peas", "spinach"],
-        "summer": ["peppers", "cilantro", "peppers"],
-        "autumnWinter": ["peppers", "peas", "peppers"]
+        "gridSpring": ["arugula", "peas", "spinach"],
+        "gridSummer": ["peppers", "cilantro", "peppers"],
+        "gridAutumnWinter": ["peppers", "peas", "peppers"]
+      },
+      "salad_bar": {
+        "gridSpring": [
+          "arugula",
+          "peas",
+          "spinach",
+          "arugula",
+          "peas",
+          "spinach"
+        ],
+        "gridSummer": [
+          "peppers",
+          "cilantro",
+          "peppers",
+          "peppers",
+          "cilantro",
+          "peppers"
+        ],
+        "gridAutumnWinter": [
+          "peppers",
+          "peas",
+          "peppers",
+          "peppers",
+          "peas",
+          "peppers"
+        ]
       }
     }
   },
@@ -57,9 +135,28 @@
     "url": "garden_packs/simply_salads.png",
     "grid": {
       "low_rider": {
-        "spring": ["arugula", "spinach", "chard"],
-        "summer": ["romaine", "kale", "chard"],
-        "autumnWinter": ["spinach", "kale", "chard"]
+        "gridSpring": ["arugula", "spinach", "chard"],
+        "gridSummer": ["romaine", "kale", "chard"],
+        "gridAutumnWinter": ["spinach", "kale", "chard"]
+      },
+      "salad_bar": {
+        "gridSpring": [
+          "arugula",
+          "spinach",
+          "chard",
+          "arugula",
+          "spinach",
+          "chard"
+        ],
+        "gridSummer": ["romaine", "kale", "chard", "romaine", "kale", "chard"],
+        "gridAutumnWinter": [
+          "spinach",
+          "kale",
+          "chard",
+          "spinach",
+          "kale",
+          "chard"
+        ]
       }
     }
   },
@@ -73,9 +170,35 @@
     "url": "garden_packs/roots_and_shoots.png",
     "grid": {
       "low_rider": {
-        "spring": ["radish", "peas", "carrots"],
-        "summer": ["beets", "bush_beans", "carrots"],
-        "autumnWinter": ["radishes", "peas", "carrots"]
+        "gridSpring": ["radish", "peas", "carrots"],
+        "gridSummer": ["beets", "bush_beans", "carrots"],
+        "gridAutumnWinter": ["radishes", "peas", "carrots"]
+      },
+      "salad_bar": {
+        "gridSpring": [
+          "radish",
+          "peas",
+          "carrots",
+          "radish",
+          "peas",
+          "carrots"
+        ],
+        "gridSummer": [
+          "beets",
+          "bush_beans",
+          "carrots",
+          "beets",
+          "bush_beans",
+          "carrots"
+        ],
+        "gridAutumnWinter": [
+          "radishes",
+          "peas",
+          "carrots",
+          "radishes",
+          "peas",
+          "carrots"
+        ]
       }
     }
   },
@@ -90,9 +213,28 @@
     "url": "garden_packs/herb_garden.png",
     "grid": {
       "low_rider": {
-        "spring": ["green_onion", "cilantro", "parsley"],
-        "summer": ["basil", "dill", "parsley"],
-        "autumnWinter": ["green_onion", "cilantro", "parsley"]
+        "gridSpring": ["green_onion", "cilantro", "parsley"],
+        "gridSummer": ["basil", "dill", "parsley"],
+        "gridAutumnWinter": ["green_onion", "cilantro", "parsley"]
+      },
+      "salad_bar": {
+        "gridSpring": [
+          "green_onion",
+          "cilantro",
+          "parsley",
+          "green_onion",
+          "cilantro",
+          "parsley"
+        ],
+        "gridSummer": ["basil", "dill", "parsley", "basil", "dill", "parsley"],
+        "gridAutumnWinter": [
+          "green_onion",
+          "cilantro",
+          "parsley",
+          "green_onion",
+          "cilantro",
+          "parsley"
+        ]
       }
     }
   }

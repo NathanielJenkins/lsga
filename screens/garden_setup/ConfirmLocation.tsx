@@ -22,7 +22,7 @@ export function ConfirmLocation({
       <View style={tw`flex justify-center items-center`}>
         <View
           style={tw`w-full h-64 flex justify-center items-center mt-4 mb-6 shadow-brand`}>
-          {/* <Image
+          {/* <CachedImage
             source={{
               uri: newGarden.url
             }}

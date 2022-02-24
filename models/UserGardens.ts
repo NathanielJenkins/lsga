@@ -11,6 +11,7 @@ import { Photo, profileId } from "./Photo";
 import { uniqueId, cloneDeep } from "lodash";
 import { CameraCapturedPicture } from "expo-camera";
 import uuid from "react-native-uuid";
+import { GridType } from ".";
 const ref = firestore.collection(Documents.UserGardens);
 
 export default interface UserGarden {
@@ -33,6 +34,10 @@ export default interface UserGarden {
   };
   [properties.gallery]: Array<Photo>;
   [properties.id]: string;
+
+  [GridType.spring]: Array<string>;
+  [GridType.summer]: Array<string>;
+  [GridType.autumnWinter]: Array<string>;
 }
 
 class properties {
@@ -44,10 +49,13 @@ class properties {
   public static readonly _name = "name";
   public static readonly description = "description";
   public static readonly grid = "grid";
+  public static readonly veggieGrid = "veggieGrid";
   public static readonly plantingDates: "plantingDates";
   public static readonly veggieSteps: "veggieSteps";
   public static readonly datePlanted: "datePlanted";
   public static readonly gallery: "gallery";
+  public static readonly isPack: "isPack";
+  public static readonly pack: "pack";
 }
 
 export const setGardenProfile = async (userGarden: UserGarden) => {
@@ -70,10 +78,14 @@ export const addUserGarden = async (userGarden: UserGarden) => {
   await setGardenProfile(userGarden);
 
   userGarden.veggieSteps = {};
-  // userGarden.gallery =
-  userGarden.grid = [
+  const emptyArray = [
     ...Array(userGarden.garden.height * userGarden.garden.width).keys()
   ].map(() => null);
+
+  userGarden.grid = [...emptyArray];
+  userGarden.gridSummer = [...emptyArray];
+  userGarden.gridAutumnWinter = [...emptyArray];
+  userGarden.gridSpring = [...emptyArray];
 
   const photo: Photo = {
     id: profileId,

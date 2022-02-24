@@ -12,6 +12,8 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { CircleIconButton } from "../../components/common";
+import CachedImage from "react-native-expo-cached-image";
+
 import {
   GardenGrid,
   TextPill,
@@ -102,7 +104,7 @@ export function PackScreen({
       </View>
       <ScrollView>
         <View style={tw.style("flex justify-center items-center ")}>
-          <Image
+          <CachedImage
             source={{ uri: pack.downloadUrl }}
             style={tw.style(`h-64 w-full max-w-2xl rounded`)}
           />
@@ -120,21 +122,25 @@ export function PackScreen({
           <View>
             <GardenInfo
               garden={gardenTypes.find(gt => gt.id === DEFAULT_TEMP)}
-              veggieGrid={pack.grid[DEFAULT_TEMP].spring.map(vn => veggies[vn])}
+              veggieGrid={pack.grid[DEFAULT_TEMP].gridSpring.map(
+                vn => veggies[vn]
+              )}
               title="Spring"
             />
           </View>
           <View>
             <GardenInfo
               garden={gardenTypes.find(gt => gt.id === DEFAULT_TEMP)}
-              veggieGrid={pack.grid[DEFAULT_TEMP].summer.map(vn => veggies[vn])}
+              veggieGrid={pack.grid[DEFAULT_TEMP].gridSummer.map(
+                vn => veggies[vn]
+              )}
               title="Summer"
             />
           </View>
           <View>
             <GardenInfo
               garden={gardenTypes.find(gt => gt.id === DEFAULT_TEMP)}
-              veggieGrid={pack.grid[DEFAULT_TEMP].autumnWinter.map(
+              veggieGrid={pack.grid[DEFAULT_TEMP].gridAutumnWinter.map(
                 vn => veggies[vn]
               )}
               title="Autumn"

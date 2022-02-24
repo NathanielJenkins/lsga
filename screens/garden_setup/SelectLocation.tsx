@@ -17,6 +17,7 @@ import { Camera, CameraCapturedPicture } from "expo-camera";
 import UserGarden from "../../models/UserGardens";
 import Swiper from "react-native-swiper";
 import { useNavigation } from "@react-navigation/native";
+import CachedImage from "react-native-expo-cached-image";
 
 interface SelectLocationProps {
   newGardenState: [
@@ -51,7 +52,7 @@ export function SelectLocation(SelectLocationProps: SelectLocationProps) {
         <View style={tw`flex justify-center items-center`}>
           <View
             style={tw`w-full h-64 flex justify-center items-center mt-4 mb-6 shadow-brand`}>
-            <Image
+            <CachedImage
               source={
                 hasImage
                   ? {

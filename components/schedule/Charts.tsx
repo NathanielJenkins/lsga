@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { Dimensions, StyleSheet } from "react-native";
+import CachedImage from "react-native-expo-cached-image";
+
 import moment from "moment";
 import {
   LineChart,
@@ -113,7 +115,6 @@ export const ProgressChartIO = () => {
     task: Task,
     veggieName: string
   ) => {
-    console.log("x");
     const ug = { ...activeGarden };
     let currentTasks = ug.veggieSteps[veggieName] || [];
     currentTasks = [...currentTasks];
@@ -300,7 +301,7 @@ export function Timeline() {
         if (!plantingDates) return <View></View>;
         return (
           <Svg key={g.name + index} height="70" width={width}>
-            <Image
+            <CachedImage
               x="5"
               y="5"
               width="35"

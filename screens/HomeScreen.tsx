@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { StyleSheet, Image, View, Text } from "react-native";
+import CachedImage from "react-native-expo-cached-image";
+
 import {
   IconText,
   PrimaryButton,
@@ -60,7 +62,6 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    console.log("update");
     dispatch(updateGardens());
     dispatch(updateVeggies());
     dispatch(updatePacks());
@@ -69,7 +70,7 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   }, []);
 
   React.useEffect(() => {
-    setVeggieGrid(activeGarden?.grid.map(g => veggies[g]) || []);
+    setVeggieGrid(activeGarden?.gridSummer.map(g => veggies[g]) || []);
   }, [activeGarden, veggies]);
 
   if (loading) return <Spinner />;
@@ -79,10 +80,24 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
       <View style={tw.style("shadow-brand rounded-md m-2 flex", { zIndex: 0 })}>
         <View
           style={tw`w-full flex overflow-visible justify-center items-center rounded-md relative `}>
-          <Image
+          <CachedImage
             style={tw.style("h-64 w-full rounded-md")}
-            source={{ uri: imageUrl }}></Image>
-          <View style={tw.style(" bg-transparent flex w-full -top-8")}>
+            source={{ uri: imageUrl }}
+          />
+          <View
+            style={tw.style(
+              " bg-transparent flex w-full flex-row items-center -top-8"
+            )}>
+            <GardenGrid
+              draggable={false}
+              veggieGrid={veggieGrid}
+              garden={activeGarden?.garden}
+            />
+            <GardenGrid
+              draggable={false}
+              veggieGrid={veggieGrid}
+              garden={activeGarden?.garden}
+            />
             <GardenGrid
               draggable={false}
               veggieGrid={veggieGrid}

@@ -16,6 +16,8 @@ import { SofiaBoldText } from "../../components/StyledText";
 import { tw } from "../../components/Themed";
 import { Photo } from "../../models/Photo";
 import { addGalleryPhoto } from "../../models/UserGardens";
+import CachedImage from "react-native-expo-cached-image";
+
 import {
   RootState,
   updateActiveGarden,
@@ -67,7 +69,7 @@ export function AddGalleryPhotoScreen({
         </SofiaBoldText>
 
         <View style={tw.style(" flex ")}>
-          <Image
+          <CachedImage
             source={{ uri: photo.uri }}
             style={tw.style(`rounded-lg h-96 w-full mb-2`)}
           />

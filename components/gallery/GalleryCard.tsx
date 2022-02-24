@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { IconText, SecondaryButton } from "../common/Button";
 import { SofiaBoldText, SofiaRegularText } from "../StyledText";
+import CachedImage from "react-native-expo-cached-image";
+
 import { tw } from "../Themed";
 export const GalleryCard = () => {
   const { activeGarden } = useSelector((state: RootState) => state.gardens);
@@ -27,7 +29,7 @@ export const GalleryCard = () => {
             horizontal={true}
             keyExtractor={d => `--${d.id}`}
             renderItem={({ item, index }) => (
-              <Image
+              <CachedImage
                 source={{ uri: item.uri }}
                 style={tw.style(`h-24 w-24 rounded-lg mr-2 mb-2`)}
               />

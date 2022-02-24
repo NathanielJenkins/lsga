@@ -8,6 +8,7 @@ import { CardSlot } from "../slots/CardSlot";
 import brand_sample from "../../assets/images/brand_sample.jpg";
 import { PrimaryButton } from "../../components/common/Button";
 import Swiper from "react-native-swiper";
+import CachedImage from "react-native-expo-cached-image";
 
 interface GardenInformationStartProps {
   newGardenState: [
@@ -33,7 +34,7 @@ export function GardenInformationStart(
         <View style={tw`flex justify-center items-center`}>
           <View
             style={tw`w-full h-64 flex justify-center items-center mt-4 mb-6 shadow-brand`}>
-            <Image
+            <CachedImage
               source={
                 hasImage
                   ? {

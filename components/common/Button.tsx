@@ -21,6 +21,8 @@ import Ripple from "react-native-material-ripple";
 import { Text, tw } from "../Themed";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { storage } from "../../firebase/firebaseTooling";
+import CachedImage from "react-native-expo-cached-image";
+
 interface ButtonProps {
   onPress: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
   title: string;
@@ -110,7 +112,10 @@ export function ImageButton(props: ImageProps) {
   return (
     <Ripple onPress={onPress} style={tw.style(`h-16 w-16 `)}>
       <View style={[styles.image]}>
-        <Image source={imageSource[props.image]} style={tw`h-full w-full `} />
+        <CachedImage
+          source={imageSource[props.image]}
+          style={tw`h-full w-full `}
+        />
       </View>
     </Ripple>
   );
@@ -201,7 +206,7 @@ export function ThumbnailCard(props: ThumbnailCardProps) {
       )}>
       <Ripple onPress={onPress} rippleContainerBorderRadius={10}>
         <View style={tw.style("flex flex-row items-center p-2")}>
-          <Image
+          <CachedImage
             source={{ uri: imageUrl }}
             style={tw`h-16 w-16 resize-contain mr-2`}
           />

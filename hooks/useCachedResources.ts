@@ -17,11 +17,11 @@ export default function useCachedResources() {
         // Load fonts
         await Font.loadAsync({
           ...FontAwesome.font,
-          SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-          SofiaRegular: require("../assets/fonts/Sofia-Pro-Regular.otf"),
-          SofiaSemiBold: require("../assets/fonts/Sofia-Pro-Semi-Bold.otf"),
-          SofiaBold: require("../assets/fonts/Sofia-Pro-Bold.otf"),
-          SofiaMedium: require("../assets/fonts/Sofia-Pro-Medium.otf")
+          "Space-Mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
+          "Sofia-Regular": require("../assets/fonts/Sofia-Pro-Regular.otf"),
+          "Sofia-SemiBold": require("../assets/fonts/Sofia-Pro-Semi-Bold.otf"),
+          "Sofia-Bold": require("../assets/fonts/Sofia-Pro-Bold.otf"),
+          "Sofia-Medium": require("../assets/fonts/Sofia-Pro-Medium.otf")
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service

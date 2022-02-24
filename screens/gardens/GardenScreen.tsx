@@ -4,7 +4,7 @@ import * as React from "react";
 import { StyleSheet, ScrollView, SafeAreaView, FlatList } from "react-native";
 import { DraxProvider, DraxView, DraxScrollView } from "react-native-drax";
 
-import { Text, tw, View } from "../../components/Themed";
+import { brandColor, Text, tw, View } from "../../components/Themed";
 import {
   VeggieItem,
   GardenSelector,
@@ -13,7 +13,8 @@ import {
   DropSection,
   GardenPackDropSection,
   GardenPackSearchItem,
-  PackSearchItem
+  PackSearchItem,
+  PackDragItem
 } from "../../components/garden/GardenItems";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -33,6 +34,9 @@ import {
 import { updatePlantingDates } from "../../models/UserGardens";
 import { Spinner } from "../../components/common";
 import DropDownPicker, { ValueType } from "react-native-dropdown-picker";
+import Hr from "../../components/common/Hr";
+import Swiper from "react-native-swiper";
+import { GardenPack, getGardenPackById, GridType } from "../../models";
 export default function GardenScreen({
   navigation,
   route
@@ -44,19 +48,32 @@ export default function GardenScreen({
   const { veggies } = useSelector((state: RootState) => state.veggies);
   const { packs } = useSelector((state: RootState) => state.packs);
 
-  const veggieGrid =
-    activeGarden?.grid?.map(veggieName => veggies[veggieName]) || [];
+  const veggieGrid = activeGarden?.grid?.map(veggieName => veggies[veggieName]) || []; //prettier-ignore
+  const gridOrder = [GridType.summer, GridType.spring, GridType.autumnWinter];
+
   const [workingGrid, setWorkingGrid] = React.useState(veggieGrid);
+
+  const getVeggieGrid = (arr: Array<string>) =>
+    arr?.map(veggieName => veggies[veggieName]) || [];
+
+  const [workingGridSummer, setWorkingGridSummer] = React.useState(getVeggieGrid(activeGarden?.gridSummer)); //prettier-ignore
+  const [workingGridSpring, setWorkingGridSpring] = React.useState(getVeggieGrid(activeGarden?.gridSpring)); //prettier-ignore
+  const [workingGridAutumn, setWorkingGridAutumn] = React.useState(getVeggieGrid(activeGarden?.gridAutumnWinter)); //prettier-ignore
+
+  const [currentWorkingGrid, setCurrentWorkingGrid] = React.useState<string>(
+    GridType.summer
+  );
+
   const [stateGrid, setStateGrid] = React.useState(
-    veggieGrid.map(() => VeggieState.None)
+    veggieGrid?.map(() => VeggieState.None)
   );
 
   const [isDraggingPallet, setIsDraggingPallet] = React.useState(false);
-  const [isDraggingGrid, setIsDraggingGrid] = React.useState(false);
   const [veggieDragging, setVeggieDragging] = React.useState<Veggie>();
-  const [veggieOrPack, setVeggieOrPack] = React.useState(
-    "veggies" as ValueType
-  );
+  const [isDraggingPack, setIsDraggingPack] = React.useState(false);
+  const [previewPack, setPreviewPack] = React.useState<Array<Veggie>>(null);
+  const [isDraggingGrid, setIsDraggingGrid] = React.useState(false);
+  const [veggieOrPack, setVeggieOrPack] = React.useState("packs" as ValueType);
   const [dropdownItems, setDropdownItems] = React.useState([
     { label: "Veggies", value: "veggies" as ValueType },
     { label: "Garden Packs", value: "packs" as ValueType }
@@ -107,6 +124,12 @@ export default function GardenScreen({
   const handleSaveGarden = () => {
     const userGarden = { ...activeGarden };
     userGarden.grid = workingGrid.map(w => w?.name || null);
+
+    // update the specific grids from the working grids
+    userGarden.gridSummer = workingGridSummer?.map(w => w?.name || null);
+    userGarden.gridAutumnWinter = workingGridAutumn?.map(w => w?.name || null);
+    userGarden.gridSpring = workingGridSpring?.map(w => w?.name || null);
+
     // update the gardenPlantingDates from the grid;
     updatePlantingDates(userGarden);
 
@@ -114,60 +137,111 @@ export default function GardenScreen({
     navigation.navigate("Root");
   };
 
+  const handleSetPack = (pack: GardenPack) => {
+    // get the garden park
+    const gardenPack = pack.grid[activeGarden?.garden?.id];
+    if (!gardenPack) return;
+
+    // from the packs update the working grids
+    setWorkingGridAutumn(getVeggieGrid(gardenPack.gridAutumnWinter));
+    setWorkingGridSpring(getVeggieGrid(gardenPack.gridSpring));
+    setWorkingGridSummer(getVeggieGrid(gardenPack.gridSummer));
+  };
+
+  const getGardenGrid = () => {
+    if (isDraggingPack) {
+      // get the preview from the pack
+      // const pack = getGardenPackById(packs, previewPack)
+
+      return (
+        <GardenGrid
+          draggable={true}
+          style={tw.style("mt-2")}
+          veggieGrid={previewPack}
+          stateGrid={stateGrid}
+          onDragStart={() => setIsDraggingGrid(true)}
+          onDragEnd={() => setIsDraggingGrid(false)}
+          garden={activeGarden?.garden}
+          handleSetPack={handleSetPack}
+        />
+      );
+    }
+    let veggieGrid = new Array<Veggie>();
+    let setVeggieGrid: React.Dispatch<React.SetStateAction<Veggie[]>>;
+
+    if (currentWorkingGrid === GridType.autumnWinter) {
+      veggieGrid = workingGridAutumn;
+      setVeggieGrid = setWorkingGridAutumn;
+    }
+
+    if (currentWorkingGrid === GridType.spring) {
+      veggieGrid = workingGridSpring;
+      setVeggieGrid = setWorkingGridSpring;
+    }
+
+    if (currentWorkingGrid === GridType.summer) {
+      veggieGrid = workingGridSummer;
+      setVeggieGrid = setWorkingGridSummer;
+    }
+
+    return (
+      <GardenGrid
+        draggable={true}
+        style={tw.style("mt-2")}
+        veggieGrid={veggieGrid}
+        setVeggieGrid={setVeggieGrid}
+        stateGrid={stateGrid}
+        onDragStart={() => setIsDraggingGrid(true)}
+        onDragEnd={() => setIsDraggingGrid(false)}
+        garden={activeGarden?.garden}
+        handleSetPack={handleSetPack}
+      />
+    );
+  };
+
   return (
     <View style={tw.style("bg-white  flex flex-1  pt-8")}>
-      <View style={tw.style("flex flex-row justify-between items-center px-2")}>
-        <SofiaBoldText style={tw.style("text-gray-500 text-2xl")}>
-          {activeGarden.name}
-        </SofiaBoldText>
+      <View style={tw.style("")}>
+        <View
+          style={tw.style("flex flex-row justify-between items-center px-2")}>
+          <SofiaBoldText style={tw.style("text-gray-500 text-2xl")}>
+            {activeGarden.name}
+          </SofiaBoldText>
 
-        <View style={tw.style("flex flex-row")}>
-          <IconText
-            size={25}
-            name="save"
-            text="Save"
-            color="grey"
-            style={tw`mr-2`}
-            onPress={handleSaveGarden}
-          />
-          <IconText
-            size={25}
-            name="times-circle"
-            text="Close"
-            color="grey"
-            style={tw`mr-2`}
-            onPress={() => navigation.pop()}
-          />
+          <View style={tw.style("flex flex-row")}>
+            <IconText
+              size={25}
+              name="save"
+              text="Save"
+              color="grey"
+              style={tw`mr-2`}
+              onPress={handleSaveGarden}
+            />
+            <IconText
+              size={25}
+              name="times-circle"
+              text="Close"
+              color="grey"
+              style={tw`mr-2`}
+              onPress={() => navigation.pop()}
+            />
+          </View>
         </View>
       </View>
-      <View style={tw.style("m-2")}>
-        <DropDownPicker
-          value={veggieOrPack}
-          setValue={setVeggieOrPack}
-          items={dropdownItems}
-          setItems={setDropdownItems}
-          open={open}
-          setOpen={setOpen}
-          listMode="MODAL"
-        />
-      </View>
-
       <DraxProvider>
-        <View style={tw.style("flex px-4")}>
-          <GardenGrid
-            draggable={true}
-            style={tw.style("mt-2")}
-            veggieGrid={workingGrid}
-            setVeggieGrid={setWorkingGrid}
-            stateGrid={stateGrid}
-            onDragStart={() => setIsDraggingGrid(true)}
-            onDragEnd={() => setIsDraggingGrid(false)}
-            garden={activeGarden?.garden}
-          />
+        <View
+          style={tw.style(
+            "flex px-4 w-full items-center h-3/5 items-center justify-center"
+          )}>
+          {getGardenGrid()}
 
           <DropSection
             isDraggingPallet={isDraggingPallet}
             isDraggingGrid={isDraggingGrid}
+            isDraggingPack={isDraggingPack}
+            currentWorkingGrid={currentWorkingGrid}
+            setCurrentWorkingGrid={setCurrentWorkingGrid}
+            gridOrder={gridOrder}
             onVeggieDeleteSelection={index => {
               const workingGridCopy = [...workingGrid];
               workingGridCopy[index] = null;
@@ -176,11 +250,12 @@ export default function GardenScreen({
             onVeggieInfoSelection={veggie =>
               navigation.push("Veggie", { veggie })
             }
+            onPackInfoSelection={pack => navigation.push("Pack", { pack })}
           />
         </View>
         <SafeAreaView
           style={tw.style(
-            "flex-1 pt-2 mt-1 border border-gray-200 bg-gray-50"
+            "flex-1 pt-2 mt-1 border border-gray-200 bg-gray-50 h-1/4"
           )}>
           {veggieOrPack == "veggies" ? (
             <DraxScrollView horizontal={true} style={tw.style("h-full ")}>
@@ -215,34 +290,57 @@ export default function GardenScreen({
               )}
             </DraxScrollView>
           ) : (
-            <DraxScrollView>
+            <DraxScrollView horizontal={true} style={tw.style("h-full ")}>
               {Object.values(packs).length !== 0 && (
-                <FlatList
-                  data={Object.values(packs)}
-                  style={tw.style("flex mb-auto")}
-                  keyExtractor={d => `--${d.name}`}
-                  horizontal={true}
-                  renderItem={({ item, index }) => (
-                    <PackSearchItem
-                      key={index}
-                      gardenPack={item}
-                      style={tw.style("my-1 mx-2")}
-                    />
-                  )}
-                />
+                <>
+                  <FlatList
+                    data={Object.values(packs)}
+                    style={tw.style("flex mb-auto")}
+                    keyExtractor={d => `--${d.name}`}
+                    horizontal={true}
+                    renderItem={({ item, index }) => (
+                      <PackDragItem
+                        key={index}
+                        gardenPack={item}
+                        style={tw.style("my-1 mx-2")}
+                        onDragStart={() => {
+                          setStateGrid(stateGrid.map(x => VeggieState.Pending));
+                          setPreviewPack(
+                            getVeggieGrid(
+                              getGardenPackById(
+                                packs,
+                                item.name,
+                                activeGarden?.garden?.id,
+                                currentWorkingGrid
+                              )
+                            )
+                          );
+                          setIsDraggingPack(true);
+                        }}
+                        onDragEnd={() => {
+                          setStateGrid(stateGrid.map(x => VeggieState.None));
+                          setIsDraggingPack(false);
+                          setPreviewPack(undefined);
+                        }}
+                      />
+                    )}
+                  />
+                </>
               )}
             </DraxScrollView>
           )}
         </SafeAreaView>
       </DraxProvider>
-
-      <View style={tw.style("p-1")}>
-        <SofiaRegularText style={tw.style("text-lg text-center")}>
-          Drag and Drop Veggies
-        </SofiaRegularText>
-        <SofiaRegularText style={tw.style(" text-center")}>
-          Make changes by dragging and dropping veggies into the grid.
-        </SofiaRegularText>
+      <View style={tw.style("m-2")}>
+        <DropDownPicker
+          value={veggieOrPack}
+          setValue={setVeggieOrPack}
+          items={dropdownItems}
+          setItems={setDropdownItems}
+          open={open}
+          setOpen={setOpen}
+          listMode="MODAL"
+        />
       </View>
     </View>
   );

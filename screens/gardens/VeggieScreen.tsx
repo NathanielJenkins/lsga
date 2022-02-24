@@ -9,6 +9,8 @@ import {
   StyleProp,
   FlatList
 } from "react-native";
+import CachedImage from "react-native-expo-cached-image";
+
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { CircleIconButton } from "../../components/common";
@@ -21,7 +23,7 @@ import { GeneralSlot } from "../slots/GeneralSlot";
 import { IconText } from "../../components/common/Button";
 import Ripple from "react-native-material-ripple";
 import { Info } from "../../components/common/Display";
-import FastImage from 'react-native-fast-image'
+import FastImage from "react-native-fast-image";
 
 export default function VeggieScreen({
   navigation,
@@ -65,7 +67,7 @@ export default function VeggieScreen({
       </View>
       <ScrollView>
         <View style={tw.style("flex justify-center items-center mt-4")}>
-          <Image
+          <CachedImage
             source={{ uri: veggie.downloadUrl }}
             style={tw.style(`resize-contain h-24 w-24`)}
           />

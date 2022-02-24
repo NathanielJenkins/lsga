@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import UserGarden, { setUpNewGarden } from "../../models/UserGardens";
+import UserGarden from "../../models/UserGardens";
 import { CardSlot } from "../slots/CardSlot";
 import { addNewGarden, RootState, setLoading } from "../../store";
 import { tw } from "../../components/Themed";

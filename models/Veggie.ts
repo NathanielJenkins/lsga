@@ -33,9 +33,7 @@ export default interface Veggie {
   url: string;
   downloadUrl?: string;
   color: string;
-  
-  
-  
+
   displayName: string;
   seasons: Array<Season>;
   directSeed: Array<Month>;
@@ -53,8 +51,6 @@ export default interface Veggie {
   howToHarvest: string;
   whatCropsToPlantAfter: Array<string>;
   stepsToSuccess: Array<Task>;
-
-
 }
 
 const ref = firestore.collection(Documents.Veggies);
@@ -117,5 +113,7 @@ export const getPlantingRangeFromUserFrostDates = (
 export class VeggieState {
   public static readonly Compatible = "Compatible";
   public static readonly Incompatible = "Incompatible";
+  public static readonly Pending = "Pending";
+
   public static readonly None = "None";
 }

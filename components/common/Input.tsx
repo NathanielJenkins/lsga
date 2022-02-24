@@ -33,7 +33,7 @@ export function Input(props: InputProps) {
         style={tw.style(
           `rounded border border-gray-500 p-3 text-gray-700`,
           {
-            fontFamily: "sofia-regular"
+            fontFamily: "Sofia-Regular"
           },
           style
         )}

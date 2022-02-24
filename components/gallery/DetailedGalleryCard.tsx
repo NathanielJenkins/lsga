@@ -10,7 +10,7 @@ import { setLoading, updateActiveUserGarden } from "../../store";
 import { IconText } from "../common/Button";
 import { SofiaBoldText, SofiaRegularText } from "../StyledText";
 import { tw } from "../Themed";
-
+import CachedImage from "react-native-expo-cached-image";
 export interface DetailedGalleryCardProps {
   photo: Photo;
   userGarden: UserGarden;
@@ -77,7 +77,7 @@ export function DetailedGalleryCard(props: DetailedGalleryCardProps) {
       </View>
 
       <View style={tw.style("rounded flex m-2")}>
-        <Image
+        <CachedImage
           key={props.photo.id}
           source={{ uri: photo.uri }}
           style={tw.style(`rounded-lg h-64 w-full w-52 `)}

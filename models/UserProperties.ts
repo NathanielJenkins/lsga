@@ -112,7 +112,6 @@ export const setFrostDateFromLngLat = async (lat: number, lon: number) => {
 
   if (springFrostResponse.status !== 200 || fallFrostResponse.status !== 200)
     return;
-  console.log(springFrostResponse.data, fallFrostResponse.data);
   const date1 = getDateFromString(springFrostResponse.data[1].prob_30);
   const date2 = getDateFromString(fallFrostResponse.data[1].prob_30);
 

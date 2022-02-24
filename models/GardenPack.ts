@@ -3,6 +3,12 @@
 import { firestore, storage } from "../firebase/firebaseTooling";
 import Documents from "./Documents";
 
+export class GridType {
+  public static readonly summer = "gridSummer";
+  public static readonly spring = "gridSpring";
+  public static readonly autumnWinter = "gridAutumnWinter";
+}
+
 export interface GardenPack {
   name: string;
   downloadUrl?: string;
@@ -15,9 +21,9 @@ export interface GardenPack {
   autumnWinter: Array<string>;
   grid: {
     [id: string]: {
-      spring: Array<string>;
-      summer: Array<string>;
-      autumnWinter: Array<string>;
+      [GridType.spring]: Array<string>;
+      [GridType.summer]: Array<string>;
+      [GridType.autumnWinter]: Array<string>;
     };
   };
 }
@@ -42,4 +48,22 @@ export const getAllGardenPacks = async () => {
   }
 
   return gardenPacks;
+};
+
+export const getGardenPackById = (
+  packs: Array<GardenPack>,
+  packId: string,
+  gardenId: string,
+  gridType: GridType
+) => {
+  // find the pack that matches the matches the pack id
+  const pack = packs.find(p => p.name === packId);
+  if (!pack) return null;
+
+  //find the garden id in this pack;
+  const gardenGrids = pack.grid[gardenId] as any;
+  if (!gardenGrids) return null;
+
+  //find the pack
+  return gardenGrids[gridType as any] as Array<string>;
 };
