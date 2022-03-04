@@ -9,8 +9,11 @@ import { store } from "../store";
 import Documents from "./Documents";
 import { deleteAllUserGardens } from "./UserGardens";
 import { useNavigation } from "@react-navigation/native";
+import geofire from "geofire-common";
+import { getClosestFrostDate, getDateFromFrostDate } from "./FrostDate";
 
 const ref = firestore.collection("user_properties");
+
 const monthNames = [
   "January",
   "February",
@@ -81,42 +84,19 @@ export const setUserProperties = async () => {
   else return null;
 };
 
-const frostAx = axios.create({
-  baseURL: "https://api.farmsense.net/v1/frostdates"
-});
-export const setFrostDateFromLngLat = async (lat: number, lon: number) => {
-  const locationParams = new URLSearchParams({
-    lat: lat.toString(),
-    lon: lon.toString()
-  });
+export const setFrostDateFromLngLat = async (lon: number, lat: number) => {
+  const frostDate = await getClosestFrostDate(lon, lat);
 
-  const stationResponse = await frostAx.get("stations", {
-    params: locationParams
-  });
-  if (stationResponse.status !== 200) return;
+  if (!frostDate)
+    return {
+      springFrostDate: null,
+      fallFrostDate: null
+    };
 
-  const station: Station = stationResponse.data[0];
-  // using the station id perform another request for the frost dates;
-  const springFrostParams = new URLSearchParams({
-    station: station.id,
-    season: Spring
-  });
-  const fallFrostParams = new URLSearchParams({
-    station: station.id,
-    season: Fall
-  });
-  const [springFrostResponse, fallFrostResponse] = await Promise.all([
-    frostAx.get("probabilities", { params: springFrostParams }),
-    frostAx.get("probabilities", { params: fallFrostParams })
-  ]);
-
-  if (springFrostResponse.status !== 200 || fallFrostResponse.status !== 200)
-    return;
-  const date1 = getDateFromString(springFrostResponse.data[1].prob_30);
-  const date2 = getDateFromString(fallFrostResponse.data[1].prob_30);
-
-  const springFrostDate = new FrostDateParsed(date1);
-  const fallFrostDate = new FrostDateParsed(date2);
+  const dates = getDateFromFrostDate(frostDate);
+  console.log(dates, frostDate);
+  const springFrostDate = new FrostDateParsed(dates.springFrostDate);
+  const fallFrostDate = new FrostDateParsed(dates.fallFrostDate);
 
   updateFirebaseFrostDates(springFrostDate, fallFrostDate);
 

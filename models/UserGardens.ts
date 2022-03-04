@@ -216,6 +216,8 @@ function addPlantingDate(
     );
   });
 
+  console.log(plantingDates);
+
   return plantingDates;
 }
 

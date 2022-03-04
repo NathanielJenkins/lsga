@@ -5,7 +5,7 @@ import { store } from "../store";
 import Documents from "./Documents";
 import Task from "./Task";
 import { FrostDateParsed } from "./UserProperties";
-
+import moment from "moment";
 export class Season {
   public static readonly Spring = "Spring";
   public static readonly Summer = "Summer";
@@ -96,18 +96,16 @@ export const getPlantingRangeFromUserFrostDates = (
     )
       return { veggieName: null, first: null, last: null };
 
-    const first = new Date(springFrostDate.date);
-    first.setDate(first.getDate() + earliestPlantingFromLastFrostDate);
-
-    const last = new Date(fallFrostDate.date);
-    last.setDate(last.getDate() - latestPlantingFromFirstFrostDate);
+    const f = moment(springFrostDate.date).add(latestPlantingFromFirstFrostDate, 'd'); //prettier-ignore
+    const l = moment(fallFrostDate.date).subtract(earliestPlantingFromLastFrostDate, 'd'); //prettier-ignore
 
     return {
       veggieName: veggie.name,
-      first: first.toISOString(),
-      last: last.toISOString()
+      first: f.toISOString(),
+      last: l.toISOString()
     };
   } catch (error) {
+    console.error(error);
     return { veggieName: null, first: null, last: null };
   }
 };

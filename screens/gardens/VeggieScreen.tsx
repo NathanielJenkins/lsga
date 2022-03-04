@@ -24,6 +24,8 @@ import { IconText } from "../../components/common/Button";
 import Ripple from "react-native-material-ripple";
 import { Info } from "../../components/common/Display";
 import FastImage from "react-native-fast-image";
+import { StepsToSuccess } from "../../components";
+import Hr from "../../components/common/Hr";
 
 export default function VeggieScreen({
   navigation,
@@ -77,8 +79,12 @@ export default function VeggieScreen({
           <View style={tw.style("border-b border-gray-300 flex w-64 my-2 ")} />
         </View>
 
-        <Info title={"Seeding Notes"} text={veggie.seedingNotes} />
+        <StepsToSuccess
+          directSeedSteps={veggie.directSeedSteps}
+          indoorsSeedSteps={veggie.indoorsSeedSteps}
+        />
 
+        <Info title={"Seeding Notes"} text={veggie.seedingNotes} />
         {veggie.directSeed.length !== 0 && (
           <Info title={"Direct Seed"}>
             <FlatList
@@ -146,19 +152,21 @@ export default function VeggieScreen({
             horizontal={true}
             data={veggie.companions}
             keyExtractor={v => `companion-${v}`}
-            renderItem={({ item, index }) => (
-              <Ripple
-                onPress={() =>
-                  navigation.push("Veggie", { veggie: veggies[item] })
-                }>
-                <VeggieItem
-                  index={index}
-                  style={tw.style("m-1")}
-                  veggie={veggies[item]}
-                  draggable={false}
-                />
-              </Ripple>
-            )}
+            renderItem={({ item, index }) => {
+              const veggie = veggies[item];
+              if (!veggie) return;
+
+              return (
+                <Ripple onPress={() => navigation.push("Veggie", { veggie })}>
+                  <VeggieItem
+                    index={index}
+                    style={tw.style("m-1")}
+                    veggie={veggies[item]}
+                    draggable={false}
+                  />
+                </Ripple>
+              );
+            }}
           />
         ) : (
           <SofiaRegularText style={tw.style("text-gray-500 text-sm my-2")}>
@@ -175,18 +183,21 @@ export default function VeggieScreen({
             nestedScrollEnabled
             horizontal={true}
             data={veggie.exclusions}
-            renderItem={({ item, index }) => (
-              <Ripple
-                onPress={() =>
-                  navigation.push("Veggie", { veggie: veggies[item] })
-                }>
-                <VeggieItem
-                  style={tw.style("m-1")}
-                  veggie={veggies[item]}
-                  draggable={false}
-                />
-              </Ripple>
-            )}
+            renderItem={({ item, index }) => {
+              const veggie = veggies[item];
+              if (!veggie) return;
+
+              return (
+                <Ripple onPress={() => navigation.push("Veggie", { veggie })}>
+                  <VeggieItem
+                    index={index}
+                    style={tw.style("m-1")}
+                    veggie={veggies[item]}
+                    draggable={false}
+                  />
+                </Ripple>
+              );
+            }}
           />
         ) : (
           <SofiaRegularText style={tw.style("text-gray-500 text-sm ")}>

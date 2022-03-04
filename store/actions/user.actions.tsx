@@ -20,13 +20,13 @@ import {
 } from "../../models/UserProperties";
 import { loadingAction } from ".";
 
-export function updateFrostDatesByLngLat(lat: number, lon: number) {
+export function updateFrostDatesByLngLat(lon: number, lat: number) {
   // check if an of the fields of the user garden are null
   return (dispatch: Dispatch) => {
     // async action: uses Redux-Thunk middleware to return a function instead of an action creator
     dispatch(request());
 
-    return setFrostDateFromLngLat(lat, lon).then(
+    return setFrostDateFromLngLat(lon, lat).then(
       response => {
         dispatch({
           type: UPDATE_FROST_DATE,

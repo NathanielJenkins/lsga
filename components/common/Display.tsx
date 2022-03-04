@@ -12,13 +12,13 @@ export const Info = (props: {
   children?: React.ReactNode;
 }) => {
   return (
-    <View style={tw.style(props.style, "flex")}>
+    <View style={tw.style(props.style, "flex my-2")}>
       <SofiaRegularText style={tw.style("text-brand text-lg")}>
         {props.title}
       </SofiaRegularText>
 
       {!isNil(props.text) && (
-        <SofiaRegularText style={tw.style("text-gray-500")}>
+        <SofiaRegularText style={tw.style("text-gray-500  leading-4")}>
           {props.text}
         </SofiaRegularText>
       )}

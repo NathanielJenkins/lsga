@@ -36,7 +36,7 @@ export function StepsToSuccess(props: StepsToSuccessProps) {
   };
 
   return (
-    <View style={tw.style("my-3")}>
+    <View style={tw.style("my-3 mb-5")}>
       <View style={tw.style("flex flex-row items-center justify-center mb-2")}>
         {hasDirect && getHeader("Direct Seed", SubPage.DIRECT)}
 
@@ -73,7 +73,7 @@ export function StepList(props: StepListProps) {
 
   const getStep = (task: Task) => {
     return (
-      <View style={tw.style("flex flex-col mx-2")}>
+      <View key={task.id} style={tw.style("flex flex-col mx-2")}>
         {getOffset(task)}
 
         <View style={tw.style("shadow-brand p-4 flex justify-center w-full")}>
