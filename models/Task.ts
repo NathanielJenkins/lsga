@@ -9,14 +9,25 @@ import Veggie from "./Veggie";
 
 export class TaskType {
   public static readonly plant = "plant";
+  public static readonly general = "general";
+}
+
+export class KnownTaskTitle {
+  public static readonly DirectSeed = "Direct Seed";
+  public static readonly Germination = "Germination";
+  public static readonly ThinSeedlings = "Thin Seedlings";
+  public static readonly Thinning = "Thinning";
+  public static readonly Pruning = "Pruning";
+  public static readonly Trellis = "Trellis";
+  public static readonly Harvest = "Harvests";
 }
 
 export default interface Task {
   id: string;
   title: string;
   description: string;
-  offset: number;
-  type: "plant" | "general";
+  offset: [number, number];
+  type: "plant" | "general" | "harvest";
 }
 
 export interface TaskDate {
@@ -67,7 +78,7 @@ export const getAllTasks = (userGarden: UserGarden) => {
         else tasks[vid] = new Array<[TaskDate, boolean]>([taskDate, true]);
       } else {
         const dateToComplete = new Date(startDate);
-        dateToComplete.setDate(dateToComplete.getDate() + sts.offset);
+        dateToComplete.setDate(dateToComplete.getDate() + sts.offset[0]);
 
         const taskDate = { task: sts, date: dateToComplete };
         if (tasks[vid]) tasks[vid].push([taskDate, false]);

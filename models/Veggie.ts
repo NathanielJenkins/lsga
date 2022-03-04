@@ -51,6 +51,8 @@ export default interface Veggie {
   howToHarvest: string;
   whatCropsToPlantAfter: Array<string>;
   stepsToSuccess: Array<Task>;
+  directSeedSteps: Array<Task>;
+  indoorsSeedSteps: Array<Task>;
 }
 
 const ref = firestore.collection(Documents.Veggies);

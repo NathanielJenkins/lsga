@@ -46,6 +46,7 @@ import Veggie from "../screens/gardens/VeggieScreen";
 import { useDispatch } from "react-redux";
 import { updateGardens, updateVeggies } from "../store";
 import GardenInfoScreen from "../screens/gardens/GardenInfoScreen";
+import StepsToSuccessScreen from "../screens/gardens/StepsToSucessScreen";
 export default function Navigation({
   colorScheme
 }: {
@@ -137,6 +138,12 @@ function RootNavigator() {
       <Stack.Screen
         name="AddGalleryPhotoScreen"
         component={AddGalleryPhotoScreen}
+        options={{ headerShown: false, animation: "none" }}
+      />
+
+      <Stack.Screen
+        name="StepsToSuccess"
+        component={StepsToSuccessScreen}
         options={{ headerShown: false, animation: "none" }}
       />
 

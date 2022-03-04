@@ -2,8 +2,6 @@
 
 import * as React from "react";
 import { Dimensions, StyleSheet } from "react-native";
-import CachedImage from "react-native-expo-cached-image";
-
 import moment from "moment";
 import {
   LineChart,
@@ -22,7 +20,7 @@ import Task, {
   TaskType
 } from "../../models/Task";
 import { RootState, updateActiveUserGarden, updateGardens } from "../../store";
-import { IconText } from "../common/Button";
+import { IconText, SecondaryButton } from "../common/Button";
 import {
   SofiaBoldText,
   SofiaRegularText,
@@ -59,6 +57,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Checkbox } from "../common/Input";
 import { PlantingDate, updateUserGarden } from "../../models/UserGardens";
 import Veggie from "../../models/Veggie";
+import { useNavigation } from "@react-navigation/native";
 
 export const ProgressChartIO = () => {
   const { veggies } = useSelector((state: RootState) => state.veggies);
@@ -255,7 +254,7 @@ export function Timeline(props: TimelineProps) {
   const xStart = 50;
   const section = (width - xStart) / 12;
   const sections = [...Array(12).keys()];
-
+  const navigation = useNavigation();
   return (
     <View style={tw.style("flex justify-center items-center shadow-brand m-2")}>
       <SofiaSemiBoldText style={tw.style("text-lg text-gray-500 my-2")}>
@@ -290,87 +289,100 @@ export function Timeline(props: TimelineProps) {
 
         if (!plantingDates) return <View></View>;
         return (
-          <Svg key={g.name + index} height="70" width={width}>
-            <Image
-              x="5"
-              y="5"
-              width="35"
-              height="35"
-              href={{ uri: g?.downloadUrl }}
-            />
-            {sections.map(s => (
+          <View key={g.name + index}>
+            <Svg height="60" width={width}>
+              <Image
+                x="5"
+                y="5"
+                width="35"
+                height="35"
+                href={{ uri: g?.downloadUrl }}
+              />
+              {sections.map(s => (
+                <Line
+                  key={s}
+                  x1={s * section + xStart}
+                  y1="20"
+                  x2={s * section + xStart}
+                  y2="30"
+                  stroke="rgba(103,146,54, 0.5)"
+                  strokeWidth="2"
+                />
+              ))}
               <Line
-                key={s}
-                x1={s * section + xStart}
-                y1="20"
-                x2={s * section + xStart}
-                y2="30"
-                stroke="rgba(103,146,54, 0.5)"
+                x1={xStart}
+                y1="25"
+                x2={width}
+                y2="25"
+                stroke="rgba(103,146,54, 0.2)"
                 strokeWidth="2"
               />
-            ))}
-            <Line
-              x1={xStart}
-              y1="25"
-              x2={width}
-              y2="25"
-              stroke="rgba(103,146,54, 0.2)"
-              strokeWidth="2"
-            />
 
-            {planted ? (
-              <G>
-                <Circle
-                  cx={xDatePlanted}
-                  cy="25"
-                  r="4"
-                  strokeWidth={2}
-                  fill={"rgba(103,146,54, 0.4)"}
-                  stroke={"rgba(103,146,54)"}
+              {planted ? (
+                <G>
+                  <Circle
+                    cx={xDatePlanted}
+                    cy="25"
+                    r="4"
+                    strokeWidth={2}
+                    fill={"rgba(103,146,54, 0.4)"}
+                    stroke={"rgba(103,146,54)"}
+                  />
+                  <Text
+                    fill="gray"
+                    stroke="transparent"
+                    fontSize="12"
+                    x={xDatePlanted}
+                    y="45"
+                    textAnchor="middle">
+                    Planted
+                  </Text>
+                </G>
+              ) : (
+                <G>
+                  <Circle cx={xFirst} cy="25" r="4" fill="rgba(103,146,54)" />
+                  <Circle cx={xLast} cy="25" r="4" fill="rgba(103,146,54)" />
+                  <Line
+                    x1={xFirst}
+                    y1="25"
+                    x2={xLast}
+                    y2="25"
+                    stroke="rgba(103,146,54, 1)"
+                    strokeWidth="2.5"
+                  />
+                  <Text
+                    fill="gray"
+                    stroke="transparent"
+                    fontSize="14"
+                    x={xFirst}
+                    y="45"
+                    textAnchor="start">
+                    {moment(firstDate).format("l")}
+                  </Text>
+                  <Text
+                    fill="gray"
+                    stroke="transparent"
+                    fontSize="14"
+                    x={xLast}
+                    y={15}
+                    textAnchor="end">
+                    {moment(lastDate).format("l")}
+                  </Text>
+                </G>
+              )}
+            </Svg>
+
+            {!planted && (
+              <View style={tw.style("mb-5")}>
+                <SecondaryButton
+                  title="Select Seeding Type"
+                  onPress={() =>
+                    navigation.navigate("StepsToSuccess", { veggie: g })
+                  }
                 />
-                <Text
-                  fill="gray"
-                  stroke="transparent"
-                  fontSize="12"
-                  x={xDatePlanted}
-                  y="45"
-                  textAnchor="middle">
-                  Planted
-                </Text>
-              </G>
-            ) : (
-              <G>
-                <Circle cx={xFirst} cy="25" r="4" fill="rgba(103,146,54)" />
-                <Circle cx={xLast} cy="25" r="4" fill="rgba(103,146,54)" />
-                <Line
-                  x1={xFirst}
-                  y1="25"
-                  x2={xLast}
-                  y2="25"
-                  stroke="rgba(103,146,54, 1)"
-                  strokeWidth="2.5"
-                />
-                <Text
-                  fill="gray"
-                  stroke="transparent"
-                  fontSize="14"
-                  x={xFirst}
-                  y="45"
-                  textAnchor="start">
-                  {moment(firstDate).format("l")}
-                </Text>
-                <Text
-                  fill="gray"
-                  stroke="transparent"
-                  fontSize="14"
-                  x={xLast}
-                  y={15}
-                  textAnchor="end">
-                  {moment(lastDate).format("l")}
-                </Text>
-              </G>
+              </View>
             )}
-          </Svg>
+          </View>
         );
       })}
     </View>

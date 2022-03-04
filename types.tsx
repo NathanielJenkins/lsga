@@ -54,6 +54,9 @@ export type RootStackParamList = {
   Veggie: {
     veggie: Veggie;
   };
+  StepsToSuccess: {
+    veggie: Veggie;
+  };
   Pack: {
     pack: GardenPack;
   };

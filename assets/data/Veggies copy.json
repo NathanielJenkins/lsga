@@ -27,37 +27,7 @@
     "daysToMaturity": [30, 40],
     "whenToHarvest": ["April", "October"],
     "howToHarvest": "When leaves are 4-6 inches long, harvest them. You can harvest the whole plant by pulling or cutting just below soil level, or cut the outer leaves as needed. You can also use the cut and come again method where you cut the entire plant down to 1-2” above the soil, leaving the root system and plant crown intact. The leaves will keep re-growing every few weeks for more harvests. You may find the leaves become more spicy with each cutting.",
-    "whatCropsToPlantAfter": [],
-    "directSeedSteps": [
-      {
-        "id": "FD",
-        "type": "plant",
-        "title": "Direct Seed",
-        "description": "Direct seed arugula ¼” deep, planting 2-3 seeds per hole, Spacing holes16 per square foot.",
-        "offset": [-14, 145]
-      },
-      {
-        "id": "SD_0",
-        "type": "general",
-        "title": "Germination",
-        "description": "Seeds should sprout in 4-8 days from seeding.",
-        "offset": [4, 8]
-      },
-      {
-        "id": "SD_1",
-        "type": "general",
-        "title": "Thin Seedlings",
-        "description": "Thin germinated seedlings to the tallest/strongest plants, and thin leaving 16 plants per square foot.",
-        "offset": [10, 16]
-      },
-      {
-        "id": "SD_2",
-        "type": "harvest",
-        "title": "Harvest",
-        "description": "When leaves are 4-6 inches long, harvest them. You can harvest the whole plant by pulling or cutting just below soil level, or cut the outer leaves as needed. You can also use the 'cut and come again' method where you cut the entire plant down to 1-2” above the soil, leaving the root system and plant crown intact. The leaves will keep re-growing every few weeks for more harvests. You may find the leaves become more spicy with each cutting.",
-        "offset": [40, 60]
-      }
-    ]
+    "whatCropsToPlantAfter": []
   },
   {
     "name": "basil",
@@ -77,88 +47,7 @@
     "daysToMaturity": [40, 50],
     "whenToHarvest": ["July", "August", "September"],
     "howToHarvest": "Harvest basil by pinching the stems just above the leaf node, where new ones will grow. Harvest basil regularly to encourage continuous production, and to ask the plant to bush out and remain lush instead of becoming tall and woody. The more basil you harvest, the more it will grow.",
-    "whatCropsToPlantAfter": ["arugula", "mustard_greens", "spinach"],
-    "indoorsSeedSteps": [
-      {
-        "id": "FD",
-        "type": "plant",
-        "title": "Start Indoors",
-        "description": "Sow basil seeds indoors about 2-3 seeds per pot, 1/4\" deep. Cover them with soil and moisten the soil with water.",
-        "offset": [7, 21]
-      },
-      {
-        "id": "SD_0",
-        "type": "general",
-        "title": "Germination",
-        "description": "Seeds should sprout in 5-10 days from seeding.",
-        "offset": [5, 10]
-      },
-      {
-        "id": "SD_1",
-        "type": "general",
-        "title": "Thin Seedlings",
-        "description": "Once the seeds have germinated, thin to the tallest/ strongest seed per pot.",
-        "offset": [10, 16]
-      },
-      {
-        "id": "SD_2",
-        "type": "general",
-        "title": "Transplant",
-        "description": "When evening temperatures are above 10°C, transplant your basil seedlings into your garden, spacing them 4 plants per square foot.",
-        "offset": [40, 60]
-      },
-      {
-        "id": "SD_4",
-        "type": "general",
-        "title": "Prune",
-        "description": "Pruning: Once plants are 15cm (6″) tall, pinch out the growing tips to encourage really bushy growth prior to harvest. Watch for signs of flower buds forming in mid-summer, and pinch these off to promote more foliage.",
-        "offset": [75, 105]
-      },
-      {
-        "id": "SD_5",
-        "type": "harvest",
-        "title": "Harvest",
-        "description": "Harvest basil by pinching the stems just above the leaf node, where new ones will grow. Harvest basil regularly to encourage continuous production.",
-        "offset": [80, 150]
-      }
-    ],
-    "directSeedSteps": [
-      {
-        "id": "FD",
-        "type": "plant",
-        "title": "Direct Seed",
-        "description": "Direct seed basil ¼” deep, planting 2-3 seeds per hole, Spacing 4 holes per square foot.",
-        "offset": [65, 105]
-      },
-      {
-        "id": "SD_0",
-        "type": "general",
-        "title": "Germination",
-        "description": "Once seeds have germinated, thin leaving the tallest strongest seedling per hole. ",
-        "offset": [5, 10]
-      },
-      {
-        "id": "SD_1",
-        "type": "general",
-        "title": "Thin Seedlings",
-        "description": "Thin germinated seedlings to the tallest/strongest plants, leaving 4 plants per square foot.",
-        "offset": [10, 16]
-      },
-      {
-        "id": "SD_2",
-        "type": "general",
-        "title": "Prune",
-        "description": "Pruning: Once plants are 15cm (6″) tall, pinch out the growing tips to encourage really bushy growth prior to harvest. Watch for signs of flower buds forming in mid-summer, and pinch these off to promote more foliage.",
-        "offset": [75, 105]
-      },
-      {
-        "id": "SD_3",
-        "type": "harvest",
-        "title": "Harvest",
-        "description": "Harvest basil by pinching the stems just above the leaf node, where new ones will grow. Harvest basil regularly to encourage continuous production.",
-        "offset": [80, 150]
-      }
-    ]
+    "whatCropsToPlantAfter": ["arugula", "mustard_greens", "spinach"]
   },
 
   {
@@ -193,36 +82,6 @@
       "spinach",
       "mustard_greens",
       "radishes"
-    ],
-    "directSeedSteps": [
-      {
-        "id": "FD",
-        "type": "plant",
-        "title": "Direct Seed",
-        "description": "Sow 1cm (½”) deep, spacing 9 / sq foot. Beets will not produce roots if planted when the soil is too cold.",
-        "offset": [30, 125]
-      },
-      {
-        "id": "SD_0",
-        "type": "general",
-        "title": "Germination",
-        "description": "Seeds should germinate in 5- 12 days.",
-        "offset": [5, 12]
-      },
-      {
-        "id": "SD_1",
-        "type": "general",
-        "title": "Thin Seedlings",
-        "description": "Thin seedlings carefully to 3-6″ apart when seedlings are 2″ tall. Eat any thinned plants, roots and all. Root size is controlled by spacing and variety.",
-        "offset": [20, 30]
-      },
-      {
-        "id": "SD_2",
-        "type": "harvest",
-        "title": "Harvest",
-        "description": "Harvest the greens by cutting the outer leaves individually, try not to take more than one or two leaves from each plant. Beet roots are at their best and most tender when they are half size, so harvest the roots when they are about the size of a ping pong to tennis ball. You can check the size of the roots by digging around the root with your fingers to uncover the top and check the size. If you are harvesting in the Fall and Winter months, beets will lay dormant in the ground, ready for harvest when you want them!",
-        "offset": [50, 70]
-      }
     ]
   },
   {
@@ -256,37 +115,7 @@
     "daysToMaturity": [50, 50],
     "whenToHarvest": ["July", "August", "September"],
     "howToHarvest": "Harvest beans by breaking or cutting each stem with 2 hands, be sure not to pull the plant or you might accidentally rip the entire plant from the ground. The best beans are the small and tender ones, so pick those and try not to let the beans get too big because they will lose their flavour. Regularly harvesting your beans will also produce great tasting pods.",
-    "whatCropsToPlantAfter": [],
-    "directSeedSteps": [
-      {
-        "id": "FD",
-        "type": "plant",
-        "title": "Direct Seed",
-        "description": "Directly seed bush beans 1 inch deep, spacing 9 seeds per square foot.Try to plant during a warm, dry spell. Soil must be warm.",
-        "offset": [5, 100]
-      },
-      {
-        "id": "SD_0",
-        "type": "general",
-        "title": "Germination",
-        "description": "Seeds should germinate in 8-16 days.",
-        "offset": [8, 16]
-      },
-      {
-        "id": "SD_1",
-        "type": "general",
-        "title": "Thin Seedlings",
-        "description": "If there are more than 9 seedlings per square foot, thin seedlings, leaving the tallest/strongest plants.",
-        "offset": [18, 28]
-      },
-      {
-        "id": "SD_2",
-        "type": "harvest",
-        "title": "Harvest",
-        "description": "Harvest beans by breaking or cutting each stem with 2 hands, be sure not to pull the plant or you might accidentally rip the entire plant from the ground. The best beans are the small and tender ones, so pick those and try not to let the beans get too big because they will lose their flavour. Regularly harvesting your beans will also produce great tasting pods.",
-        "offset": [50, 70]
-      }
-    ]
+    "whatCropsToPlantAfter": []
   },
   {
     "name": "carrots",
@@ -328,37 +157,7 @@
       "December"
     ],
     "howToHarvest": " 65-70 days Carrots can be harvested at any size, but flavour is best when the carrot has turned bright orange.",
-    "whatCropsToPlantAfter": [],
-    "directSeedSteps": [
-      {
-        "id": "FD",
-        "type": "plant",
-        "title": "Direct Seed",
-        "description": "Plant the tiny seeds ¼” deep, and 1″ apart (spacing 16 seeds per square foot).  Firm soil lightly after seeding. Make sure the seeds are only just buried.The first main trick with carrot seeds is to sow them shallowly and then maintain moisture in that top layer of soil until they germinate. Because they may take as long as three weeks to germinate, this can be challenging, especially in hot weather or in exposed, windy gardens.",
-        "offset": [5, 105]
-      },
-      {
-        "id": "SD_0",
-        "type": "general",
-        "title": "Germination",
-        "description": "Seeds will germinate in 14-21 days.",
-        "offset": [14, 21]
-      },
-      {
-        "id": "SD_1",
-        "type": "general",
-        "title": "Thin Seedlings",
-        "description": "Thin seedlings  3-6” apart when seedlings are 2” tall. It is very important to thin carrots so they don’t compete for available nutrients, moisture, and light.  Use wider spacing to get larger roots. As they grow, carrots may push up, out of the soil, so hill soil up to prevent getting a green shoulder.",
-        "offset": [30, 45]
-      },
-      {
-        "id": "SD_2",
-        "type": "harvest",
-        "title": "Harvest",
-        "description": "Carrots can be harvested at any size, but flavour is best when the carrot has turned bright orange. (The green carrot tops are also edible!)",
-        "offset": [65, 85]
-      }
-    ]
+    "whatCropsToPlantAfter": []
   },
   {
     "name": "cilantro",
@@ -378,37 +177,7 @@
     "daysToMaturity": [45, 70],
     "whenToHarvest": ["May", "June", "July", "August", "September", "October"],
     "howToHarvest": "Cilantro leaves can be picked anytime once the plant is 6-8 inches tall. You can either pick the outer leaves as needed, or use the \"cut and come again\" method. If  you are using the cut and come again method, cut the entire plant or section down to 1-2\" or slightly above the tiny middle shoots, leaving the root system intact.  The plant will continue to grow more leaves throughout the season.",
-    "whatCropsToPlantAfter": [],
-    "directSeedSteps": [
-      {
-        "id": "FD",
-        "type": "plant",
-        "title": "Direct Seed",
-        "description": "Seed cilantro 1cm (½”) deep, spacing 9 seeds per square foot.",
-        "offset": [7, 150]
-      },
-      {
-        "id": "SD_0",
-        "type": "general",
-        "title": "Germination",
-        "description": "Seeds should sprout in 5-10 days.",
-        "offset": [5, 10]
-      },
-      {
-        "id": "SD_1",
-        "type": "general",
-        "title": "Thin Seedlings",
-        "description": "Once seeds have germinated, thin to the tallest/ strongest seedlings, spacing 9 seeds per square foot.",
-        "offset": [12, 18]
-      },
-      {
-        "id": "SD_2",
-        "type": "harvest",
-        "title": "Harvest",
-        "description": "Cilantro leaves can be picked anytime once the plant is 6-8 inches tall. You can either pick the outer leaves as needed, or use the \"cut and come again\" method. If you are using the cut and come again method, cut the entire plant or section down to 1-2\" or slightly above the tiny middle shoots, leaving the root system intact. The plant will continue to grow more leaves throughout the season.",
-        "offset": [40, 70]
-      }
-    ]
+    "whatCropsToPlantAfter": []
   },
 
   {
@@ -448,108 +217,6 @@
       "garlic",
       "broad_beans",
       "radishes"
-    ],
-    "directSeedSteps": [
-      {
-        "id": "FD",
-        "type": "plant",
-        "title": "Direct Seed",
-        "description": "Sow 3-4 seeds 2cm (1″) deep in each spot you want to grow, spacing holes 1 per square foot.",
-        "offset": [75, 95]
-      },
-      {
-        "id": "SD_0",
-        "type": "general",
-        "title": "Germination",
-        "description": "Seeds should germinate in days, thin seedlings to the strongest/tallest plant.",
-        "offset": [5, 10]
-      },
-      {
-        "id": "SD_1",
-        "type": "general",
-        "title": "Thin Seedlings",
-        "description": "Once seedlings have germinated, thin to the tallest/ strongest seedling.",
-        "offset": [12, 18]
-      },
-      {
-        "id": "SD_2",
-        "type": "general",
-        "title": "Trellis",
-        "description": "Cucumbers are vining plants, that will require trellising for support. Alternatively, allow your vines to spill over the sides of your garden beds and trail down. 'Patio Snacker' variety are compact plants that only grow 36-60” tall.",
-        "offset": [20, 40]
-      },
-      {
-        "id": "SD_3",
-        "type": "general",
-        "title": "Trellis",
-        "description": "Continue to trellis your cucumbers as they mature in size and length.",
-        "offset": [40, 60]
-      },
-      {
-        "id": "SD_4",
-        "type": "general",
-        "title": "Pruning",
-        "description": "Pick cucumbers regularly to encourage continnuous production. Harvest your cucumber by clipping them off the vine when they reach the desired size, about 6-9\". If you let your cucumbers get too big, it will signal the plant to stop producing more cucumbers.",
-        "offset": [60, 80]
-      },
-      {
-        "id": "SD_5",
-        "type": "harvest",
-        "title": "Harvest",
-        "description": "About a month before first frost, pinch off any new flowers, to allow existing fruit to mature.",
-        "offset": [175, 200]
-      }
-    ],
-    "indoorsSeedSteps": [
-      {
-        "id": "FD",
-        "type": "plant",
-        "title": "Start Indoors",
-        "description": "Sow 3-4 seeds 2cm (1″) deep in each spot you want to grow, spacing holes 1 per square foot.",
-        "offset": [75, 95]
-      },
-      {
-        "id": "SD_0",
-        "type": "general",
-        "title": "Germination",
-        "description": "Seeds should germinate in days, thin seedlings to the strongest/tallest plant.",
-        "offset": [5, 10]
-      },
-      {
-        "id": "SD_1",
-        "type": "general",
-        "title": "Thin Seedlings",
-        "description": "Once seedlings have germinated, thin to the tallest/ strongest seedling.",
-        "offset": [12, 18]
-      },
-      {
-        "id": "SD_2",
-        "type": "general",
-        "title": "Trellis",
-        "description": "Cucumbers are vining plants, that will require trellising for support. Alternatively, allow your vines to spill over the sides of your garden beds and trail down. 'Patio Snacker' variety are compact plants that only grow 36-60” tall.",
-        "offset": [20, 40]
-      },
-      {
-        "id": "SD_3",
-        "type": "general",
-        "title": "Trellis",
-        "description": "Continue to trellis your cucumbers as they mature in size and length.",
-        "offset": [40, 60]
-      },
-      {
-        "id": "SD_4",
-        "type": "general",
-        "title": "Pruning",
-        "description": "Pick cucumbers regularly to encourage continnuous production. Harvest your cucumber by clipping them off the vine when they reach the desired size, about 6-9\". If you let your cucumbers get too big, it will signal the plant to stop producing more cucumbers.",
-        "offset": [60, 80]
-      },
-      {
-        "id": "SD_5",
-        "type": "harvest",
-        "title": "Harvest",
-        "description": "About a month before first frost, pinch off any new flowers, to allow existing fruit to mature.",
-        "offset": [175, 200]
-      }
     ]
   },
   {
