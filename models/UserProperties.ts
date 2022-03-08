@@ -40,31 +40,6 @@ class properties {
 
 /** @format */
 
-export interface Station {
-  id: string;
-  name: string;
-  lat: string;
-  lon: string;
-  distance: string;
-}
-
-export interface FrostDateRaw {
-  season_id: string;
-  temperature_threshold: string;
-  prob_90: string;
-  prob_80: string;
-  prob_70: string;
-  prob_60: string;
-  prob_50: string;
-  prob_40: string;
-  prob_30: string;
-  prob_20: string;
-  prob_10: string;
-}
-
-export const Spring = "1";
-export const Fall = "2";
-
 export class FrostDateParsed {
   public day: number;
   public month: Month;
@@ -94,7 +69,6 @@ export const setFrostDateFromLngLat = async (lon: number, lat: number) => {
     };
 
   const dates = getDateFromFrostDate(frostDate);
-  console.log(dates, frostDate);
   const springFrostDate = new FrostDateParsed(dates.springFrostDate);
   const fallFrostDate = new FrostDateParsed(dates.fallFrostDate);
 
@@ -129,21 +103,6 @@ export const updateFirebaseFrostDates = (
   ref.doc(userId).set(userProperties);
 
   return { springFrostDate, fallFrostDate };
-};
-
-const getDateFromString = (f: string) => {
-  const monthNumber = parseInt(f.slice(0, 2));
-  const dayNumber = parseInt(f.slice(2, 4));
-  const currentDate = new Date();
-
-  // check if the current month is greater than the month number,
-  // if it is add one year, otherwise, it has not happened yet so use the current year
-  let year: number =
-    monthNumber < currentDate.getDate()
-      ? currentDate.getFullYear() + 1
-      : currentDate.getFullYear() + 0;
-
-  return new Date(year, monthNumber, dayNumber);
 };
 
 export const deleteAccount = async () => {

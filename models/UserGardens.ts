@@ -3,7 +3,10 @@
 import Garden from "./Garden";
 import { auth, firestore, storage } from "../firebase/firebaseTooling";
 import Documents from "./Documents";
-import Veggie, { getPlantingRangeFromUserFrostDates } from "./Veggie";
+import Veggie, {
+  getPlantingRangeFromUserFrostDates,
+  PlantingType
+} from "./Veggie";
 import { useDispatch } from "react-redux";
 import { setLoading, store } from "../store";
 import Task, { TaskDate } from "./Task";
@@ -13,6 +16,7 @@ import { CameraCapturedPicture } from "expo-camera";
 import uuid from "react-native-uuid";
 import { GridType } from ".";
 import { FrostDateParsed } from "./UserProperties";
+import moment from "moment";
 const ref = firestore.collection(Documents.UserGardens);
 
 export interface PlantingDate {
@@ -20,6 +24,7 @@ export interface PlantingDate {
   first: string;
   last: string;
   datePlanted?: Date | string;
+  plantingType?: PlantingType;
 }
 
 export default interface UserGarden {
@@ -46,6 +51,16 @@ export default interface UserGarden {
   [properties.springPlantingDates]?: Array<PlantingDate>;
   [properties.summerPlantingDates]?: Array<PlantingDate>;
   [properties.autumnWinterPlantingDates]?: Array<PlantingDate>;
+
+  [properties.autumnWinterVeggieSteps]: {
+    [veggieName: string]: Array<TaskDate>;
+  };
+  [properties.springVeggieSteps]: {
+    [veggieName: string]: Array<TaskDate>;
+  };
+  [properties.summerVeggieSteps]: {
+    [veggieName: string]: Array<TaskDate>;
+  };
 }
 
 class properties {
@@ -67,6 +82,14 @@ class properties {
   public static readonly summerPlantingDates: "summerPlantingDates";
   public static readonly springPlantingDates: "springPlantingDates";
   public static readonly autumnWinterPlantingDates: "autumnWinterPlantingDates";
+
+  public static readonly summerVeggieSteps: "summerVeggieSteps";
+  public static readonly springVeggieSteps: "springVeggieSteps";
+  public static readonly autumnWinterVeggieSteps: "autumnWinterVeggieSteps";
+
+  public static readonly summerVeggiePlantingTypes: "summerVeggiePlantingTypes";
+  public static readonly springVeggiePlantingTypes: "springVeggiePlantingTypes";
+  public static readonly autumnWinterVeggiePlantingTypes: "autumnWinterVeggiePlantingTypes";
 
   public static readonly plantingDates: "plantingDates";
 }
@@ -91,6 +114,10 @@ export const addUserGarden = async (userGarden: UserGarden) => {
   await setGardenProfile(userGarden);
 
   userGarden.veggieSteps = {};
+  userGarden.springVeggieSteps = {};
+  userGarden.summerVeggieSteps = {};
+  userGarden.autumnWinterVeggieSteps = {};
+
   const emptyArray = [
     ...Array(userGarden.garden.height * userGarden.garden.width).keys()
   ].map(() => null);
@@ -184,45 +211,79 @@ export const getUserGardens = async () => {
   return gardens;
 };
 
-export function updatePlantingDates(userGarden: UserGarden) {
+export function setPlantingDates(userGarden: UserGarden) {
   const state = store.getState();
   const { veggies } = state.veggies;
   const { springFrostDate, fallFrostDate } = state.user;
-  const veggieNames = [...new Set(userGarden.grid)];
 
+  const veggieNames = [...new Set(userGarden.grid)];
   const summerVeggiesNames = [...new Set(userGarden.gridSummer)];
   const springVeggiesNames = [...new Set(userGarden.gridSpring)];
   const autumnVeggiesNames = [...new Set(userGarden.gridAutumnWinter)];
 
-  userGarden.plantingDates =              addPlantingDate(veggieNames, veggies, springFrostDate, fallFrostDate); //prettier-ignore
-  userGarden.summerPlantingDates =        addPlantingDate(summerVeggiesNames, veggies, springFrostDate, fallFrostDate); //prettier-ignore
-  userGarden.autumnWinterPlantingDates =  addPlantingDate(autumnVeggiesNames, veggies, springFrostDate, fallFrostDate); //prettier-ignore
-  userGarden.springPlantingDates =        addPlantingDate(springVeggiesNames, veggies, springFrostDate, fallFrostDate); //prettier-ignore
+  addPlantingDates(veggieNames, veggies, springFrostDate, fallFrostDate, userGarden.plantingDates); //prettier-ignore
+  addPlantingDates(summerVeggiesNames, veggies, springFrostDate, fallFrostDate, userGarden.summerPlantingDates); //prettier-ignore
+  addPlantingDates(autumnVeggiesNames, veggies, springFrostDate, fallFrostDate, userGarden.autumnWinterPlantingDates); //prettier-ignore
+  addPlantingDates(springVeggiesNames, veggies, springFrostDate, fallFrostDate, userGarden.springPlantingDates); //prettier-ignore
 }
 
-function addPlantingDate(
+export function setVeggiePlantingDate(
+  userGarden: UserGarden,
+  plantingType: PlantingType,
+  activeGrid: GridType,
+  veggie: Veggie
+) {
+  const plantingDates = getPlantingDatesFromGridType(activeGrid, userGarden);
+  const plantingDateIndex = plantingDates?.findIndex(
+    p => p.veggieName === veggie.name
+  );
+  if (plantingDateIndex === -1) return;
+
+  const newPlantingDate = { ...plantingDates[plantingDateIndex] };
+  newPlantingDate.datePlanted = moment().toISOString();
+  newPlantingDate.plantingType = plantingType;
+  plantingDates[plantingDateIndex] = newPlantingDate;
+
+  console.log("planting dates", plantingDates);
+  return plantingDates;
+}
+
+function addPlantingDates(
   veggieNames: string[],
   veggies: { [name: string]: Veggie },
   springFrostDate: FrostDateParsed,
-  fallFrostDate: FrostDateParsed
+  fallFrostDate: FrostDateParsed,
+  oldPlantingDates: Array<PlantingDate>
 ) {
   const plantingDates: Array<PlantingDate> = new Array();
 
   veggieNames.forEach((veggieName, index) => {
     const veggie = veggies[veggieName];
-
-    plantingDates.push(
-      getPlantingRangeFromUserFrostDates(veggie, springFrostDate, fallFrostDate)
+    const oldPlantingDate = oldPlantingDates.find(
+      p => p.veggieName === veggieName
     );
-  });
+    const newPlantingDate = getPlantingRangeFromUserFrostDates(
+      veggie,
+      springFrostDate,
+      fallFrostDate
+    );
 
-  console.log(plantingDates);
+    if (oldPlantingDate) {
+      newPlantingDate.plantingType = oldPlantingDate.plantingType;
+      newPlantingDate.datePlanted = oldPlantingDate.datePlanted;
+    }
+  });
 
   return plantingDates;
 }
 
-export function getUniqueVeggieIdsFromGrid(userGarden: UserGarden) {
-  const veggieIds = [...new Set(userGarden.grid)] || [];
+export function getUniqueVeggieIdsFromGrid(
+  userGarden: UserGarden,
+  activeGridType: GridType
+) {
+  const grid = getGridFromGridType(activeGridType, userGarden);
+
+  const veggieIds = [...new Set(grid)] || [];
   return veggieIds;
 }
 

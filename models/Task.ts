@@ -2,9 +2,13 @@
 
 import { isNil } from "lodash";
 import { useSelector } from "react-redux";
+import { GridType } from ".";
 import { RootState, store } from "../store";
 import { addDays, randomRgb } from "../utils/Date";
-import UserGarden, { getUniqueVeggieIdsFromGrid } from "./UserGardens";
+import UserGarden, {
+  getPlantingDatesFromGridType,
+  getUniqueVeggieIdsFromGrid
+} from "./UserGardens";
 import Veggie from "./Veggie";
 
 export class TaskType {
@@ -43,16 +47,21 @@ export const getPlantingTask = (veggie: Veggie) => {
   return { title, description, offset };
 };
 
-export const getAllTasks = (userGarden: UserGarden) => {
+export const getAllTasks = (
+  activeGridType: GridType,
+  userGarden: UserGarden
+) => {
   const { veggies } = store.getState().veggies;
-  const { veggieSteps, plantingDates } = userGarden;
-
+  const plantingDates = getPlantingDatesFromGridType(
+    activeGridType,
+    userGarden
+  );
   // map tasks to data
   const tasks: { [veggieName: string]: Array<[TaskDate, boolean]> } = {};
 
   // get starting date
-  const veggieIds = getUniqueVeggieIdsFromGrid(userGarden);
-
+  const veggieIds = getUniqueVeggieIdsFromGrid(userGarden, activeGridType);
+  console.log(veggieIds, plantingDates);
   for (let vid of veggieIds) {
     const veggie = veggies[vid];
     if (!veggie) continue;

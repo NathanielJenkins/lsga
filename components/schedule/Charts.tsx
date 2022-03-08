@@ -58,8 +58,13 @@ import { Checkbox } from "../common/Input";
 import { PlantingDate, updateUserGarden } from "../../models/UserGardens";
 import Veggie from "../../models/Veggie";
 import { useNavigation } from "@react-navigation/native";
+import { GridType } from "../../models";
 
-export const ProgressChartIO = () => {
+interface ProgressChartIOProps {
+  activeGridType: GridType;
+}
+
+export const ProgressChartIO = (props: ProgressChartIOProps) => {
   const { veggies } = useSelector((state: RootState) => state.veggies);
   const { activeGarden } = useSelector((state: RootState) => state.gardens);
 
@@ -73,7 +78,7 @@ export const ProgressChartIO = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    const { tasks: _tasks } = getAllTasks(activeGarden); //prettier-ignore
+    const { tasks: _tasks } = getAllTasks(props.activeGridType, activeGarden); //prettier-ignore
     setTasks(_tasks);
     const weeklyTasks = getPaginationTasks(_tasks, first);
     const {
@@ -268,28 +273,29 @@ export function Timeline(props: TimelineProps) {
         const last = plantingDates?.last;
         const planted = plantingDates?.datePlanted;
 
-        const lastDate = new Date(first);
-        const firstDate = new Date(last);
-        const plantedDate = planted ? new Date(planted) : null;
+        const lastDate = moment(first);
+        const firstDate = moment(last);
+        const plantedDate = !isNil(planted) ? moment(planted) : false;
 
         const xFirst =
           xStart +
-          firstDate.getMonth() * section +
-          (firstDate.getDate() / 30) * section;
+          firstDate.month() * section +
+          (firstDate.date() / 30) * section;
         const xLast =
           xStart +
-          lastDate.getMonth() * section +
-          (lastDate.getDate() / 30) * section;
+          lastDate.month() * section +
+          (lastDate.date() / 30) * section;
 
-        const xDatePlanted = planted
-          ? xStart +
-            plantedDate.getMonth() * section +
-            (plantedDate.getDate() / 30) * section
-          : null;
-
+        const xDatePlanted =
+          planted && plantedDate
+            ? xStart +
+              plantedDate.month() * section +
+              (plantedDate.date() / 30) * section
+            : 0;
+        console.log(planted, plantedDate, section);
         if (!plantingDates) return <View></View>;
         return (
-          <View key={g.name + index}>
+          <View key={g.name + new Date().toISOString()}>
             <Svg height="60" width={width}>
               <Image
                 x="5"
@@ -325,7 +331,7 @@ export function Timeline(props: TimelineProps) {
                     cy="25"
                     r="4"
                     strokeWidth={2}
-                    fill={"rgba(103,146,54, 0.4)"}
+                    fill={"rgba(103,146,54,0.4)"}
                     stroke={"rgba(103,146,54)"}
                   />
                   <Text

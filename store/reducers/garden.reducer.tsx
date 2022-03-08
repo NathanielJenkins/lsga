@@ -1,5 +1,6 @@
 /** @format */
 
+import { GridType } from "../../models";
 import Garden from "../../models/Garden";
 import UserGarden from "../../models/UserGardens";
 import {
@@ -8,18 +9,21 @@ import {
   NEW_GARDEN,
   DELETE_GARDEN,
   GardenActionTypes,
-  UPDATE_GARDEN_TYPES
+  UPDATE_GARDEN_TYPES,
+  UPDATE_ACTIVE_GRID
 } from "../types";
 interface GardenState {
   gardens: UserGarden[];
   gardenTypes: Garden[];
   activeGarden: UserGarden;
+  activeGrid: GridType;
 }
 
 const initialState: GardenState = {
   gardens: [],
   gardenTypes: [],
-  activeGarden: undefined
+  activeGarden: undefined,
+  activeGrid: GridType.spring
 };
 
 export function gardenReducer(
@@ -55,6 +59,12 @@ export function gardenReducer(
       return {
         ...state,
         gardens: state.gardens.filter(f => f.id !== action.payload.id)
+      };
+    }
+    case UPDATE_ACTIVE_GRID: {
+      return {
+        ...state,
+        activeGrid: action.payload
       };
     }
 

@@ -5,25 +5,28 @@ import { isNil } from "lodash";
 import React from "react";
 import { View } from "react-native";
 import Task, { KnownTaskTitle, TaskType } from "../../models/Task";
+import { PlantingType } from "../../models/Veggie";
 import { SofiaBoldText, SofiaRegularText } from "../StyledText";
 import { tw } from "../Themed";
-
-class SubPage {
-  public static readonly DIRECT = "DIRECT";
-  public static readonly INDOORS = "INDOORS";
-}
-
 interface StepsToSuccessProps {
   directSeedSteps: Array<Task>;
   indoorsSeedSteps: Array<Task>;
+  currentPage?: string;
+  setCurrentPage?: React.Dispatch<React.SetStateAction<string>>;
 }
 export function StepsToSuccess(props: StepsToSuccessProps) {
-  const hasIndoors = !isNil(props.indoorsSeedSteps);
-  const hasDirect = !isNil(props.directSeedSteps);
-  const startingPage = hasDirect ? SubPage.DIRECT : SubPage.INDOORS;
-  const [currentPage, setCurrentPage] = React.useState(startingPage);
+  const { startingPage, hasDirect, hasIndoors } = getStartingPage(
+    props.indoorsSeedSteps,
+    props.directSeedSteps
+  );
 
-  const getHeader = (title: string, subPage: SubPage) => {
+  let currentPage: string;
+  let setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
+  [currentPage, setCurrentPage] = props.currentPage
+    ? [props.currentPage, props.setCurrentPage]
+    : React.useState(startingPage);
+
+  const getHeader = (title: string, subPage: PlantingType) => {
     return (
       <SofiaBoldText
         style={tw.style("text-2xl text-gray-400", {
@@ -38,18 +41,18 @@ export function StepsToSuccess(props: StepsToSuccessProps) {
   return (
     <View style={tw.style("my-3 mb-5")}>
       <View style={tw.style("flex flex-row items-center justify-center mb-2")}>
-        {hasDirect && getHeader("Direct Seed", SubPage.DIRECT)}
+        {hasDirect && getHeader("Direct Seed", PlantingType.directSeedSteps)}
 
         {hasIndoors && hasDirect && (
           <SofiaBoldText style={tw.style("text-2xl text-gray-400 mx-2")}>
             |
           </SofiaBoldText>
         )}
-        {hasIndoors && getHeader("Seed Indoors", SubPage.INDOORS)}
+        {hasIndoors && getHeader("Seed Indoors", PlantingType.indoorsSeedSteps)}
       </View>
-      {currentPage === SubPage.DIRECT &&
+      {currentPage === PlantingType.directSeedSteps &&
         StepList({ tasks: props.directSeedSteps })}
-      {currentPage === SubPage.INDOORS &&
+      {currentPage === PlantingType.indoorsSeedSteps &&
         StepList({ tasks: props.indoorsSeedSteps })}
     </View>
   );
@@ -58,6 +61,18 @@ export function StepsToSuccess(props: StepsToSuccessProps) {
 interface StepListProps {
   tasks: Array<Task>;
 }
+export function getStartingPage(
+  indoorsSeedSteps: Array<Task>,
+  directSeedSteps: Array<Task>
+) {
+  const hasIndoors = !isNil(indoorsSeedSteps);
+  const hasDirect = !isNil(directSeedSteps);
+  const startingPage = hasDirect
+    ? PlantingType.directSeedSteps
+    : PlantingType.indoorsSeedSteps;
+  return { startingPage, hasDirect, hasIndoors };
+}
+
 export function StepList(props: StepListProps) {
   const getOffset = (task: Task) => {
     if (task.type === TaskType.plant) return;

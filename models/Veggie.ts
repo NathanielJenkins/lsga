@@ -5,6 +5,7 @@ import { store } from "../store";
 import Documents from "./Documents";
 import Task from "./Task";
 import { FrostDateParsed } from "./UserProperties";
+import { PlantingDate } from "./UserGardens";
 import moment from "moment";
 export class Season {
   public static readonly Spring = "Spring";
@@ -51,8 +52,13 @@ export default interface Veggie {
   howToHarvest: string;
   whatCropsToPlantAfter: Array<string>;
   stepsToSuccess: Array<Task>;
-  directSeedSteps: Array<Task>;
-  indoorsSeedSteps: Array<Task>;
+  [properties.directSeedSteps]: Array<Task>;
+  [properties.indoorsSeedSteps]: Array<Task>;
+}
+
+class properties {
+  public static readonly directSeedSteps = "directSeedSteps";
+  public static readonly indoorsSeedSteps = "indoorsSeedSteps";
 }
 
 const ref = firestore.collection(Documents.Veggies);
@@ -80,7 +86,7 @@ export const getPlantingRangeFromUserFrostDates = (
   veggie: Veggie,
   springFrostDate: FrostDateParsed,
   fallFrostDate: FrostDateParsed
-) => {
+): PlantingDate => {
   try {
     // get the frost dates from the user
     const {
@@ -109,6 +115,29 @@ export const getPlantingRangeFromUserFrostDates = (
     return { veggieName: null, first: null, last: null };
   }
 };
+
+export const getStepsToSuccessByPlantingType = (
+  veggie: Veggie,
+  plantingType: PlantingType
+) => {
+  switch (plantingType) {
+    case properties.directSeedSteps:
+      return veggie[properties.directSeedSteps];
+
+    case properties.indoorsSeedSteps:
+      return veggie[properties.indoorsSeedSteps];
+
+    default:
+      return [];
+  }
+};
+
+export class PlantingType {
+  public static readonly [properties.directSeedSteps] =
+    properties.directSeedSteps;
+  public static readonly [properties.indoorsSeedSteps] =
+    properties.indoorsSeedSteps;
+}
 
 export class VeggieState {
   public static readonly Compatible = "Compatible";

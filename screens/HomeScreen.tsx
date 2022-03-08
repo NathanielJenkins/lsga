@@ -15,6 +15,7 @@ import { RootState } from "../store/reducers";
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateGardens,
+  updateActiveGrid,
   updateActiveGarden
 } from "../store/actions/garden.actions";
 import no_gardens from "../assets/images/no_gardens.png";
@@ -49,15 +50,19 @@ import {
 } from "../models/UserGardens";
 PrimaryButton;
 export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
+  const dispatch = useDispatch();
+
   const [imageUrl, setImageUrl] = React.useState(undefined);
-  const [activeGridType, setActiveGridType] = React.useState<GridType>(
-    GridType.summer
-  );
+  const setActiveGridType = (grid: GridType) => {
+    dispatch(updateActiveGrid(grid));
+  };
 
   const { gardens, activeGarden } = useSelector(
     (state: RootState) => state.gardens
   );
   const { veggies } = useSelector((state: RootState) => state.veggies);
+  const { activeGrid } = useSelector((state: RootState) => state.gardens);
+
   const [veggieGrid, setVeggieGrid] = React.useState([]);
   const [plantingDates, setPlantingDates] = React.useState<Array<PlantingDate>>(
     []
@@ -73,7 +78,6 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
       })
       .catch((e: Error) => console.error("Errors while downloading => ", e));
   }, [activeGarden]);
-  const dispatch = useDispatch();
 
   React.useEffect(() => {
     dispatch(updateGardens());
@@ -84,14 +88,14 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
   }, []);
 
   React.useEffect(() => {
-    const grid = getGridFromGridType(activeGridType, activeGarden);
+    const grid = getGridFromGridType(activeGrid, activeGarden);
     const plantingDates = getPlantingDatesFromGridType(
-      activeGridType,
+      activeGrid,
       activeGarden
     );
     setVeggieGrid(grid.map(g => veggies[g]) || []);
     setPlantingDates(plantingDates);
-  }, [activeGarden, veggies, activeGridType]);
+  }, [activeGarden, veggies, activeGrid]);
 
   if (loading) return <Spinner />;
   return gardens?.length && activeGarden ? (
@@ -115,7 +119,7 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
             />
             <GridSwapper
               style={tw.style("mt-4")}
-              selectedGrid={activeGridType}
+              selectedGrid={activeGrid}
               setActiveGridType={setActiveGridType}
             />
           </View>
@@ -144,7 +148,7 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
         />
       </View>
       <View>
-        <ProgressChartIO />
+        <ProgressChartIO activeGridType={activeGrid} />
       </View>
       <View>
         <GalleryCard />

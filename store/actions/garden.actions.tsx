@@ -8,7 +8,8 @@ import {
   NEW_GARDEN,
   UPDATE_ACTIVE_GARDEN,
   DELETE_GARDEN,
-  UPDATE_GARDEN_TYPES
+  UPDATE_GARDEN_TYPES,
+  UPDATE_ACTIVE_GRID
 } from "../types";
 import UserGarden, {
   getUserGardens,
@@ -22,6 +23,7 @@ import { loadingAction } from ".";
 import { firestore } from "../../firebase/firebaseTooling";
 import Documents from "../../models/Documents";
 import { getAllGardens } from "../../models/Garden";
+import { GridType } from "../../models";
 const updateStoredGardensSuccess: ActionCreator<GardenActionTypes> = (
   gardens: UserGarden[]
 ) => {
@@ -161,5 +163,11 @@ export function updateGardenTypes() {
         dispatch(failure("Server error."));
       }
     );
+  };
+}
+
+export function updateActiveGrid(activeGrid: GridType) {
+  return (dispatch: Dispatch) => {
+    dispatch({ type: UPDATE_ACTIVE_GRID, payload: activeGrid });
   };
 }

@@ -1,5 +1,6 @@
 /** @format */
 
+import { GridType } from "../../models";
 import Garden from "../../models/Garden";
 import UserGarden from "../../models/UserGardens";
 
@@ -33,9 +34,17 @@ interface DeleteGardenAction {
   type: typeof DELETE_GARDEN;
   payload: UserGarden;
 }
+
+export const UPDATE_ACTIVE_GRID = "UPDATE_ACTIVE_GRID";
+interface UpdateActiveGridAction {
+  type: typeof UPDATE_ACTIVE_GRID;
+  payload: GridType;
+}
+
 export type GardenActionTypes =
   | UpdateGardenAction
   | NewGardenAction
   | UpdateActiveGardenAction
   | DeleteGardenAction
-  | UpdateGardenTypesAction;
+  | UpdateGardenTypesAction
+  | UpdateActiveGridAction;

@@ -52,7 +52,6 @@ import Ripple from "react-native-material-ripple";
 import { Info } from "../common/Display";
 import * as Location from "expo-location";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { setFrostDateFromLngLat, Spring } from "../../models/UserProperties";
 import UserGarden, { setGardenProfile } from "../../models/UserGardens";
 import { deleteGarden } from "../../store";
 import { CameraCapturedPicture } from "expo-camera";

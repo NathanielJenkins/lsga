@@ -31,7 +31,7 @@ import {
   updateActiveUserGarden,
   addNewGarden
 } from "../../store/actions/garden.actions";
-import { updatePlantingDates } from "../../models/UserGardens";
+import { setPlantingDates } from "../../models/UserGardens";
 import { Spinner } from "../../components/common";
 import DropDownPicker, { ValueType } from "react-native-dropdown-picker";
 import Hr from "../../components/common/Hr";
@@ -131,7 +131,7 @@ export default function GardenScreen({
     userGarden.gridSpring = workingGridSpring?.map(w => w?.name || null);
 
     // update the gardenPlantingDates from the grid;
-    updatePlantingDates(userGarden);
+    setPlantingDates(userGarden);
 
     dispatch(updateActiveUserGarden(userGarden));
     navigation.navigate("Root");
