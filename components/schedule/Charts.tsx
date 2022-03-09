@@ -136,8 +136,6 @@ export const ProgressChartIO = (props: ProgressChartIOProps) => {
     else currentTasks = currentTasks.filter(t => t.task.id !== task.id);
 
     veggieSteps[veggieName] = currentTasks;
-    console.log(ug);
-    console.log(weeklyTasks);
 
     dispatch(updateActiveUserGarden(ug, true, false));
   };
