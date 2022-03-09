@@ -57,11 +57,10 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
     dispatch(updateActiveGrid(grid));
   };
 
-  const { gardens, activeGarden } = useSelector(
+  const { gardens, activeGarden, activeGrid } = useSelector(
     (state: RootState) => state.gardens
   );
   const { veggies } = useSelector((state: RootState) => state.veggies);
-  const { activeGrid } = useSelector((state: RootState) => state.gardens);
 
   const [veggieGrid, setVeggieGrid] = React.useState([]);
   const [plantingDates, setPlantingDates] = React.useState<Array<PlantingDate>>(
@@ -148,7 +147,7 @@ export function HomeScreen({ navigation }: RootTabScreenProps<"HomeScreen">) {
         />
       </View>
       <View>
-        <ProgressChartIO activeGridType={activeGrid} />
+        <ProgressChartIO />
       </View>
       <View>
         <GalleryCard />

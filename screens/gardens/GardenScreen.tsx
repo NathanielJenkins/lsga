@@ -258,9 +258,9 @@ export default function GardenScreen({
             "flex-1 pt-2 mt-1 border border-gray-200 bg-gray-50 h-1/4"
           )}>
           {veggieOrPack == "veggies" ? (
-            <DraxScrollView horizontal={true} style={tw.style("h-full ")}>
+            <>
               {Object.values(veggies).length !== 0 && (
-                <>
+                <DraxScrollView horizontal={true} style={tw.style("h-full ")}>
                   <FlatList
                     data={Object.values(veggies)}
                     style={tw.style("flex mb-auto")}
@@ -286,13 +286,13 @@ export default function GardenScreen({
                       />
                     )}
                   />
-                </>
+                </DraxScrollView>
               )}
-            </DraxScrollView>
+            </>
           ) : (
-            <DraxScrollView horizontal={true} style={tw.style("h-full ")}>
+            <>
               {Object.values(packs).length !== 0 && (
-                <>
+                <DraxScrollView horizontal={true} style={tw.style("h-full ")}>
                   <FlatList
                     data={Object.values(packs)}
                     style={tw.style("flex mb-auto")}
@@ -325,9 +325,9 @@ export default function GardenScreen({
                       />
                     )}
                   />
-                </>
+                </DraxScrollView>
               )}
-            </DraxScrollView>
+            </>
           )}
         </SafeAreaView>
       </DraxProvider>

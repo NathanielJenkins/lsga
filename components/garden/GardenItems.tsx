@@ -204,7 +204,7 @@ export function GardenVeggieReceiver(props: GardenVeggieReceiverProps) {
         "bg-red-100": veggieState === VeggieState.Incompatible,
         "bg-gray-100": isDraggingOver
       })}
-      key={i}
+      key={Math.random() + i}
       onReceiveDragEnter={() => setIsDraggingOver(true)}
       onReceiveDragExit={e => setIsDraggingOver(false)}
       onReceiveDragDrop={({
@@ -212,6 +212,7 @@ export function GardenVeggieReceiver(props: GardenVeggieReceiverProps) {
           payload: { veggie, pack }
         }
       }) => {
+        setIsDraggingOver(false);
         if (pack) {
           handleAlter(pack);
         } else {
@@ -219,7 +220,6 @@ export function GardenVeggieReceiver(props: GardenVeggieReceiverProps) {
           workingGridCopy[i] = veggie;
           setWorkingGrid(workingGridCopy);
         }
-        setIsDraggingOver(false);
       }}>
       <View
         style={tw.style("flex justify-center items-center mt-1")}

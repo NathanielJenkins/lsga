@@ -51,22 +51,29 @@ import Svg, {
   Pattern,
   Mask
 } from "react-native-svg";
-import { flatten, isEmpty, isNil } from "lodash";
+import { findIndex, flatten, isEmpty, isNil } from "lodash";
 import { addDays } from "../../utils/Date";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Checkbox } from "../common/Input";
-import { PlantingDate, updateUserGarden } from "../../models/UserGardens";
-import Veggie from "../../models/Veggie";
+import {
+  getStepsFromGridType,
+  PlantingDate,
+  updateUserGarden
+} from "../../models/UserGardens";
+import Veggie, {
+  getStepsToSuccessByPlantingType,
+  PlantingType
+} from "../../models/Veggie";
 import { useNavigation } from "@react-navigation/native";
 import { GridType } from "../../models";
 
-interface ProgressChartIOProps {
-  activeGridType: GridType;
-}
+interface ProgressChartIOProps {}
 
 export const ProgressChartIO = (props: ProgressChartIOProps) => {
   const { veggies } = useSelector((state: RootState) => state.veggies);
-  const { activeGarden } = useSelector((state: RootState) => state.gardens);
+  const { activeGarden, activeGrid } = useSelector(
+    (state: RootState) => state.gardens
+  );
 
   const [first, setFirst] = React.useState(moment().startOf("week").toDate()); // First day is the day of the month - the day of the week
   const [tasks, setTasks] =
@@ -78,7 +85,7 @@ export const ProgressChartIO = (props: ProgressChartIOProps) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    const { tasks: _tasks } = getAllTasks(props.activeGridType, activeGarden); //prettier-ignore
+    const { tasks: _tasks } = getAllTasks(activeGrid, activeGarden); //prettier-ignore
     setTasks(_tasks);
     const weeklyTasks = getPaginationTasks(_tasks, first);
     const {
@@ -95,7 +102,7 @@ export const ProgressChartIO = (props: ProgressChartIOProps) => {
     // const isDone =
     //   !isEmpty(weeklyTasks) &&
     //   !flatten(Object.values(weeklyTasks)).some(x => x[1] === false);
-  }, [veggies, activeGarden]);
+  }, [veggies, activeGarden, activeGrid]);
 
   const updateWeek = (inc: boolean) => {
     const date = inc ? addDays(first, 7) : addDays(first, -7);
@@ -117,37 +124,22 @@ export const ProgressChartIO = (props: ProgressChartIOProps) => {
   const handleAddRemoveTask = (
     add: boolean,
     task: Task,
-    veggieName: string
+    veggieName: string,
+    gridType: GridType
   ) => {
     const ug = { ...activeGarden };
-    let currentTasks = ug.veggieSteps[veggieName] || [];
+
+    const veggieSteps = getStepsFromGridType(gridType, ug);
+    let currentTasks = veggieSteps[veggieName] || [];
     currentTasks = [...currentTasks];
     if (add) currentTasks.push({ task, date: moment().format() });
     else currentTasks = currentTasks.filter(t => t.task.id !== task.id);
-    if (task.type === TaskType.plant) {
-      const plantingDates = [...ug.plantingDates];
-      const plantingDateIndex = plantingDates.findIndex(
-        p => p.veggieName === veggieName
-      );
 
-      if (plantingDateIndex !== -1) {
-        if (add) {
-          plantingDates[plantingDateIndex] = {
-            ...plantingDates[plantingDateIndex],
-            datePlanted: moment().format()
-          };
-        } else {
-          plantingDates[plantingDateIndex] = {
-            ...plantingDates[plantingDateIndex],
-            datePlanted: null
-          };
-        }
-      }
-      ug.plantingDates = plantingDates;
-    }
+    veggieSteps[veggieName] = currentTasks;
+    console.log(ug);
+    console.log(weeklyTasks);
 
-    ug.veggieSteps[veggieName] = currentTasks;
-    dispatch(updateActiveUserGarden(ug));
+    dispatch(updateActiveUserGarden(ug, true, false));
   };
 
   return (
@@ -226,7 +218,12 @@ export const ProgressChartIO = (props: ProgressChartIOProps) => {
                   <View style={tw.style("my-0.5")} key={task[0].task.id}>
                     <Checkbox
                       onPress={(isChecked: boolean) =>
-                        handleAddRemoveTask(isChecked, task[0].task, veggieName)
+                        handleAddRemoveTask(
+                          isChecked,
+                          task[0].task,
+                          veggieName,
+                          activeGrid
+                        )
                       }
                       isChecked={task[1]}
                       text={task[0].task.title}
@@ -260,6 +257,7 @@ export function Timeline(props: TimelineProps) {
   const section = (width - xStart) / 12;
   const sections = [...Array(12).keys()];
   const navigation = useNavigation();
+
   return (
     <View style={tw.style("flex justify-center items-center shadow-brand m-2")}>
       <SofiaSemiBoldText style={tw.style("text-lg text-gray-500 my-2")}>
@@ -292,7 +290,6 @@ export function Timeline(props: TimelineProps) {
               plantedDate.month() * section +
               (plantedDate.date() / 30) * section
             : 0;
-        console.log(planted, plantedDate, section);
         if (!plantingDates) return <View></View>;
         return (
           <View key={g.name + new Date().toISOString()}>

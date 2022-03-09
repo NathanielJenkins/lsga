@@ -221,10 +221,10 @@ export function setPlantingDates(userGarden: UserGarden) {
   const springVeggiesNames = [...new Set(userGarden.gridSpring)];
   const autumnVeggiesNames = [...new Set(userGarden.gridAutumnWinter)];
 
-  addPlantingDates(veggieNames, veggies, springFrostDate, fallFrostDate, userGarden.plantingDates); //prettier-ignore
-  addPlantingDates(summerVeggiesNames, veggies, springFrostDate, fallFrostDate, userGarden.summerPlantingDates); //prettier-ignore
-  addPlantingDates(autumnVeggiesNames, veggies, springFrostDate, fallFrostDate, userGarden.autumnWinterPlantingDates); //prettier-ignore
-  addPlantingDates(springVeggiesNames, veggies, springFrostDate, fallFrostDate, userGarden.springPlantingDates); //prettier-ignore
+  userGarden.plantingDates = addPlantingDates(veggieNames, veggies, springFrostDate, fallFrostDate, userGarden.plantingDates); //prettier-ignore
+  userGarden.summerPlantingDates = addPlantingDates(summerVeggiesNames, veggies, springFrostDate, fallFrostDate, userGarden.summerPlantingDates); //prettier-ignore
+  userGarden.autumnWinterPlantingDates = addPlantingDates(autumnVeggiesNames, veggies, springFrostDate, fallFrostDate, userGarden.autumnWinterPlantingDates); //prettier-ignore
+  userGarden.springPlantingDates = addPlantingDates(springVeggiesNames, veggies, springFrostDate, fallFrostDate, userGarden.springPlantingDates); //prettier-ignore
 }
 
 export function setVeggiePlantingDate(
@@ -244,7 +244,6 @@ export function setVeggiePlantingDate(
   newPlantingDate.plantingType = plantingType;
   plantingDates[plantingDateIndex] = newPlantingDate;
 
-  console.log("planting dates", plantingDates);
   return plantingDates;
 }
 
@@ -253,13 +252,13 @@ function addPlantingDates(
   veggies: { [name: string]: Veggie },
   springFrostDate: FrostDateParsed,
   fallFrostDate: FrostDateParsed,
-  oldPlantingDates: Array<PlantingDate>
+  plantingDates: Array<PlantingDate> = []
 ) {
-  const plantingDates: Array<PlantingDate> = new Array();
+  const pd = [...plantingDates];
 
   veggieNames.forEach((veggieName, index) => {
     const veggie = veggies[veggieName];
-    const oldPlantingDate = oldPlantingDates.find(
+    const oldPlantingDateIndex = pd?.findIndex(
       p => p.veggieName === veggieName
     );
     const newPlantingDate = getPlantingRangeFromUserFrostDates(
@@ -268,13 +267,16 @@ function addPlantingDates(
       fallFrostDate
     );
 
-    if (oldPlantingDate) {
+    if (oldPlantingDateIndex !== -1) {
+      const oldPlantingDate = pd[oldPlantingDateIndex];
       newPlantingDate.plantingType = oldPlantingDate.plantingType;
       newPlantingDate.datePlanted = oldPlantingDate.datePlanted;
+      pd[index] = newPlantingDate;
+    } else {
+      pd.push(newPlantingDate);
     }
   });
-
-  return plantingDates;
+  return pd;
 }
 
 export function getUniqueVeggieIdsFromGrid(
@@ -297,6 +299,18 @@ export function getGridFromGridType(
     return userGarden?.gridAutumnWinter || [];
 
   return [];
+}
+
+export function getStepsFromGridType(
+  gridType: GridType,
+  userGarden: UserGarden
+) {
+  if (gridType === GridType.spring) return userGarden?.springVeggieSteps || {};
+  if (gridType === GridType.summer) return userGarden?.summerVeggieSteps || {};
+  if (gridType === GridType.autumnWinter)
+    return userGarden?.autumnWinterVeggieSteps || {};
+
+  return {};
 }
 
 export function getPlantingDatesFromGridType(

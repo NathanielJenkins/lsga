@@ -122,11 +122,12 @@ export function deleteGarden(garden: UserGarden) {
 
 export function updateActiveUserGarden(
   garden: UserGarden,
-  updateActive = true
+  updateActive = true,
+  shouldShowLoading = true
 ) {
   return (dispatch: Dispatch, getState: () => RootState) => {
     // async action: uses Redux-Thunk middleware to return a function instead of an action creator
-    dispatch(loadingAction(true));
+    shouldShowLoading && dispatch(loadingAction(true));
     dispatch(request());
 
     return updateUserGarden(garden).then(
@@ -139,10 +140,10 @@ export function updateActiveUserGarden(
         dispatch(updateStoredGardensSuccess(gardens));
         updateActive && dispatch(updateActiveGardenSuccess(response));
 
-        dispatch(loadingAction(false));
+        shouldShowLoading && dispatch(loadingAction(false));
       },
       error => {
-        dispatch(loadingAction(false));
+        shouldShowLoading && dispatch(loadingAction(false));
         dispatch(failure("Server error."));
       }
     );

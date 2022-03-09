@@ -7,9 +7,10 @@ import { RootState, store } from "../store";
 import { addDays, randomRgb } from "../utils/Date";
 import UserGarden, {
   getPlantingDatesFromGridType,
+  getStepsFromGridType,
   getUniqueVeggieIdsFromGrid
 } from "./UserGardens";
-import Veggie from "./Veggie";
+import Veggie, { getStepsToSuccessByPlantingType } from "./Veggie";
 
 export class TaskType {
   public static readonly plant = "plant";
@@ -61,22 +62,30 @@ export const getAllTasks = (
 
   // get starting date
   const veggieIds = getUniqueVeggieIdsFromGrid(userGarden, activeGridType);
-  console.log(veggieIds, plantingDates);
   for (let vid of veggieIds) {
     const veggie = veggies[vid];
     if (!veggie) continue;
 
     //get the planting date;
     const plantingDate = plantingDates.find(pd => pd.veggieName === vid);
-    if (!plantingDate) continue;
+    if (!plantingDate?.datePlanted) continue;
+
+    const plantingType = plantingDate.plantingType;
+    const stepsToSuccess = getStepsToSuccessByPlantingType(
+      veggie,
+      plantingType
+    );
 
     let startDate: Date = new Date();
-    // if (plantingDate.datePlanted) startDate = plantingDate.datePlanted;
-    // else startDate = new Date(plantingDate.first);
+    if (plantingDate.datePlanted)
+      startDate = new Date(plantingDate.datePlanted);
+    else startDate = new Date(plantingDate.first);
 
     // iterate through the tasks and assign them a date and completed status
-    for (let sts of veggie.stepsToSuccess || []) {
-      const veggieSteps = userGarden.veggieSteps || {};
+    for (let sts of stepsToSuccess || []) {
+      const veggieSteps = getStepsFromGridType(activeGridType, userGarden);
+
+      // find the
       const completedTask = veggieSteps[vid]?.find(t => sts.id === t.task.id);
       if (completedTask) {
         const taskDate = {
@@ -106,10 +115,14 @@ export const getPaginationTasks = (
   first: Date
 ) => {
   const last = addDays(first, 7);
+  // make a copy
   const vts: { [veggieName: string]: Array<[TaskDate, boolean]> } = {
     ...veggieTasks
   };
+
+  //filtered list based on date
   const vtss: { [veggieName: string]: Array<[TaskDate, boolean]> } = {};
+
   for (let [veggieName, tasks] of Object.entries(vts)) {
     const filteredTasks = tasks.filter(t => {
       return new Date(t[0].date) >= first && new Date(t[0].date) <= last;
